@@ -1,0 +1,44 @@
+.editorHeader {
+  background-color: $header;
+  grid-area: editorHeader;
+  // @extend %flexCenter-space-between-row;
+  display: grid;
+  grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 60px 3fr 1fr;
+}
+.editorHeader__left {
+  @include size(60px, 100%);
+  background-color: $white;
+  grid-area: editorHeader__left;
+}
+.editorHeader__center {
+  grid-area: editorHeader__center;
+  @include size(auto, 100%);
+  @extend %flexCenter-flexStart-row;
+}
+.editorHeader__right {
+  grid-area: editorHeader__right;
+  @include size(auto, 100%);
+  @extend %flexCenter-Center-row;
+  @include distance(0 16px, 0);
+}
+.editorHeader__button--save {
+  background-color: $special;
+  font-size: 12px;
+  &:hover{
+    background-color:  darken($special, 20%) ;
+  }
+}
+.editorHeader__button--share {
+  background-color: $button;
+  font-size: 12px;
+  @include distance(0, 0 16px);
+  &:hover{
+    background-color:  darken($button, 20%) ;
+  }
+}
+.editorHeader__member {
+  @include size(36px, 36px);
+
+  @include background-center('../img/self-01.jpg');
+  border-radius: 50%;
+}

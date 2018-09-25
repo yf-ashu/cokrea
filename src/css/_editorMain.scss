@@ -1,0 +1,67 @@
+.editorMain {
+  background-color: $editor;
+  grid-area: editorMain;
+  overflow: scroll;
+  position: relative;
+  display:block;
+
+}
+.editorMain__canvas--outer{
+position: relative;
+display:flex;
+padding: 100px;
+
+}
+.editorMain__canvas {
+  @include size(100%,100%);
+  background-color: $white;
+  overflow: hidden;
+  position: relative;
+  transform:scale(4);
+  border-radius: 5px;
+  transform-origin: left top;
+  border: 1px solid #000;
+  display:inline-block;
+}
+.editorMain__items {
+  position: absolute;
+  cursor: move;
+  overflow: hidden;
+  &:hover {
+    outline: 1px solid $special;
+  }
+}
+.editorMain__item {
+  word-break: break-all;
+}
+.editorMain__item--select {
+  position: absolute;
+  @include size(55px, 20px);
+  border: #000 1px solid;
+  left: 100px;
+  &.outside {
+    position: relative;
+  }
+  &.inside {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border: red 1px solid;
+  }
+}
+.editorMain__item--h2 {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  background-color: white;
+  background-color: -moz-field;
+  border: 1px solid darkgray;
+  box-shadow: 1px 1px 1px 0 lightgray inset;  
+  font: -moz-field;
+  font: -webkit-small-control;
+  margin-top: 5px;
+  padding: 2px 3px;
+  width: 398px;    
+}
+.test{
+  @include size(100px,100px);
+}

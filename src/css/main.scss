@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i');
+@mixin size($w, $h) {
+  width: $w;
+  height: $h;
+}
+@mixin distance($p, $m) {
+  padding: $p;
+  margin: $m;
+}
+@mixin background-center($url) {
+  background:url($url);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+%flexCenter-Center-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+%flexCenter-Center-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column wrap;
+}
+
+%flexCenter-flexStart-column {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-flow: column wrap;
+}
+%flexCenter-flexStart-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+}
+%flexCenter-space-around-column {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-flow: column wrap;
+}
+%flexCenter-space-around-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-flow: row wrap;
+}
+%flexCenter-space-between-column {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: column wrap;
+}
+%flexCenter-space-between-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: row wrap;
+}
+%flexFlex-start-center-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+$header:#393939;
+$controller:#3c3c3c;
+$click:#303030;
+$editor:#737373;
+$hover:#4b4a4a;
+$button:#949D9C;
+$special:#64DDD2;
+$white:#f5f5f5;
+$search:#7e7d7d;
+$text-white:#f7f7f7;
+$text-black:#312F2F;
+* {
+  box-sizing: border-box;
+  font-family: 'PingFangTC-Thin', 'Noto Sans', Arial, Helvetica, sans-serif; // border: 1px solid red;
+}
+
+body,
+html {
+  @include size(100%, 100%);
+}
+
+a,
+a:hover,
+a:active,
+a:focus {
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+ @include distance(0, 0);
+}
+h1{
+  font-size: 47px;
+}
+h2{
+  font-size: 22px;
+}
+ul,
+li {
+  list-style: none;
+  cursor: pointer;
+  @include distance(0, 0);
+}
+input,
+textarea {
+  resize: none;
+  display: inline-block;
+  border-radius: 4px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  font-size: 1rem;
+  outline: none;
+  border: 1px solid #979797;
+  padding: 5px;
+}
+button {
+  text-align: center;
+  vertical-align: top;
+  text-decoration: none;
+  outline: 0;
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: background-color 0.2s;
+  border: none;
+  background-color: transparent;
+  font-weight: 700;
+  @include size(120px, 30px);
+  border-radius: 5px;
+  color: $text-white;
+  @include distance(0,0 );
+
+}
+
+input[type="text"]{
+  background-color: $search;
+  @include size(180px,28px );
+transition: all 0.5s;
+border: none;
+}
+input[type="text"]:focus{
+  background-color: $white;
+  @include size(240px,28px );
+
+}
+.input{
+  @extend %flexCenter-flexStart-row;
+  position: relative;
+  @include distance(0 24px,0 );
+}
+.input__icon{
+  position: absolute;
+  @include size(22px,22px );
+  left: 36px;
+}
+.input-control{
+  @include distance(4px 0 4px 44px,0 );
+}
+@import 'reset';
+@import 'editor';

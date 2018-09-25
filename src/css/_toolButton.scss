@@ -1,0 +1,121 @@
+.toolButton {
+  background-color: $controller;
+  grid-area: toolButton;
+  position: relative;
+  @include size(100%, 100%);
+  z-index: 1000;
+}
+
+.toolButton__all {
+  @include size(100%, 60px);
+  position: relative;
+
+  &:hover {
+    background-color: $hover;
+    .toolButton__alert {
+      opacity: 1;
+      visibility: visible;
+    }
+    .toolButton__alert_tringle {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  img {
+    @include size(22px, 22px);
+  }
+}
+.toolButton__all--click{
+  background-color: $click;
+}
+.toolButton__alert {
+  @include size(80px, 40px);
+  background-color: $click;
+  position: absolute;
+  left: 69px;
+  top: 9px;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  @extend %flexCenter-Center-row;
+  color: $text-white;
+  font-size: 12px;
+}
+.toolButton__alert_tringle {
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid $click;
+  display: inline-block;
+  position: absolute;
+  left: 62px;
+  top: 21px;
+  opacity: 0;
+  visibility: hidden;
+}
+.toolButton__item--display {
+  position: absolute;
+  @extend %flexCenter-flexStart-column;
+  @include size(250px, 100%);
+  left: -100%;
+  top: 0;
+  background-color: $controller;
+  border-left: $click solid 2px;
+  display: none;
+  transition: all 0.5s;
+}
+.toolButton__item--header {
+  @include size(100%, 60px);
+  background-color: $click;
+  position: relative;
+  color: $text-white;
+  @extend %flexCenter-Center-row;
+}
+.toolButton__item {
+  @include size(100px, 100px);
+  background-color: $white;
+  border-radius: 5px;
+  @include distance(0, 8px);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  img{
+    @include size(44px, 44px);
+  }
+  &:hover{
+    background-color: $special;
+  }
+}
+.toolButton__items {
+  @include size(100%,calc(100% - 60px));
+  overflow: auto;
+&--inner{
+  display: flex;
+  flex-flow: row wrap;
+
+}
+}
+.slideTozero {
+  display: block;
+  animation: slide 0.5s forwards ease-in-out;
+}
+@keyframes slide {
+  0% {
+    display: block;
+    left: -250px;
+  }
+
+  100% {
+    left: 60px;
+  }
+}
+.toolButton__item--close {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  right: 5px;
+  img {
+    @include size(16px, 16px);
+    cursor: pointer;
+  }
+}
+
