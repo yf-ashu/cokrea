@@ -1,67 +1,120 @@
 .editorMain {
   background-color: $editor;
   grid-area: editorMain;
-  overflow: scroll;
+  overflow: auto;
   position: relative;
-  display:block;
-
+  text-align: center;
+  
 }
-.editorMain__canvas--outer{
-position: relative;
-display:flex;
-padding: 100px;
-
+.editorMain__canvas--outer {
+  display: block;
+  position: relative;
+  display: flex;
+  padding: 100px;
 }
 .editorMain__canvas {
-  @include size(100%,100%);
+  @include size(100%, 100%);
   background-color: $white;
   overflow: hidden;
   position: relative;
-  transform:scale(4);
-  border-radius: 5px;
-  transform-origin: left top;
-  border: 1px solid #000;
-  display:inline-block;
+  display: inline-block;
 }
 .editorMain__items {
   position: absolute;
   cursor: move;
   overflow: hidden;
+  z-index: 1000;
+  pointer-events: auto;
   &:hover {
     outline: 1px solid $special;
   }
 }
 .editorMain__item {
   word-break: break-all;
+    z-index: 1000;
+
 }
 .editorMain__item--select {
   position: absolute;
-  @include size(55px, 20px);
-  border: #000 1px solid;
-  left: 100px;
-  &.outside {
+  border: $special 2px dotted;
+  cursor: move;
+  left: -100%;
+  transform-origin: right bottom;
+
+  &-outside {
+    @include size(100%, 100%);
     position: relative;
+    // border: red 1px solid;
   }
-  &.inside {
+  &-inside-tl {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    border: red 1px solid;
+    transform: translate(-50%, -50%);
+    top: -16px;
+    left: -16px;
+    border: $white 1px solid;
+    background-color: $special;
+    @include size(10px, 10px);
+    z-index: 1100;
+    margin: 16px;
+    cursor: nwse-resize;
+
+  }
+  &-inside-tr {
+    position: absolute;
+    top: -16px;;
+    right: -16px;;
+    transform: translate(50%, -50%);
+    border: $white 1px solid;
+    background-color: $special;
+    @include size(10px, 10px);
+    z-index: 1100;
+    margin: 16px;
+
+    cursor: nesw-resize;
+
+  }
+  &-inside-bl {
+    position: absolute;
+    bottom: -16px;;
+    left: -16px;;
+    transform: translate(-50%, 50%);
+    border: $white 1px solid;
+    background-color: $special;
+    @include size(10px, 10px);
+    z-index: 1100;
+    margin: 16px;
+
+    cursor: nesw-resize;
+
+  }
+  &-inside-br {
+    position: absolute;
+    bottom: -16px;;
+    right: -16px;;
+    transform: translate(50%, 50%);
+    border: $white 1px solid;
+    background-color: $special;
+    @include size(10px, 10px);
+    z-index: 1100;
+    margin: 16px;
+
+    cursor: nwse-resize;
+
   }
 }
 .editorMain__item--h2 {
-  -moz-appearance: textfield;
-  -webkit-appearance: textfield;
-  background-color: white;
-  background-color: -moz-field;
-  border: 1px solid darkgray;
-  box-shadow: 1px 1px 1px 0 lightgray inset;  
-  font: -moz-field;
-  font: -webkit-small-control;
-  margin-top: 5px;
-  padding: 2px 3px;
-  width: 398px;    
+  // -moz-appearance: textfield;
+  // -webkit-appearance: textfield;
+  // background-color: white;
+  // background-color: -moz-field;
+  // border: 1px solid darkgray;
+  // box-shadow: 1px 1px 1px 0 lightgray inset;
+  // font: -moz-field;
+  // font: -webkit-small-control;
+  // margin-top: 5px;
+  // padding: 2px 3px;
+  // width: 398px;
 }
-.test{
-  @include size(100px,100px);
+.test {
+  @include size(100px, 100px);
 }

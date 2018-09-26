@@ -42,3 +42,17 @@
   @include background-center('../img/self-01.jpg');
   border-radius: 50%;
 }
+.editorHeader__scale{
+  @include size(200px,28px);
+  @extend %flexCenter-Center-row;
+  background-color: $white;
+  border-radius: 4px;
+  &--main{
+    @include size(100px,28px);
+    @extend %flexCenter-Center-row;
+  }
+  button{
+    @include size(20px,28px);
+    color: $click;
+  }
+}

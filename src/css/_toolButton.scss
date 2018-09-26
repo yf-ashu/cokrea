@@ -25,9 +25,7 @@
     @include size(22px, 22px);
   }
 }
-.toolButton__all--click{
-  background-color: $click;
-}
+
 .toolButton__alert {
   @include size(80px, 40px);
   background-color: $click;
@@ -118,4 +116,27 @@
     cursor: pointer;
   }
 }
+.toolButton__items--image{
+  @include size(100%, auto);
+  @include distance(16px,0);
+background-color: $white;
+@extend %flexCenter-Center-row;
+}
+.fileUpload{
+  @include distance(16px 0,16px);
 
+  @include size(100%, auto);
+display: flex;
+border: none;
+}
+.toolButton__items--upload{
+  @include size(100%, auto);
+
+}
+.toolButton__items--upload-button{
+  background-color: $special;
+  font-size: 12px;
+  &:hover{
+    background-color:  darken($special, 20%) ;
+  }
+}

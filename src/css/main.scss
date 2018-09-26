@@ -174,5 +174,8 @@ input[type="text"]:focus{
 .input-control{
   @include distance(4px 0 4px 44px,0 );
 }
+.displayNone{
+  display: none;
+}
 @import 'reset';
 @import 'editor';

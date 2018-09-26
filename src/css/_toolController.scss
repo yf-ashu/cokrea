@@ -5,5 +5,54 @@
 }
 .toolController__header{
   @include size(100%,60px);
-  background-color: $click;
+  border: 3px solid $click;
+  ul{
+    @include size(100%,100%);
+
+    @extend %flexCenter-flexStart-row;
+
+    li{
+      @include size(50%,100%);
+      color: $text-white;
+      @extend %flexCenter-Center-row;
+      text-transform: capitalize;
+      &:hover{
+
+border-bottom: 2px solid $special;
+      }
+    }
+  }
+}
+.toolController--click{
+  border-bottom: 2px solid $special;
+}
+.toolControllerPageSetting{
+@include distance(16px,0);
+color:$text-white;
+}
+.toolControllerPageSetting--size-item{
+  @include size(50%,auto);
+  label{
+      @include distance(8px 0,0);
+  }
+  input{
+    @include size(80%,auto);
+background-color: $click;
+color: $text-white;
+border: none;
+  }
+}
+.toolControllerPageSetting--size{
+  display: flex;
+  
+}
+.toolControllerPageSetting--color{
+  label{
+    @include distance(8px 0,0);
+}
+input{
+  @include size(100%,30px);
+}
+  display: flex;
+  flex-flow: column wrap;
 }

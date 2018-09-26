@@ -1,30 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const EditorMain = ({
-    onDrop,
-    onDragEnter,
-    onDragOver,
-    children,
-    style,
-    scale,
-    onClick
-}) => {
-    let outerStyle;
-    if (scale < 1) {
-        outerStyle = {
-            width: '100%',
-            height: style.height * scale + 200
-        };
-    } else {
-        outerStyle = {
-            width: style.width * scale + 200,
-            height: style.height * scale + 200
-        };
-    }
+const EditorMain = ({ onDrop, onDragEnter, onDragOver, children, style }) => {
     return (
         <div className="editorMain">
-            <div className="editorMain__canvas--outer" style={outerStyle}>
+            <div className="editorMain__canvas--outer">
                 <div
                     className="editorMain__canvas"
                     onDrop={onDrop}
@@ -32,7 +12,6 @@ const EditorMain = ({
                     onDragOver={onDragOver}
                     data-role="drag-drop-container"
                     style={style}
-                    onClick={onClick}
                 >
                     {children}
                 </div>
@@ -46,8 +25,8 @@ EditorMain.propTypes = {
     onDragEnter: PropTypes.func.isRequired,
     onDragOver: PropTypes.func.isRequired,
     children: PropTypes.any,
-    style: PropTypes.any.isRequired,
-    onClick: PropTypes.func,
-    scale: PropTypes.number
+    style: PropTypes.any.isRequired
+    // attribute: PropTypes.any,
+    // textContent: PropTypes.any
 };
 export default EditorMain;

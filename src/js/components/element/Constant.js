@@ -6,7 +6,7 @@ const Constant = {
                 src: '../src/img/edit.svg',
                 size: { width: 0.8, height: 75 },
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
+                    'Lorem ipsum dolor sit .',
                 format: 'text'
             },
             {
@@ -14,7 +14,7 @@ const Constant = {
                 src: '../src/img/edit.svg',
                 size: { width: 0.8, height: 55 },
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
+                    'Lorem ipsum dolor, sit amet .',
                 format: 'text'
             },
             {
@@ -23,7 +23,7 @@ const Constant = {
                 size: { width: 0.8, height: 45 },
                 format: 'text',
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum, est maxime vero? Nostrum fugit quae ex perferendis repudiandae!'
+                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum!'
             },
             {
                 type: 'span',
@@ -31,10 +31,15 @@ const Constant = {
                 size: { width: 0.8, height: 45 },
                 format: 'text',
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum, est maxime vero? Nostrum fugit quae ex perferendis repudiandae!'
+                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum!'
             }
         ],
-        img: [],
+        img: [ {
+            type: 'img',
+            src: '../src/img/edit.svg',
+            size: { width: 0.8, height: 500 },
+            format: 'image'
+        }],
         square: []
     }
 };
