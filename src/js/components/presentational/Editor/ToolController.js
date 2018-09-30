@@ -12,12 +12,18 @@ class ToolController extends Component {
         super(props);
         this.state = {
             current: 'pageSetting',
-            editMainStyle: this.props.editMainStyle
+            editMainStyle: this.props.editMainStyle,
+            display: this.props.display
         };
+        console.log(this.props.display);
+        console.log(this.props.editMainStyl);
+
         this.controllerDisplay = this.controllerDisplay.bind(this);
         this.handleClickLi = this.handleClickLi.bind(this);
         this.handlePageOnChangeNum = this.handlePageOnChangeNum.bind(this);
         this.handlePageOnChangeStr = this.handlePageOnChangeStr.bind(this);
+        this.handleDetailOnChangeNum = this.handleDetailOnChangeNum.bind(this);
+        this.handleDetailOnChangeStr = this.handleDetailOnChangeStr.bind(this);
     }
 
     controllerDisplay() {
@@ -28,10 +34,43 @@ class ToolController extends Component {
             current: e.currentTarget.dataset.data
         });
     }
+
+    handleDetailOnChangeNum(e) {
+        let value;
+        if (e.currentTarget.value) {
+            value = e.currentTarget.value;
+        } else {
+            value = e.currentTarget.dataset.value;
+        }
+        this.props.controll(
+            'display',
+            'style',
+            e.currentTarget.dataset.data,
+            value,
+            null
+        );
+    }
+    handleDetailOnChangeStr(e) {
+        let value;
+        if (e.currentTarget.value) {
+            value = e.currentTarget.value;
+        } else {
+            value = e.currentTarget.dataset.value;
+        }
+
+        this.props.controll(
+            'display',
+            'style',
+            e.currentTarget.dataset.data,
+            null,
+            value
+        );
+
+        // console.log(this.state.editMainStyle.style);
+        // console.log(value);
+    }
+
     handlePageOnChangeNum(e) {
-        // this.setState({
-        //     [name]: event.target.value,
-        //   });
         this.props.controll(
             'editMainStyle',
             'style',
@@ -39,14 +78,8 @@ class ToolController extends Component {
             e.currentTarget.value,
             null
         );
-
-        console.log(this.state.editMainStyle.style);
-        console.log(e.currentTarget);
     }
     handlePageOnChangeStr(e) {
-        // this.setState({
-        //     [name]: event.target.value,
-        //   });
         this.props.controll(
             'editMainStyle',
             'style',
@@ -54,21 +87,42 @@ class ToolController extends Component {
             null,
             e.currentTarget.value
         );
-
-        console.log(e.currentTarget.dataset.data);
-        console.log(e.currentTarget);
     }
     render() {
-        let Item = components[this.state.current];
+        console.log(this.state.current);
+        let Item;
+        if (this.state.current === 'pageSetting') {
+            Item = components[this.state.current];
+        } else {
+            if (this.props.controllCurrent[0] !== this.state.current) {
+                Item = components[this.props.controllCurrent[0]];
+            }else{
+                Item = components[this.state.current]; 
+            }
+        }
+
+        console.log(this.props.controllCurrent[0]);
+        // console.log(Item)
         let display = (
             <Item
-                style={this.state.editMainStyle}
+                controllCurrent={this.props.controllCurrent}
+                display={this.props.display}
+                style={this.props.editMainStyle}
                 action={{
                     pageonChangeNum: this.handlePageOnChangeNum,
-                    pageonChangeStr: this.handlePageOnChangeStr
+                    pageonChangeStr: this.handlePageOnChangeStr,
+                    detailChangeNum: this.handleDetailOnChangeNum,
+                    detailChangeStr: this.handleDetailOnChangeStr
                 }}
             />
         );
+        // console.log(this.props.controllCurrent)
+        // console.log(this.props.display)
+        // console.log(this.props.editMainStyle)
+
+        // console.log(this.state.display)
+        // console.log(this.state.editMainStyle)
+
         return (
             <div className="toolController">
                 <div className="toolController__header">
@@ -79,10 +133,10 @@ class ToolController extends Component {
                                     ? ''
                                     : 'toolController--click'
                             }
-                            data-data={this.props.controllCurrent}
+                            data-data={this.props.controllCurrent[0]}
                             onClick={this.handleClickLi}
                         >
-                            {this.props.controllCurrent}
+                            {this.props.controllCurrent[0]}
                         </li>
                         <li
                             onClick={this.handleClickLi}

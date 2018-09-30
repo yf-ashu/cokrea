@@ -4,37 +4,41 @@ import PropTypes from 'prop-types';
 const EditorItem = ({
     tag,
     attribute,
-    textContent,
+    option,
     style,
-    onClick,
     outside,
-    contentEditable,
-    onMouseDown,onBlur,onDoubleClick
+    onMouseDown,
+    onBlur,
+    onDoubleClick
 }) => {
     let Tag = tag;
+    if (tag !== 'img') {
+        option.dangerouslySetInnerHTML = { __html: attribute.textContent };
+    }
+
     return (
         <div
             className="editorMain__items"
             style={outside}
             data-id={attribute.id}
-            onMouseDown={onMouseDown}
-            onBlur={onBlur}
-            onDoubleClick={onDoubleClick}
+            draggable="false"
         >
             <Tag
+                onDoubleClick={onDoubleClick}
+                data-id={attribute.id}
                 className={attribute.className}
                 id={attribute.id}
                 type={attribute.type}
                 data-format={attribute.format}
                 style={style}
-                onClick={onClick}
-                contentEditable={contentEditable}
                 suppressContentEditableWarning
                 src={attribute.src}
-                // onBlur={onBlur}
-
+                onBlur={onBlur}
+                draggable="false"
+                onMouseDown={onMouseDown}
+                tabIndex="-1"
+                {...option}
             >
-                {textContent}
             </Tag>
         </div>
     );
@@ -43,13 +47,11 @@ const EditorItem = ({
 EditorItem.propTypes = {
     tag: PropTypes.string.isRequired,
     attribute: PropTypes.any.isRequired,
-    textContent: PropTypes.string,
+    option: PropTypes.any,
     style: PropTypes.any,
     outside: PropTypes.any,
-    onClick: PropTypes.func,
     onBlur: PropTypes.func,
-    contentEditable: PropTypes.string,
     onMouseDown: PropTypes.func,
-    onDoubleClick:PropTypes.func
+    onDoubleClick: PropTypes.func
 };
 export default EditorItem;

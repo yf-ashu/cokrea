@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../../element/Input';
-const EditorHeader = ({ scale, onClick }) => {
+const EditorHeader = ({ scale, onClick,onSave }) => {
     return (
         <div className="editorHeader">
             <div className="editorHeader__left"> </div>
@@ -38,7 +38,7 @@ const EditorHeader = ({ scale, onClick }) => {
                 </div>
             </div>
             <div className="editorHeader__right">
-                <button className="editorHeader__button--save">SAVE</button>
+                <button className="editorHeader__button--save" onClick={onSave}>SAVE</button>
                 <button className="editorHeader__button--share">SHARE</button>
                 <div className="editorHeader__member" />
             </div>
@@ -48,7 +48,8 @@ const EditorHeader = ({ scale, onClick }) => {
 
 EditorHeader.propTypes = {
     scale: PropTypes.any,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    onSave: PropTypes.func
     // textContent: PropTypes.any
 };
 export default EditorHeader;

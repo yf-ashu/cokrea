@@ -3,7 +3,7 @@
   grid-area: editorHeader;
   // @extend %flexCenter-space-between-row;
   display: grid;
-  grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 60px 3fr 1fr;
+  grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 60px 3fr 2fr;
 }
 .editorHeader__left {
   @include size(60px, 100%);
@@ -18,7 +18,7 @@
 .editorHeader__right {
   grid-area: editorHeader__right;
   @include size(auto, 100%);
-  @extend %flexCenter-Center-row;
+  @extend %flexCenter-flex-end-row;
   @include distance(0 16px, 0);
 }
 .editorHeader__button--save {

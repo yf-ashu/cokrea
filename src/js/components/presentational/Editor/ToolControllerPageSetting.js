@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ToolControllerPageSetting = ({ style, action }) => {
+const ToolControllerPageSetting = ({ style, action,display }) => {
+    // console.log(display)
+    // console.log(style)
+
     return (
         <div className="toolControllerPageSetting">
-            <div className="toolControllerPageSetting--size">
-                <div className="toolControllerPageSetting--size-item">
+            <div className="toolController--size">
+                <div className="toolController--size-item">
                     <label htmlFor="pageWidth">Width</label>
                     <input
                         type="number"
@@ -15,7 +18,7 @@ const ToolControllerPageSetting = ({ style, action }) => {
                         onChange={action.pageonChangeNum}
                     />
                 </div>
-                <div className="toolControllerPageSetting--size-item">
+                <div className="toolController--size-item">
                     <label htmlFor="pageHeight">Height</label>
                     <input
                         type="number"
@@ -26,21 +29,24 @@ const ToolControllerPageSetting = ({ style, action }) => {
                     />
                 </div>
             </div>
-            <div className="toolControllerPageSetting--color">
+            <div className="toolController--color">
                 <label htmlFor="pageWidth">Background-color</label>
                 <input
                     type="color"
                     value={style.style[4]['backgroundColor']}
+                    data-value={style.style[4]['backgroundColor']}
                     data-data='backgroundColor'
                     onChange={action.pageonChangeStr}
                 />
             </div>
+         
         </div>
     );
 };
 
 ToolControllerPageSetting.propTypes = {
-    style: PropTypes.any.isRequired,
+    display: PropTypes.any,
+    style: PropTypes.any,
     action: PropTypes.any.isRequired
 };
 export default ToolControllerPageSetting;

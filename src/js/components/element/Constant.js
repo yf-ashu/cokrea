@@ -20,24 +20,24 @@ const Constant = {
             {
                 type: 'p',
                 src: '../src/img/edit.svg',
-                size: { width: 0.8, height: 45 },
+                size: { width: 0.8, height: 65 },
                 format: 'text',
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum!'
+                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati !'
             },
             {
                 type: 'span',
                 src: '../src/img/edit.svg',
-                size: { width: 0.8, height: 45 },
+                size: { width: 0.8, height: 65 },
                 format: 'text',
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum!'
+                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum !'
             }
         ],
         img: [ {
             type: 'img',
             src: '../src/img/edit.svg',
-            size: { width: 0.8, height: 500 },
+            size: { width: 0.8, height: 0.8 },
             format: 'image'
         }],
         square: []

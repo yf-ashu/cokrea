@@ -134,6 +134,8 @@ border: none;
 
 }
 .toolButton__items--upload-button{
+  @include distance(0,5px 0);
+
   background-color: $special;
   font-size: 12px;
   &:hover{

@@ -8,7 +8,7 @@ const EditorMain = ({
     children,
     style,
     scale,
-    onClick
+    onMouseDown
 }) => {
     let outerStyle;
     if (scale < 1) {
@@ -32,7 +32,7 @@ const EditorMain = ({
                     onDragOver={onDragOver}
                     data-role="drag-drop-container"
                     style={style}
-                    onClick={onClick}
+                    onMouseDown={onMouseDown}
                 >
                     {children}
                 </div>
@@ -47,7 +47,7 @@ EditorMain.propTypes = {
     onDragOver: PropTypes.func.isRequired,
     children: PropTypes.any,
     style: PropTypes.any.isRequired,
-    onClick: PropTypes.func,
+    onMouseDown: PropTypes.func,
     scale: PropTypes.number
 };
 export default EditorMain;
