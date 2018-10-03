@@ -1,9 +1,10 @@
+import h1 from '../../../img/edit.svg';
 const Constant = {
     buttonDisplay: {
         text: [
             {
                 type: 'h1',
-                src: '../src/img/edit.svg',
+                src:h1,
                 size: { width: 0.8, height: 75 },
                 textContent:
                     'Lorem ipsum dolor sit .',
@@ -11,7 +12,7 @@ const Constant = {
             },
             {
                 type: 'h2',
-                src: '../src/img/edit.svg',
+                src:h1,
                 size: { width: 0.8, height: 55 },
                 textContent:
                     'Lorem ipsum dolor, sit amet .',
@@ -19,7 +20,7 @@ const Constant = {
             },
             {
                 type: 'p',
-                src: '../src/img/edit.svg',
+                src: h1,
                 size: { width: 0.8, height: 65 },
                 format: 'text',
                 textContent:
@@ -27,7 +28,7 @@ const Constant = {
             },
             {
                 type: 'span',
-                src: '../src/img/edit.svg',
+                src:h1,
                 size: { width: 0.8, height: 65 },
                 format: 'text',
                 textContent:
@@ -36,7 +37,7 @@ const Constant = {
         ],
         img: [ {
             type: 'img',
-            src: '../src/img/edit.svg',
+            src:h1,
             size: { width: 0.8, height: 0.8 },
             format: 'image'
         }],

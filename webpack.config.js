@@ -18,8 +18,12 @@ module.exports = {
             test: /\.(jpe?g|png|gif|svg)$/,
             use: [
                 {
-                    loader: "url-loader",
-                    options: { limit: 40000 }
+                    loader: 'url-loader',
+                    options: { limit: 40000,
+                    name: 'img/[hash]-[name].[ext]',
+                    outputPath: 'img/',
+                    publicPath:'/src/img'
+                       }
                 },
                 "image-webpack-loader"
             ]

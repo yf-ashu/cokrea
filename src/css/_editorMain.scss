@@ -4,19 +4,33 @@
   overflow: auto;
   position: relative;
   text-align: center;
-  
 }
 .editorMain__canvas--outer {
   display: block;
-  position: relative;
-  display: flex;
+  // position: relative;
+  // display: flex;
   padding: 100px;
 }
 .editorMain__canvas {
   @include size(100%, 100%);
   background-color: $white;
+  // overflow: hidden;
+  position: relative;
+  display: inline-block;
+}
+.editorMain__canvas--inner {
+  @include size(100%, 100%);
+
   overflow: hidden;
   position: relative;
+  display: inline-block;
+}
+.editorMain__canvas--select {
+  @include size(100%, 100%);
+  background-color: $white;
+  opacity: 0;
+  left: 100px;
+  position: absolute;
   display: inline-block;
 }
 .editorMain__items {
@@ -31,23 +45,30 @@
 }
 .editorMain__item {
   // word-break: break-all;
-  white-space:nowrap;
-    z-index: 1001;
-    display: flex;
-    margin: 0;
-    padding: 16px;
-    &:focus{
-      border: none;
-      outline: none;
-    }
+  white-space: nowrap;
+  z-index: 1001;
+  display: flex;
+  margin: 0;
+  padding: 16px;
+  &:focus {
+    border: none;
+    outline: none;
+  }
+}
+.editorMain__item--select-svg {
+  position: absolute;
+  outline: $special 3px dotted;
+  z-index: 1200;
+  pointer-events: none;
+  top: 0;
+  left: 0;
 }
 .editorMain__item--select {
   position: absolute;
- outline: $special 3px dotted;
   cursor: move;
   left: -100%;
   transform-origin: right bottom;
-
+  // pointer-events: none;
   &-outside {
     @include size(100%, 100%);
     position: relative;
@@ -64,12 +85,11 @@
     z-index: 1100;
     margin: 16px;
     cursor: nwse-resize;
-
   }
   &-inside-tr {
     position: absolute;
-    top: -16px;;
-    right: -16px;;
+    top: -16px;
+    right: -16px;
     transform: translate(50%, -50%);
     border: $white 1px solid;
     background-color: $special;
@@ -78,12 +98,11 @@
     margin: 16px;
 
     cursor: nesw-resize;
-
   }
   &-inside-bl {
     position: absolute;
-    bottom: -16px;;
-    left: -16px;;
+    bottom: -16px;
+    left: -16px;
     transform: translate(-50%, 50%);
     border: $white 1px solid;
     background-color: $special;
@@ -92,12 +111,11 @@
     margin: 16px;
 
     cursor: nesw-resize;
-
   }
   &-inside-br {
     position: absolute;
-    bottom: -16px;;
-    right: -16px;;
+    bottom: -16px;
+    right: -16px;
     transform: translate(50%, 50%);
     border: $white 1px solid;
     background-color: $special;
@@ -106,19 +124,54 @@
     margin: 16px;
 
     cursor: nwse-resize;
-
   }
 }
-.editorMain__item--h2 {
-  // -moz-appearance: textfield;
-  // -webkit-appearance: textfield;
-  // background-color: white;
-  // background-color: -moz-field;
-  // border: 1px solid darkgray;
-  // box-shadow: 1px 1px 1px 0 lightgray inset;
-  // font: -moz-field;
-  // font: -webkit-small-control;
-  // margin-top: 5px;
-  // padding: 2px 3px;
-  // width: 398px;
+.editorMain__item--select__features {
+  position: absolute;
+  top: -15px;
+  right: -44px;
+  z-index: 1100;
+  @include size(32px, 110px);
+  @extend %flexCenter-Center-column;
+  .editorMain__item--select__features--up {
+    @include distance(0, 0 0 6px 0);
+
+    @include size(28px, 28px);
+    @include background-center('../img/layerUp.png');
+
+    &:hover {
+      @include background-center('../img/layerUpHover.png');
+    }
+    &-unable {
+      @include distance(0, 0 0 6px 0);
+
+      @include size(28px, 28px);
+      @include background-center('../img/layerUpHoverun.png');
+      cursor: not-allowed;
+    }
+  }
+  .editorMain__item--select__features--down {
+    @include distance(0, 0 0 10px 0);
+    @include size(28px, 28px);
+    @include background-center('../img/layerDown.png');
+    &:hover {
+      @include background-center('../img/layerDownHover.png');
+    }
+    &-unable {
+      @include distance(0, 0 0 10px 0);
+
+      @include size(28px, 28px);
+      @include background-center('../img/layerDownHoverun.png');
+      cursor: not-allowed;
+    }
+  }
+  .editorMain__item--select__features--delete {
+    @include distance(0, 0 0 6px 0);
+
+    @include size(22px, 22px);
+    @include background-center('../img/delete.png');
+    &:hover {
+      @include background-center('../img/deleteHover.png');
+    }
+  }
 }

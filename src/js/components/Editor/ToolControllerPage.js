@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ToolControllerPage = ({ }) => {
+const ToolControllerPage = () => {
     return (
         <div className="editorMain">
           page 

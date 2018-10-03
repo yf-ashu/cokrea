@@ -8,12 +8,16 @@ const EditorMain = ({
     children,
     style,
     scale,
-    onMouseDown
+    onMouseDown,
+
+    select
 }) => {
     let outerStyle;
     if (scale < 1) {
         outerStyle = {
-            width: '100%',
+            width: 'auto',
+            // width:style.width * scale + 200,
+            minWidth: style.width * scale + 200,
             height: style.height * scale + 200
         };
     } else {
@@ -34,7 +38,8 @@ const EditorMain = ({
                     style={style}
                     onMouseDown={onMouseDown}
                 >
-                    {children}
+                    <div className="editorMain__canvas--inner">{children}</div>
+                    {select}
                 </div>
             </div>
         </div>
@@ -48,6 +53,7 @@ EditorMain.propTypes = {
     children: PropTypes.any,
     style: PropTypes.any.isRequired,
     onMouseDown: PropTypes.func,
-    scale: PropTypes.number
+    scale: PropTypes.number,
+    select: PropTypes.any
 };
 export default EditorMain;

@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import bold from '../../../img/bold.svg';
+import italic from '../../../img/italic.svg';
 
 const ToolControllerText = ({ display, action, style, controllCurrent }) => {
     console.log(display);
     console.log(style);
     // let find = display.findIndex(data => data.style);
-    let find, findwhere,option=[];
+    let find,
+        findwhere,
+        option = [];
     if (controllCurrent[2] != null) {
         find = display[controllCurrent[2]].style;
         findwhere = Object.assign({}, ...find);
-        console.log(findwhere);
     }
-    for (let i = 16; i < 73; i+=2) {
-     option.push(i)
+    for (let i = 16; i < 73; i++) {
+        option.push(i);
     }
     return (
         <div className="toolControllerText">
@@ -27,7 +30,7 @@ const ToolControllerText = ({ display, action, style, controllCurrent }) => {
                     }
                 >
                     <img
-                        src="../src/img/bold.svg"
+                        src={bold}
                         id="fontBold"
                         data-value={
                             findwhere
@@ -50,7 +53,7 @@ const ToolControllerText = ({ display, action, style, controllCurrent }) => {
                     }
                 >
                     <img
-                        src="../src/img/italic.svg"
+                        src={italic}
                         id="fontItalic"
                         data-value={
                             findwhere
@@ -92,17 +95,28 @@ const ToolControllerText = ({ display, action, style, controllCurrent }) => {
             </div>
             <div className="toolController--select">
                 <label htmlFor="textSize">Font size</label>
-                <select name="textSize" id="textSize" value={
-                        findwhere ? findwhere['fontSize'] :47
-                    }
+                <select
+                    name="textSize"
+                    id="textSize"
+                    value={findwhere ? findwhere['fontSize'] : 47}
                     onChange={action.detailChangeNum}
                     data-data="fontSize"
-
-                    >
-                    {option.map(data=>{
-                       return <option value={data}>{data}</option>
+                >
+                    {option.map(data => {
+                        return (
+                            <option
+                                key={data}
+                                value={data}
+                                selected={
+                                    data === +findwhere['fontSize']
+                                        ? 'selected'
+                                        : null
+                                }
+                            >
+                                {data}{' '}
+                            </option>
+                        );
                     })}
-
                 </select>
             </div>
         </div>

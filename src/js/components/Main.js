@@ -105,15 +105,15 @@ class Main extends Component {
         //   // setInterval( this.test(e) , 1000)
         //   this.test(e)
         // });
-        let that=this
+        let that=this;
         let move=function(e){
             // console.log('有放開');
-                that.test(e,elem)
-        }
-        document.addEventListener('mousemove',move)
+            that.test(e,elem);
+        };
+        document.addEventListener('mousemove',move);
 
         document.addEventListener('mouseup',function(){
-            document.removeEventListener('mousemove',move)
+            document.removeEventListener('mousemove',move);
         });
     }
     mouseUp(e) {

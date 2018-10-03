@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
-import EditorHeader from '../presentational/Editor/EditorHeader';
-import ToolButton from '../presentational/Editor/ToolButton';
-import EditorMain from '../presentational/Editor/Editormain';
-import EditorItem from '../presentational/Editor/EditorItem';
-import ToolController from '../presentational/Editor/ToolController';
-import ToolButtonItem from '../presentational/Editor/ToolButtonItem';
-import Constant from '../../components/element/Constant';
-import EditorPreview from '../presentational/Editor/EditorPreview';
+import EditorHeader from '../Editor/EditorHeader';
+import EditorSelect from '../Editor/EditorSelect';
+import ToolButton from '../Editor/ToolButton';
+import EditorMain from '../Editor/Editormain';
+import EditorItem from '../Editor/EditorItem';
+import ToolController from '../Editor/ToolController';
+import ToolButtonItem from '../Editor/ToolButtonItem';
+import Constant from '../Editor/Constant';
+import EditorPreview from '../Editor/EditorPreview';
+// 圖片
+import font from '../../../img/font.svg';
+import close from '../../../img/close.svg';
+import picture from '../../../img/picture.svg';
+import square from '../../../img/square.svg';
 
 const random = () => {
     let date = Date.now().toString();
@@ -39,7 +45,7 @@ const styleSetting = type => {
     }
     case 'h1': {
         tmp = [
-            { backgroundColor: '#rrggbb' },
+            { backgroundColor: 'rgba(0,0,0,0)' },
             { color: '#000000' },
             { fontWeight: 700 },
             { fontStyle: 'normal' },
@@ -49,7 +55,7 @@ const styleSetting = type => {
     }
     case 'h2': {
         tmp = [
-            { backgroundColor: '#rrggbb' },
+            { backgroundColor: 'rgba(0,0,0,0)' },
             { color: '#000000' },
 
             { fontWeight: 700 },
@@ -60,7 +66,7 @@ const styleSetting = type => {
     }
     default: {
         tmp = [
-            { backgroundColor: '#rrggbb' },
+            { backgroundColor: 'rgba(0,0,0,0)' },
             { color: '#000000' },
 
             { fontWeight: 400 },
@@ -93,7 +99,9 @@ class Editor extends Component {
             controllCurrent: ['page', null, null, null],
             fileUpload: { imgUrl: null, file: null },
             mouseEvent: 'true',
-            saveButton:false
+            saveButton: false,
+            history: [],
+            redoItem: []
         };
         //按 button 顯示在 display
         this.handleClickButton = this.handleClickButton.bind(this);
@@ -112,8 +120,117 @@ class Editor extends Component {
         this.changeSizeset = this.changeSizeset.bind(this);
         this.handleImageUpload = this.handleImageUpload.bind(this);
         this.onBlur = this.onBlur.bind(this);
+        this.changeLayer = this.changeLayer.bind(this);
+        this.recordStep = this.recordStep.bind(this);
+        this.redoStep = this.redoStep.bind(this);
     }
+    recordStep(value) {
+        let record = this.state.history;
+        console.log(record);
 
+        record.push(JSON.stringify(value));
+        this.setState({
+            history: record,
+            redoItem: []
+        });
+    }
+    redoStep(e) {
+        console.log(e.currentTarget.dataset.data);
+        let record = this.state.history.slice(0);
+        let newRecord;
+        let redoRecord = this.state.redoItem;
+        if (e.currentTarget.dataset.data === 'recovery') {
+            newRecord = record.pop();
+            redoRecord.push(newRecord);
+            newRecord = JSON.parse(newRecord);
+
+            this.recoveryItem(
+                newRecord.old.func.split('-'),
+                newRecord.old.id,
+                newRecord.old.value
+            );
+        } else {
+            console.log(redoRecord);
+            newRecord = redoRecord.pop();
+            record.push(newRecord);
+            newRecord = JSON.parse(newRecord);
+
+            this.redoItem(
+                newRecord.now.func.split('-'),
+                newRecord.now.id,
+                newRecord.now.value
+            );
+        }
+
+        this.setState({
+            history: record,
+            redoItem: redoRecord
+        });
+        console.log('回復', record);
+        console.log('重做', redoRecord);
+    }
+    recoveryItem(action, id, value) {
+        console.log(action, id, value);
+        let copy = [];
+        copy = this.state[action[1]];
+
+        if (action[1] === 'display') {
+            if (action[0] === 'addNewItem') {
+                copy.splice(id[1], 1);
+            } else if (action[0] === 'changeLayer') {
+                let previous = copy[id[0]];
+                let now = copy[id[1]];
+                copy[id[0]] = now;
+                copy[id[1]] = previous;
+                console.log(now);
+            } else if (action[0] === 'changeLayerDelete') {
+                copy.splice(id[1], 0, value[0]); //生成
+            } else {
+                console.log(copy[id[1]]);
+                console.log(copy);
+                let find = this.state[action[1]].findIndex(data => {
+                    return data.key === id[0];
+                });
+                copy[find][value[1]] = value[0];
+            }
+        } else {
+            copy[0][value[1]] = value[0];
+        }
+
+        this.setState({
+            [action[1]]: copy,
+            controllCurrent: ['page', null, null, null]
+        });
+    }
+    redoItem(action, id, value) {
+        let copy = [];
+        copy = this.state[action[1]];
+
+        if (action[1] === 'display') {
+            if (action[0] === 'addNewItem') {
+                copy.splice(id[1], 0, value[0]); //生成
+            } else if (action[0] === 'changeLayer') {
+                let previous = copy[id[0]];
+                let now = copy[id[1]];
+                copy[id[0]] = now;
+                copy[id[1]] = previous;
+            } else if (action[0] === 'changeLayerDelete') {
+                copy.splice(id[1], 1);
+            } else {
+                let find = this.state[action[1]].findIndex(data => {
+                    return data.key === id[0];
+                });
+                copy[find][value[1]] = value[0];
+            }
+        } else {
+            copy = this.state[action[1]];
+            copy[0][value[1]] = value[0];
+        }
+        this.setState({
+            [action[1]]: copy,
+            controllCurrent: ['page', null, null, null]
+        });
+    }
     handleClickButton(e) {
         let type = {
             type: e.currentTarget.attributes.type.value,
@@ -148,7 +265,12 @@ class Editor extends Component {
         }
 
         let find = copy[object].findIndex(data => data[inner]);
-
+        let opt = [];
+        let old = Object.assign({}, [...copy[object]]);
+        old = Object.keys(old).map(function(key) {
+            opt.push(old[key]);
+            return old[key];
+        });
         if (value !== null) {
             if (find < 0) {
                 copy[object].push({ [inner]: value });
@@ -157,18 +279,37 @@ class Editor extends Component {
             }
         }
         if (string !== null) {
-            copy[object][find] = { [inner]: string };
+            if (find < 0) {
+                copy[object].push({ [inner]: value });
+            } else {
+                copy[object][find] = { [inner]: string };
+            }
         }
+
         this.setState({
             [state]: copyFirst
+        });
+
+        this.recordStep({
+            old: {
+                func: 'controllSetting-' + state,
+                id: state === 'display' ? [copy.key, find] : [0, find],
+                value: [old, object]
+            },
+
+            now: {
+                func: 'controllSetting-' + state,
+                id: state === 'display' ? [copy.key, find] : [0, find],
+                value: [copy[object], object]
+            }
         });
     }
     clickToolButtonItem(e) {
         let send;
         if (e.currentTarget.dataset.send) {
-            send=e.currentTarget.dataset.send;
-            if(!this.state.fileUpload.file){
-                alert('Please select a image to upload.')
+            send = e.currentTarget.dataset.send;
+            if (!this.state.fileUpload.file) {
+                alert('Please select a image to upload.');
             }
         }
         let type = {
@@ -189,11 +330,11 @@ class Editor extends Component {
         let type = JSON.parse(e.dataTransfer.getData('text/plain'));
         this.addNewItem(type, e);
     }
-    //放大縮小
+    //放大縮小 要重寫
     headerSizeClick(e) {
         let copyDisplay = this.state.editMainStyle.slice(0);
         let copy = copyDisplay[0];
-        console.log(copy);
+        // console.log(copy);
         if (e.currentTarget.dataset.num === '0') {
             if (copy.scale <= 0.25) {
                 let find = copy.style.findIndex(data => data.transform);
@@ -238,7 +379,7 @@ class Editor extends Component {
 
     addNewItem(type, e, special) {
         // console.log(type, e.currentTarget);
-        console.log(special)
+        // console.log(special);
         if (type) {
             let check = this.state.buttonItem.findIndex(
                 object => object.type === type.type
@@ -250,11 +391,15 @@ class Editor extends Component {
             // console.log(e.currentTarget);
             let width =
                 special === 'img'
-                    ? this.state.fileUpload.file.width *this.state.buttonItem[check].size.width
+                    ? this.state.fileUpload.file.width *
+                      this.state.buttonItem[check].size.width
                     : this.state.buttonItem[check].size.width *
                       this.state.editMainStyle[0].style[0].width;
-            let height =special === 'img'? this.state.fileUpload.file.height *this.state.buttonItem[check].size.width
-            : this.state.buttonItem[check].size.height;
+            let height =
+                special === 'img'
+                    ? this.state.fileUpload.file.height *
+                      this.state.buttonItem[check].size.width
+                    : this.state.buttonItem[check].size.height;
             let textContent =
                 type === 'img'
                     ? null
@@ -284,14 +429,11 @@ class Editor extends Component {
                     id: randomClass,
                     format: type.format,
                     type: type.type,
-                    src: this.state.fileUpload.imgUrl,
-                    textContent:textContent
+                    src: this.state.fileUpload.imgUrl
                 },
-                option: [
-                    {contentEditable: 'false'},
-                    // {dangerouslySetInnerHTML:null}
-                    // {textContent: textContent}
-                ],
+                textContent: textContent,
+
+                option: [{ contentEditable: 'false' }],
 
                 style: style.concat(tmp),
 
@@ -321,8 +463,22 @@ class Editor extends Component {
                     }
                 ]
             };
-            console.log(array);
+            // console.log(array);
             array.push(value);
+            this.recordStep({
+                old: {
+                    func: 'addNewItem-display',
+                    id: [randomClass, array.length - 1],
+                    value: [{}, '']
+                },
+
+                now: {
+                    func: 'addNewItem-display',
+                    id: [randomClass, array.length - 1],
+                    value: [value, '']
+                }
+            });
+
             this.setState({
                 display: array
             });
@@ -333,6 +489,8 @@ class Editor extends Component {
         e.stopPropagation();
     }
     canInterEdit(e) {
+        e.preventDefault();
+        e.stopPropagation();
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
         copy[copyDisplay].option[0].contentEditable = 'true';
@@ -343,24 +501,22 @@ class Editor extends Component {
         });
     }
     onBlur(e) {
-        console.log(e.currentTarget);
-        if(this.state.controllCurrent[2]){
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
-        console.log(copy[copyDisplay])
+        console.log(copy[copyDisplay]);
         copy[copyDisplay].option[0].contentEditable = 'false';
-        copy[copyDisplay].attribute.textContent = e.currentTarget.textContent;
-        // console.log(copy[copyDisplay].textContent);
+        copy[copyDisplay].textContent = e.currentTarget.innerHTML;
         this.setState({
             mouseEvent: 'true',
             display: copy
         });
-
         let that = this;
         let move = function(e) {
-            if (e.target.className === 'editorMain__canvas') {
+            console.log('點到畫布', e.target);
+
+            if (e.target.className === 'editorMain__canvas--inner') {
                 that.setState({
-                    controllCurrent: ['page', null]
+                    controllCurrent: ['page', null, null, null]
                 });
                 return;
             }
@@ -368,9 +524,10 @@ class Editor extends Component {
         document.addEventListener('click', move);
         this.init(e, move);
     }
-    }
     //移動座標時
     changePosition(e, elem, pre, init) {
+        e.preventDefault();
+        e.stopPropagation();
         let currentX = e.pageX;
         let currentY = e.pageY;
         let distanceX = currentX - pre[0];
@@ -381,17 +538,20 @@ class Editor extends Component {
         let copy = this.state.display.slice(0);
         let left = distanceX / this.state.editMainStyle[0].scale + +init.left;
         let top = distanceY / this.state.editMainStyle[0].scale + +init.top;
-
         copy[copyDisplay].outside[2] = {
             left: left
         };
         copy[copyDisplay].outside[3] = {
             top: top
         };
-
         this.setState({
             display: copy
         });
+
+        return {
+            id: [elem.dataset.id, copyDisplay],
+            value: copy[copyDisplay].outside
+        };
     }
     //偵測目前點到誰
     editorItemClick(e) {
@@ -401,7 +561,7 @@ class Editor extends Component {
         let copyDisplay = this.state.display.findIndex(
             data => data.key === e.currentTarget.dataset.id
         );
-        console.log(this.state.display[copyDisplay].style);
+        // console.log(this.state.display[copyDisplay].style);
         copy[0] = this.state.display[copyDisplay].attribute.format;
         copy[1] = this.state.display[copyDisplay];
         copy[2] = copyDisplay;
@@ -412,23 +572,52 @@ class Editor extends Component {
     }
     //要移動
     elementOnMouseDown(e) {
+        e.preventDefault();
+        e.stopPropagation();
         e.currentTarget.focus();
+
         this.editorItemClick(e);
         let elem = e.currentTarget;
         let that = this;
         let pre = [e.pageX, e.pageY];
+        let copyDisplay = parseInt(
+            this.state.display.findIndex(data => data.key === elem.dataset.id)
+        );
+        let copy = this.state.display.slice(0);
+
         let init = {
             left: +e.currentTarget.parentNode.style.left.split('px')[0],
             top: +e.currentTarget.parentNode.style.top.split('px')[0]
         };
+        let result;
+        let opt = [];
+        let old = Object.assign({}, [...copy[copyDisplay].outside]);
+        old = Object.keys(old).map(function(key) {
+            opt.push(old[key]);
+            return old[key];
+        });
         let move = function(e) {
             e.preventDefault();
-
-            that.changePosition(e, elem, pre, init);
+            result = that.changePosition(e, elem, pre, init);
         };
         document.addEventListener('mousemove', move);
         document.addEventListener('mouseup', function() {
             document.removeEventListener('mousemove', move);
+            result
+                ? that.recordStep({
+                    old: {
+                        func: 'changePosition-display',
+                        id: result.id,
+                        value: [opt, 'outside']
+                    },
+                    now: {
+                        func: 'changePosition-display',
+                        id: result.id,
+                        value: [result.value, 'outside']
+                    }
+                })
+                : null;
+            result = null;
         });
     }
     init(e, move) {
@@ -442,6 +631,7 @@ class Editor extends Component {
             this.setState({
                 controllCurrent: ['page', null]
             });
+            e.currentTarget.blur();
         } else {
             e.currentTarget.blur();
         }
@@ -498,7 +688,6 @@ class Editor extends Component {
             break;
         }
         }
-
         copy[copyDisplay].outside[0] = {
             width: width
         };
@@ -515,6 +704,10 @@ class Editor extends Component {
         this.setState({
             display: copy
         });
+        return {
+            id: [copy[copyDisplay].key, copyDisplay],
+            value: copy[copyDisplay].outside
+        };
     }
     changeSize(e) {
         e.preventDefault();
@@ -528,14 +721,37 @@ class Editor extends Component {
             left: +target.style.left.split('px')[0],
             top: +target.style.top.split('px')[0]
         };
-        console.log(target.offsetWidth);
         let pull = e.currentTarget.dataset.data;
+
+        let opt = [
+            { width: init.width },
+            { height: init.height },
+            { left: init.left },
+            { top: init.top }
+        ];
+        let result;
+
         let move = function(e) {
-            that.changeSizeset(e, pre, init, pull);
+            result = that.changeSizeset(e, pre, init, pull);
         };
         document.addEventListener('mousemove', move);
         document.addEventListener('mouseup', function() {
             document.removeEventListener('mousemove', move);
+            result
+                ? that.recordStep({
+                    old: {
+                        func: 'changeSize-display',
+                        id: result.id,
+                        value: [opt, 'outside']
+                    },
+                    now: {
+                        func: 'changeSize-display',
+                        id: result.id,
+                        value: [result.value, 'outside']
+                    }
+                })
+                : null;
+            result = null;
         });
     }
     handleImageUpload(e) {
@@ -544,10 +760,10 @@ class Editor extends Component {
         let file = e.target.files[0];
 
         reader.onloadend = () => {
-            let img = new Image;
-let that=this;
+            let img = new Image();
+            let that = this;
             img.onload = function() {
-                console.log(img.width)
+                console.log(img.width);
                 that.setState({
                     fileUpload: {
                         file: img,
@@ -555,32 +771,103 @@ let that=this;
                     }
                 });
             };
-            img.src=reader.result
-
-
-       
-        
+            img.src = reader.result;
         };
         reader.readAsDataURL(file);
     }
+    changeLayer(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log(e.currentTarget.dataset.data);
+        let copy = this.state.display.slice(0);
+        let copyDisplay = this.state.controllCurrent.slice(0);
+        if (e.currentTarget.dataset.data === 'layerdown') {
+            let previous = copy[copyDisplay[2] - 1];
+            let now = copy[copyDisplay[2]];
+            copy[copyDisplay[2]] = previous;
+            copy[copyDisplay[2] - 1] = now;
+            copyDisplay[2] = copyDisplay[2] - 1;
+
+            this.recordStep({
+                old: {
+                    func: 'changeLayer-display',
+                    id: [copyDisplay[2] + 1, copyDisplay[2]],
+                    value: [{}, '']
+                },
+
+                now: {
+                    func: 'changeLayer-display',
+                    id: [copyDisplay[2] + 1, copyDisplay[2]],
+                    value: [{}, '']
+                }
+            });
+        } else if (e.currentTarget.dataset.data === 'layerup') {
+            let next = copy[copyDisplay[2] + 1];
+            let now = copy[copyDisplay[2]];
+            copy[copyDisplay[2]] = next;
+            copy[copyDisplay[2] + 1] = now;
+            copyDisplay[2] = copyDisplay[2] + 1;
+            this.recordStep({
+                old: {
+                    func: 'changeLayer-display',
+                    id: [copyDisplay[2] - 1, copyDisplay[2]],
+                    value: [{}, '']
+                },
+
+                now: {
+                    func: 'changeLayer-display',
+                    id: [copyDisplay[2] - 1, copyDisplay[2]],
+                    value: [{}, '']
+                }
+            });
+        } else {
+            console.log(copy[copyDisplay[2]]);
+            this.recordStep({
+                old: {
+                    func: 'changeLayerDelete-display',
+                    id: [null, copy[copyDisplay[2]]],
+                    value: [copy[copyDisplay[2]], '']
+                },
+
+                now: {
+                    func: 'changeLayerDelete-display',
+                    id: [null, copy[copyDisplay[2]]],
+                    value: [{}, '']
+                }
+            });
+            copy.splice(copyDisplay[2], 1);
+            copyDisplay = ['page', null, null, null];
+        }
+        this.setState({
+            display: copy,
+            controllCurrent: copyDisplay
+        });
+
+        console.log(copy);
+        console.log(copyDisplay);
+    }
+
     render() {
+        // console.log(this.state.controllCurrent);
+        console.log(this.state.display);
+        console.log(this.state.history);
         let item = this.state.display.map(data => {
             return (
                 <EditorItem
                     key={data.key}
-                    outside={Object.assign({}, ...data.outside)}
                     tag={data.tag}
                     attribute={data.attribute}
-                    option={Object.assign({},...data.option)}
+                    outside={Object.assign({}, ...data.outside)}
+                    option={Object.assign({}, ...data.option)}
                     style={Object.assign({}, ...data.style)}
                     onMouseDown={
                         this.state.mouseEvent === 'true'
                             ? this.elementOnMouseDown.bind(this)
                             : null
                     }
-                    // contentEditable={data.attribute.contentEditable}
                     onBlur={this.onBlur}
                     onDoubleClick={this.canInterEdit.bind(this)}
+                    textContent={data.textContent}
                 />
             );
         });
@@ -599,8 +886,7 @@ let that=this;
                 />
             );
         });
-        console.log( this.state.display);
-        // console.log(this.state.fileUpload)
+        // console.log(this.state.display);
         return (
             <div className="editor">
                 <EditorPreview
@@ -608,12 +894,18 @@ let that=this;
                     display={this.state.display}
                     fileUpload={this.state.fileUpload}
                     saveButton={this.state.saveButton}
-                    closeButton={()=>{this.setState({saveButton:false})}}
+                    closeButton={() => {
+                        this.setState({ saveButton: false });
+                    }}
                 />
                 <EditorHeader
                     scale={this.state.editMainStyle[0].scale}
                     onClick={this.headerSizeClick}
-                    onSave={()=>{this.setState({saveButton:true})}}
+                    onSave={() => {
+                        this.setState({ saveButton: true });
+                    }}
+                    onHistory={this.redoStep}
+                    unable={[this.state.history, this.state.redoItem]}
                 />
                 <div className="toolButton">
                     <div
@@ -629,7 +921,7 @@ let that=this;
                                 className="toolButton__item--close"
                                 onClick={this.handleCloseButton}
                             >
-                                <img src="../src/img/close.svg" />
+                                <img src={close} />
                             </div>
                         </div>
                         <div className="toolButton__items">
@@ -654,7 +946,7 @@ let that=this;
                                 <button
                                     className="toolButton__items--upload-button"
                                     type="img"
-                                    data-format="Image"
+                                    data-format="image"
                                     data-send="img"
                                     onClick={this.clickToolButtonItem}
                                 >
@@ -669,7 +961,7 @@ let that=this;
                     <div className="toolButton">
                         <ToolButton
                             onClick={this.handleClickButton}
-                            src="../src/img/font.svg"
+                            src={font}
                             type="text"
                             name="Text"
                             displayName="Add Text"
@@ -682,7 +974,7 @@ let that=this;
                         />
                         <ToolButton
                             onClick={this.handleClickButton}
-                            src="../src/img/picture.svg"
+                            src={picture}
                             type="img"
                             name="Image"
                             displayName="Add Image"
@@ -695,7 +987,7 @@ let that=this;
                         />
                         <ToolButton
                             onClick={this.handleClickButton}
-                            src="../src/img/square.svg"
+                            src={square}
                             type="square"
                             name="Square"
                             displayName="Add Shape"
@@ -723,49 +1015,18 @@ let that=this;
                             ? this.init.bind(this)
                             : null
                     }
-                    // onMouseDown={this.init.bind(this)}
-                    // onFocus={this.test.bind(this)}
+                    controllCurrent={this.state.controllCurrent}
+                    changeSize={this.changeSize}
+                    select={
+                        <EditorSelect
+                            controllCurrent={this.state.controllCurrent}
+                            changeSize={this.changeSize}
+                            onMouseDown={this.changeLayer}
+                            display={this.state.display}
+                        />
+                    }
                 >
                     {item}
-                    <div
-                        className="editorMain__item--select"
-                        style={
-                            this.state.controllCurrent[1] !== null
-                                ? Object.assign(
-                                    {},
-                                    ...this.state.controllCurrent[1].outside
-                                )
-                                : {}
-                        }
-                        data-id={
-                            this.state.controllCurrent[1] !== null
-                                ? this.state.controllCurrent[1].key
-                                : {}
-                        }
-                    >
-                        <div className="editorMain__item--select-outside">
-                            <div
-                                className="editorMain__item--select-inside-tl"
-                                onMouseDown={this.changeSize}
-                                data-data="tl"
-                            />
-                            <div
-                                className="editorMain__item--select-inside-tr"
-                                onMouseDown={this.changeSize}
-                                data-data="tr"
-                            />
-                            <div
-                                className="editorMain__item--select-inside-bl"
-                                onMouseDown={this.changeSize}
-                                data-data="bl"
-                            />
-                            <div
-                                className="editorMain__item--select-inside-br"
-                                onMouseDown={this.changeSize}
-                                data-data="br"
-                            />
-                        </div>
-                    </div>
                 </EditorMain>
                 <ToolController
                     editMainStyle={this.state.editMainStyle[0]}

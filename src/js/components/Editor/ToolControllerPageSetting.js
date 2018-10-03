@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ToolControllerPageSetting = ({ style, action,display }) => {
+const ToolControllerPageSetting = ({ style, action }) => {
     // console.log(display)
     // console.log(style)
 
@@ -45,7 +45,6 @@ const ToolControllerPageSetting = ({ style, action,display }) => {
 };
 
 ToolControllerPageSetting.propTypes = {
-    display: PropTypes.any,
     style: PropTypes.any,
     action: PropTypes.any.isRequired
 };

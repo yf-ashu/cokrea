@@ -24,7 +24,7 @@
 .toolController--click {
   border-bottom: 2px solid $special;
 }
-.toolControllerPageSetting,.toolControllerText {
+.toolControllerPageSetting,.toolControllerText,.toolControllerImage {
   @include distance(16px, 0);
   color: $text-white;
 }
@@ -67,4 +67,7 @@
     @include size(16px,16px);
     cursor: pointer;
   }
+}
+.toolControllerImage{
+
 }

@@ -2,23 +2,24 @@ import React, { Component } from 'react';
 import ToolControllerPageSetting from './ToolControllerPageSetting';
 import ToolControllerText from './ToolControllerText';
 import ToolControllerPage from './ToolControllerPage';
+import ToolControllerImage from './ToolControllerImage';
+import PropTypes from 'prop-types';
+
 const components = {
     pageSetting: ToolControllerPageSetting,
     text: ToolControllerText,
-    page: ToolControllerPage
+    page: ToolControllerPage,
+    image:ToolControllerImage
 };
 class ToolController extends Component {
     constructor(props) {
         super(props);
         this.state = {
             current: 'pageSetting',
-            editMainStyle: this.props.editMainStyle,
-            display: this.props.display
+           
         };
-        console.log(this.props.display);
-        console.log(this.props.editMainStyl);
 
-        this.controllerDisplay = this.controllerDisplay.bind(this);
+
         this.handleClickLi = this.handleClickLi.bind(this);
         this.handlePageOnChangeNum = this.handlePageOnChangeNum.bind(this);
         this.handlePageOnChangeStr = this.handlePageOnChangeStr.bind(this);
@@ -26,9 +27,9 @@ class ToolController extends Component {
         this.handleDetailOnChangeStr = this.handleDetailOnChangeStr.bind(this);
     }
 
-    controllerDisplay() {
-        this.props.controll('test123');
-    }
+    // controllerDisplay() {
+    //     this.props.controll('test123');
+    // }
     handleClickLi(e) {
         this.setState({
             current: e.currentTarget.dataset.data
@@ -65,9 +66,6 @@ class ToolController extends Component {
             null,
             value
         );
-
-        // console.log(this.state.editMainStyle.style);
-        // console.log(value);
     }
 
     handlePageOnChangeNum(e) {
@@ -89,7 +87,8 @@ class ToolController extends Component {
         );
     }
     render() {
-        console.log(this.state.current);
+        // console.log(this.state.current);
+        // console.log(this.props.controllCurrent[0])
         let Item;
         if (this.state.current === 'pageSetting') {
             Item = components[this.state.current];
@@ -101,8 +100,7 @@ class ToolController extends Component {
             }
         }
 
-        console.log(this.props.controllCurrent[0]);
-        // console.log(Item)
+        // console.log(this.props.controllCurrent[0]);
         let display = (
             <Item
                 controllCurrent={this.props.controllCurrent}
@@ -116,12 +114,6 @@ class ToolController extends Component {
                 }}
             />
         );
-        // console.log(this.props.controllCurrent)
-        // console.log(this.props.display)
-        // console.log(this.props.editMainStyle)
-
-        // console.log(this.state.display)
-        // console.log(this.state.editMainStyle)
 
         return (
             <div className="toolController">
@@ -156,4 +148,10 @@ class ToolController extends Component {
         );
     }
 }
+ToolController.propTypes = {
+    controll: PropTypes.any,
+    controllCurrent: PropTypes.any,
+    editMainStyle: PropTypes.any.isRequired,
+    display: PropTypes.array
+};
 export default ToolController;

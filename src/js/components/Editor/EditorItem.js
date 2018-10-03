@@ -9,11 +9,11 @@ const EditorItem = ({
     outside,
     onMouseDown,
     onBlur,
-    onDoubleClick
+    onDoubleClick,textContent
 }) => {
     let Tag = tag;
     if (tag !== 'img') {
-        option.dangerouslySetInnerHTML = { __html: attribute.textContent };
+        option.dangerouslySetInnerHTML = { __html: textContent };
     }
 
     return (
@@ -52,6 +52,7 @@ EditorItem.propTypes = {
     outside: PropTypes.any,
     onBlur: PropTypes.func,
     onMouseDown: PropTypes.func,
-    onDoubleClick: PropTypes.func
+    onDoubleClick: PropTypes.func,
+    textContent:PropTypes.string
 };
 export default EditorItem;

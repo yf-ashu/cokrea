@@ -8,23 +8,29 @@
   @extend %flexCenter-Center-column;
   @include distance(16px, 0);
 }
-.editorPreview-main {
+.editorPreview__main {
   @include size(80%, 100%);
-  overflow: auto;
   @extend %flexCenter-Center-column;
+border-radius: 5px;
+background-color: $editor;
+overflow: hidden;
 
-  background-color: white;
 }
 .mainCanvas {
   outline: 1px solid black;
 }
-.editorPreview-controller {
-  @include size(40%, 100%);
+.editorPreview__controller {
+  @include size(300px, 100%);
   background-color: $controller;
   @extend %flexFlex-start-center-row;
 }
-.editorPreview-canvas {
-  @include size(auto, 100%);
+.editorPreview__canvas {
+  @include size(calc(100% - 300px), 100%);
+  overflow: auto;
+  // @extend %flexFlex-start-center-row;
+  text-align: center;
+  @include distance(16px 0 0 0, 0);
+
 }
 .editorPreview--button {
   @include distance(0, 5px 0);

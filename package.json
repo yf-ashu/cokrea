@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --open --mode development"
+    "start": "webpack-dev-server --open --mode development",
+    "lint": "eslint src --fix"
   },
   "author": "",
   "license": "ISC",
@@ -33,6 +34,7 @@
   "dependencies": {
     "eslint-loader": "^2.1.0",
     "file-loader": "^2.0.0",
+    "firebase-tools": "^4.2.1",
     "image-webpack-loader": "^4.3.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",

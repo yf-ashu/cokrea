@@ -24,16 +24,16 @@
 .editorHeader__button--save {
   background-color: $special;
   font-size: 12px;
-  &:hover{
-    background-color:  darken($special, 20%) ;
+  &:hover {
+    background-color: darken($special, 20%);
   }
 }
 .editorHeader__button--share {
   background-color: $button;
   font-size: 12px;
   @include distance(0, 0 16px);
-  &:hover{
-    background-color:  darken($button, 20%) ;
+  &:hover {
+    background-color: darken($button, 20%);
   }
 }
 .editorHeader__member {
@@ -42,17 +42,28 @@
   @include background-center('../img/self-01.jpg');
   border-radius: 50%;
 }
-.editorHeader__scale{
-  @include size(200px,28px);
+.editorHeader__scale {
+  @include size(200px, 28px);
   @extend %flexCenter-Center-row;
   background-color: $white;
   border-radius: 4px;
-  &--main{
-    @include size(100px,28px);
+  &--main {
+    @include size(100px, 28px);
     @extend %flexCenter-Center-row;
   }
-  button{
-    @include size(20px,28px);
+  button {
+    @include size(20px, 28px);
     color: $click;
+  }
+}
+.editorHeader__recovery,.editorHeader__redo {
+  @include size(28px, 28px);
+  @include distance(2px, 6px);
+
+  img {
+    @include size(24px, 24px);
+  }
+  &:hover {
+    background-color: $hover;
   }
 }
