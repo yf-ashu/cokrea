@@ -15,10 +15,7 @@ class EditorPreview extends Component {
     componentDidMount() {
         this.updateCanvas();
     }
-    // componentWillReceiveProps(nextProps){
-    //     this.updateCanvas();
 
-    //   }
     static getDerivedStateFromProps(nextProps, prevState) {
         if (
             nextProps.display !== prevState.display ||
@@ -113,12 +110,7 @@ class EditorPreview extends Component {
                     };
                     img.src = display[index].attribute.src;
                 } else {
-                    // let findWidth = display[index].style.findIndex(
-                    //     data => data.width
-                    // );
-                    // let findHeight = display[index].style.findIndex(
-                    //     data => data.height
-                    // );
+            
                     let findColor = display[index].style.findIndex(
                         data => data.color
                     );
@@ -195,7 +187,5 @@ EditorPreview.propTypes = {
     editMainStyle: PropTypes.array.isRequired,
     saveButton: PropTypes.any,
     closeButton: PropTypes.any
-
-    // option: PropTypes.any,
 };
 export default EditorPreview;

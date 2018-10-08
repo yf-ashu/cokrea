@@ -1,0 +1,113 @@
+.createMain {
+  @include size(100%, 100%);
+  grid-area: createMain;
+  background-color: $editor;
+  @extend %flexCenter-Center-row;
+  @include distance(16px,0);
+
+}
+.createMainItem {
+  @include size(250px, auto);
+  background-color: $white;
+  border-radius: 5px;
+  overflow: hidden;
+  @include distance(0, 8px);
+
+  &:hover {
+    .createMainItem__display {
+      background-color: $special;
+
+    }
+
+    .createMainItem__toggle,
+    .createMainItem__button {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+.createMainItem__inner {
+  @include size(100%, 350px);
+  @include distance(8px, 0);
+
+  transition: all 0.5s;
+  @extend %flexCenter-Center-row;
+}
+.createMainItem__display {
+  @include size(100%, 100%);
+  @extend %flexCenter-Center-row;
+  position: relative;
+  box-shadow: 0px 0px 30px rgba($color: #000000, $alpha: 0.5);
+}
+.createMainItem__bottom {
+  @include size(100%, 50px);
+  background-color: $white;
+  border-top: 1px solid lighten($button, 20);
+  @include distance(8px, 0);
+  @extend %flexCenter-space-between-row;
+}
+.createMainItem__button {
+  @include size(40%, 10%);
+  border: 1px solid $white;
+  font-size: 14px;
+  opacity: 0;
+
+  visibility: hidden;
+  transition: all 0.5s;
+
+  color:$text-white;
+  @extend %flexCenter-Center-row;
+
+  &:hover {
+    background-color: darken($special, 20%);
+    border: none;
+  }
+}
+.createMainItem__toggle {
+  @include size(24px, 22px);
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  opacity: 0;
+  visibility: hidden;
+  @include distance(2px 0, 0);
+  cursor: pointer;
+  span {
+    position: absolute;
+    @include size(100%, 2px);
+    background-color: $white;
+  }
+  span:nth-child(2) {
+    top: 50%;
+  }
+  span:last-child {
+    bottom: 0;
+  }
+  &:hover {
+    span {
+      background-color: darken($special, 20%);
+    }
+  }
+}
+.createMainItem__default {
+  @include size(70px, 70px);
+  border-radius: 50%;
+  background-color: $button;
+  position: relative;
+  transition: background-color 0.5s;
+  cursor: pointer;
+  &:hover {
+    background-color: darken($button, 20%);
+  }
+  span {
+    position: absolute;
+    @include size(20%, 4px);
+    background-color: $white;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+  }
+  span:last-child {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}

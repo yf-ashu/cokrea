@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-const Input = ({ type, id, value, handleChange,src }) => (
+const Input = ({ type, id, value, onChange,src,className }) => (
     <div className="input">
         <img className="input__icon" src={src} />
         <input
             type={type}
-            className="input-control"
+            className={className}
             id={id}
             value={value}
-            onChange={handleChange}
+            onChange={onChange}
         />
     </div>
 );
@@ -17,6 +17,7 @@ Input.propTypes = {
     id: PropTypes.string,
     value: PropTypes.string,
     src: PropTypes.string,
-    handleChange: PropTypes.func
+    onChange: PropTypes.func,
+    className: PropTypes.string,
 };
 export default Input;

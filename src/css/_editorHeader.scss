@@ -1,7 +1,6 @@
 .editorHeader {
   background-color: $header;
   grid-area: editorHeader;
-  // @extend %flexCenter-space-between-row;
   display: grid;
   grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 60px 3fr 2fr;
 }
@@ -28,19 +27,44 @@
     background-color: darken($special, 20%);
   }
 }
-.editorHeader__button--share {
-  background-color: $button;
+.editorHeader__button--share,.editorHeader__button--download {
+  // background-color: $button;
+  @include size(30px, 30px);
+
   font-size: 12px;
-  @include distance(0, 0 16px);
+  // @include distance(0, 0 16px);
   &:hover {
     background-color: darken($button, 20%);
   }
 }
+.editorHeader__button--download{
+  @include distance(0, 0 16px);
+img{
+  @include size(22px, 22px);
+
+}
+}
+.editorHeader__button--share{
+  @include distance(0, 0 16px 0 0);
+  button{
+    @include size(22px, 22px);
+
+    img{
+    @include size(22px, 22px);
+  
+  }
+  }
+  
+}
 .editorHeader__member {
   @include size(36px, 36px);
+cursor: pointer;
+  img {
+    @include size(100%, 100%);
+    border-radius: 50%;
+    background-color: $white;
 
-  @include background-center('../img/self-01.jpg');
-  border-radius: 50%;
+  }
 }
 .editorHeader__scale {
   @include size(200px, 28px);

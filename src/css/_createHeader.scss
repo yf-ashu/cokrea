@@ -1,0 +1,36 @@
+.createHeader {
+  // @include size(60px, 100%);
+
+  background-color: $header;
+  grid-area: createHeader;
+  display: grid;
+  grid-template: 'createHeader__left createHeader__center createHeader__right' 100% / 60px 3fr 2fr;
+}
+.createHeader__left {
+  @include size(60px, 100%);
+  background-color: $white;
+  grid-area: createHeader__left;
+}
+.createHeader__center {
+  grid-area: createHeader__center;
+  @include size(auto, 100%);
+  @extend %flexCenter-flexStart-row;
+}
+.createHeader__right {
+  grid-area: createHeader__right;
+  @include size(auto, 100%);
+  @extend %flexCenter-flex-end-row;
+  @include distance(0 16px, 0);
+}
+.createHeader__member {
+  @include size(36px, 36px);
+
+  img {
+    @include size(100%, 100%);
+    border-radius: 50%;
+    background-color: $white;
+
+  }
+
+  // @include background-center('../img/self-01.jpg');
+}

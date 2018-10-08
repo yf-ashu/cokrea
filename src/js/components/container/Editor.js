@@ -6,77 +6,26 @@ import EditorMain from '../Editor/Editormain';
 import EditorItem from '../Editor/EditorItem';
 import ToolController from '../Editor/ToolController';
 import ToolButtonItem from '../Editor/ToolButtonItem';
-import Constant from '../Editor/Constant';
+import {
+    random,
+    constant,
+    styleSetting,
+    initFirebase,
+    connectFetch
+} from '../element/constant';
 import EditorPreview from '../Editor/EditorPreview';
+import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
+require('firebase/auth');
+require('firebase/database');
+
 // 圖片
 import font from '../../../img/font.svg';
 import close from '../../../img/close.svg';
 import picture from '../../../img/picture.svg';
 import square from '../../../img/square.svg';
+import EditorShare from '../Editor/EditorShare';
 
-const random = () => {
-    let date = Date.now().toString();
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
-    let random = '';
-    for (let i = 1; i < 15; i += 3) {
-        let str = possible.charAt(Math.floor(Math.random() * possible.length));
-
-        if (i === 1) {
-            random =
-                str +
-                date.slice(0, i + 2) +
-                str +
-                date.slice(i + 2, date.length);
-        } else {
-            random =
-                random.slice(0, i + 2) +
-                str +
-                random.slice(i + 2, random.length);
-        }
-    }
-    return random;
-};
-const styleSetting = type => {
-    let tmp = [];
-    switch (type.type) {
-    case 'img': {
-        tmp = [{ backgroundColor: '#ffffff' }];
-        break;
-    }
-    case 'h1': {
-        tmp = [
-            { backgroundColor: 'rgba(0,0,0,0)' },
-            { color: '#000000' },
-            { fontWeight: 700 },
-            { fontStyle: 'normal' },
-            { fontSize: 47 }
-        ];
-        break;
-    }
-    case 'h2': {
-        tmp = [
-            { backgroundColor: 'rgba(0,0,0,0)' },
-            { color: '#000000' },
-
-            { fontWeight: 700 },
-            { fontStyle: 'normal' },
-            { fontSize: 22 }
-        ];
-        break;
-    }
-    default: {
-        tmp = [
-            { backgroundColor: 'rgba(0,0,0,0)' },
-            { color: '#000000' },
-
-            { fontWeight: 400 },
-            { fontStyle: 'normal' },
-            { fontSize: 16 }
-        ];
-    }
-    }
-    return tmp;
-};
 class Editor extends Component {
     constructor(props) {
         super(props);
@@ -101,7 +50,10 @@ class Editor extends Component {
             mouseEvent: 'true',
             saveButton: false,
             history: [],
-            redoItem: []
+            redoItem: [],
+            loginStatus: null,
+            userData: null
+            //前面是public是否有,後面是特定某些人有
         };
         //按 button 顯示在 display
         this.handleClickButton = this.handleClickButton.bind(this);
@@ -123,11 +75,159 @@ class Editor extends Component {
         this.changeLayer = this.changeLayer.bind(this);
         this.recordStep = this.recordStep.bind(this);
         this.redoStep = this.redoStep.bind(this);
+        this.saveData = this.saveData.bind(this);
+        this.checkLogin = this.checkLogin.bind(this);
+        this.connectDb = this.connectDb.bind(this);
+
     }
+
+    componentWillMount() {
+        this.checkLogin();
+    }
+    connectDb(database) {
+        let connectedRef = database.ref('.info/connected');
+        connectedRef.on('value', function(snap) {
+            if (snap.val() === true) {
+                alert('connected');
+            } else {
+                alert('not connected');
+            }
+        });
+        db.ref('/projectData/' + data.projectId).once('value', snapshot => {
+            if (snapshot.exists()) {
+                let getData = snapshot.val();
+                if (data.share) {
+                    getData.share = data.share;
+                }
+                getData.updateTime = now.getTime();
+                if (data.display) {
+                    getData.display = data.display;
+                }
+                if (data.editMainStyle) {
+                    getData.editMainStyle = data.editMainStyle;
+                }
+
+                db.ref('/projectData/' + data.projectId).update(
+                    getData,
+                    error => {
+                        if (error) {
+                            res.send({
+                                error: 'Create project Error'
+                            });
+                        } else {
+                            res.send({
+                                success: 'Create project'
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }
+    checkLogin() {
+        let projectData = location.href.split('edit/')[1];
+        let database
+        if (!this.props.loginStatus) {
+            if (!firebase.apps.length) {
+                database = initFirebase().database();
+                console.log('有進來');
+            }
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    console.log('有登入');
+                    let data = {
+                        id: user.uid
+                    };
+                    console.log(user);
+                    let target = '/app/getAccount';
+                    let payload = {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: new Headers({
+                            'Content-Type': 'application/json'
+                        })
+                    };
+                    // let getProjectData = data => {
+                    //     console.log(data);
+
+                    //     if (data.display) {
+                    //         this.setState({
+                    //             display: data.display,
+                    //             editMainStyle: data.editMainStyle
+                    //         });
+                    //     } else {
+                    //         this.setState({
+                    //             display: []
+                    //         });
+                    //     }
+                    // };
+
+                    // let getMemberData = data => {
+                    //     console.log(user, data);
+                    //     this.setState({
+                    //         loginStatus: user,
+                    //         userData: data
+                    //     });
+                        // let projectSendData = {
+                        //     userId: user.uid,
+                        //     projectId: projectData
+                        // };
+                        // let target = '/app/getProject';
+                        // let payload = {
+                        //     method: 'POST',
+                        //     body: JSON.stringify(projectSendData),
+                        //     headers: new Headers({
+                        //         'Content-Type': 'application/json'
+                        //     })
+                        // };
+
+                        // connectFetch(target, payload, getProjectData);
+                    // };
+                    connectFetch(target, payload, getMemberData);
+                } else {
+                    window.location.pathname = '/';
+                    console.log('沒有登入');
+                }
+            });
+        } else {
+            this.setState({
+                loginStatus: this.props.loginStatus,
+                userData: this.props.userData
+            });
+
+            let projectSendData = {
+                userId: this.props.loginStatus.uid,
+                projectId: projectData
+            };
+            let target = '/app/getProject';
+            let payload = {
+                method: 'POST',
+                body: JSON.stringify(projectSendData),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+            };
+
+            let getProjectData = data => {
+                console.log(data);
+
+                if (data.display) {
+                    this.setState({
+                        display: data.display,
+                        editMainStyle: data.editMainStyle
+                    });
+                } else {
+                    this.setState({
+                        display: []
+                    });
+                }
+            };
+            connectFetch(target, payload, getProjectData);
+        }
+    }
+
     recordStep(value) {
         let record = this.state.history;
-        console.log(record);
-
         record.push(JSON.stringify(value));
         this.setState({
             history: record,
@@ -135,7 +235,6 @@ class Editor extends Component {
         });
     }
     redoStep(e) {
-        console.log(e.currentTarget.dataset.data);
         let record = this.state.history.slice(0);
         let newRecord;
         let redoRecord = this.state.redoItem;
@@ -150,7 +249,6 @@ class Editor extends Component {
                 newRecord.old.value
             );
         } else {
-            console.log(redoRecord);
             newRecord = redoRecord.pop();
             record.push(newRecord);
             newRecord = JSON.parse(newRecord);
@@ -166,8 +264,6 @@ class Editor extends Component {
             history: record,
             redoItem: redoRecord
         });
-        console.log('回復', record);
-        console.log('重做', redoRecord);
     }
     recoveryItem(action, id, value) {
         console.log(action, id, value);
@@ -182,12 +278,9 @@ class Editor extends Component {
                 let now = copy[id[1]];
                 copy[id[0]] = now;
                 copy[id[1]] = previous;
-                console.log(now);
             } else if (action[0] === 'changeLayerDelete') {
                 copy.splice(id[1], 0, value[0]); //生成
             } else {
-                console.log(copy[id[1]]);
-                console.log(copy);
                 let find = this.state[action[1]].findIndex(data => {
                     return data.key === id[0];
                 });
@@ -205,7 +298,6 @@ class Editor extends Component {
     redoItem(action, id, value) {
         let copy = [];
         copy = this.state[action[1]];
-
         if (action[1] === 'display') {
             if (action[0] === 'addNewItem') {
                 copy.splice(id[1], 0, value[0]); //生成
@@ -239,7 +331,7 @@ class Editor extends Component {
         if (type.type !== this.state.type.type) {
             this.setState({
                 type: type,
-                buttonItem: Constant.buttonDisplay[type.type]
+                buttonItem: constant.buttonDisplay[type.type]
             });
         } else {
             this.setState({
@@ -263,7 +355,6 @@ class Editor extends Component {
             copyFirst = this.state[state].slice(0);
             copy = copyFirst[0];
         }
-
         let find = copy[object].findIndex(data => data[inner]);
         let opt = [];
         let old = Object.assign({}, [...copy[object]]);
@@ -334,7 +425,6 @@ class Editor extends Component {
     headerSizeClick(e) {
         let copyDisplay = this.state.editMainStyle.slice(0);
         let copy = copyDisplay[0];
-        // console.log(copy);
         if (e.currentTarget.dataset.num === '0') {
             if (copy.scale <= 0.25) {
                 let find = copy.style.findIndex(data => data.transform);
@@ -378,8 +468,6 @@ class Editor extends Component {
     }
 
     addNewItem(type, e, special) {
-        // console.log(type, e.currentTarget);
-        // console.log(special);
         if (type) {
             let check = this.state.buttonItem.findIndex(
                 object => object.type === type.type
@@ -388,7 +476,6 @@ class Editor extends Component {
                 (document.querySelector('.editorMain').offsetWidth -
                     this.state.editMainStyle[0].style[0].width) /
                 2;
-            // console.log(e.currentTarget);
             let width =
                 special === 'img'
                     ? this.state.fileUpload.file.width *
@@ -439,10 +526,10 @@ class Editor extends Component {
 
                 outside: [
                     {
-                        width: width
+                        width: 'auto'
                     },
                     {
-                        height: height
+                        height: 'auto'
                     },
                     {
                         left: e.pageX
@@ -463,7 +550,6 @@ class Editor extends Component {
                     }
                 ]
             };
-            // console.log(array);
             array.push(value);
             this.recordStep({
                 old: {
@@ -494,7 +580,6 @@ class Editor extends Component {
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
         copy[copyDisplay].option[0].contentEditable = 'true';
-        console.log(copy);
         this.setState({
             mouseEvent: 'false',
             display: copy
@@ -504,16 +589,29 @@ class Editor extends Component {
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
         console.log(copy[copyDisplay]);
-        copy[copyDisplay].option[0].contentEditable = 'false';
+        copy[copyDisplay].option[0]
+            ? (copy[copyDisplay].option[0].contentEditable = 'false')
+            : '';
         copy[copyDisplay].textContent = e.currentTarget.innerHTML;
         this.setState({
             mouseEvent: 'true',
             display: copy
         });
+        // that.recordStep({
+        //     old: {
+        //         func: 'changePosition-display',
+        //         id: result.id,
+        //         value: [opt, 'outside']
+        //     },
+        //     now: {
+        //         func: 'changePosition-display',
+        //         id: result.id,
+        //         value: [result.value, 'outside']
+        //     }
+        // })
+
         let that = this;
         let move = function(e) {
-            console.log('點到畫布', e.target);
-
             if (e.target.className === 'editorMain__canvas--inner') {
                 that.setState({
                     controllCurrent: ['page', null, null, null]
@@ -538,6 +636,12 @@ class Editor extends Component {
         let copy = this.state.display.slice(0);
         let left = distanceX / this.state.editMainStyle[0].scale + +init.left;
         let top = distanceY / this.state.editMainStyle[0].scale + +init.top;
+        copy[copyDisplay].outside[0] = {
+            width: init.width
+        };
+        copy[copyDisplay].outside[1] = {
+            height: init.height
+        };
         copy[copyDisplay].outside[2] = {
             left: left
         };
@@ -561,7 +665,6 @@ class Editor extends Component {
         let copyDisplay = this.state.display.findIndex(
             data => data.key === e.currentTarget.dataset.id
         );
-        // console.log(this.state.display[copyDisplay].style);
         copy[0] = this.state.display[copyDisplay].attribute.format;
         copy[1] = this.state.display[copyDisplay];
         copy[2] = copyDisplay;
@@ -584,8 +687,9 @@ class Editor extends Component {
             this.state.display.findIndex(data => data.key === elem.dataset.id)
         );
         let copy = this.state.display.slice(0);
-
         let init = {
+            width: e.currentTarget.parentNode.offsetWidth,
+            height: e.currentTarget.parentNode.offsetHeight,
             left: +e.currentTarget.parentNode.style.left.split('px')[0],
             top: +e.currentTarget.parentNode.style.top.split('px')[0]
         };
@@ -778,7 +882,6 @@ class Editor extends Component {
     changeLayer(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(e.currentTarget.dataset.data);
         let copy = this.state.display.slice(0);
         let copyDisplay = this.state.controllCurrent.slice(0);
         if (e.currentTarget.dataset.data === 'layerdown') {
@@ -846,11 +949,30 @@ class Editor extends Component {
         console.log(copy);
         console.log(copyDisplay);
     }
+    saveData() {
+        let sendData = {
+            userId: this.state.loginStatus.uid,
+            display: this.state.display,
+            editMainStyle: this.state.editMainStyle,
+            projectId: location.href.split('edit/')[1],
+            share: this.state.share
+        };
+        let target = '/app/manageProject';
+        let payload = {
+            method: 'POST',
+            body: JSON.stringify(sendData),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        };
 
+        console.log(sendData);
+        let getMemberData = data => {
+            console.log(data);
+        };
+        connectFetch(target, payload, getMemberData);
+    }
     render() {
-        // console.log(this.state.controllCurrent);
-        console.log(this.state.display);
-        console.log(this.state.history);
         let item = this.state.display.map(data => {
             return (
                 <EditorItem
@@ -886,9 +1008,11 @@ class Editor extends Component {
                 />
             );
         });
-        // console.log(this.state.display);
+
         return (
             <div className="editor">
+                {/* 可以拆出去 */}
+                <EditorShare loginStatus={this.state.loginStatus} />
                 <EditorPreview
                     editMainStyle={this.state.editMainStyle}
                     display={this.state.display}
@@ -901,11 +1025,13 @@ class Editor extends Component {
                 <EditorHeader
                     scale={this.state.editMainStyle[0].scale}
                     onClick={this.headerSizeClick}
-                    onSave={() => {
+                    onDownload={() => {
                         this.setState({ saveButton: true });
                     }}
+                    login={this.state.loginStatus}
                     onHistory={this.redoStep}
                     unable={[this.state.history, this.state.redoItem]}
+                    saveData={this.saveData}
                 />
                 <div className="toolButton">
                     <div
@@ -1038,5 +1164,8 @@ class Editor extends Component {
         );
     }
 }
-
+Editor.propTypes = {
+    userData: PropTypes.any,
+    loginStatus: PropTypes.any
+};
 export default Editor;

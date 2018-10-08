@@ -1,0 +1,71 @@
+.login {
+  @include size(100%, 100%);
+  grid-area: createMain;
+  background-color: $editor;
+  @extend %flexCenter-Center-row;
+}
+.login__main {
+  @include size(40%,500px);
+  max-width: 500px;
+  min-width: 350px;
+
+  background-color: $white;
+  @extend %flexCenter-Center-row;
+border-radius: 5px;
+  .input__icon {
+    position: absolute;
+    @include size(21px, 21px);
+    left: 10%;
+  }
+}
+input[type='text'].input-login,input[type='password'].input-login{
+  @include size(100%, 30px);
+  border: lighten($button, 30) 0.5px solid;
+  transition: all 0.5s;
+  @include distance(0 15%, 8px 0);
+  background-color: lighten($button, 20);
+}
+input[type='text'].input-login:focus,input[type='password'].input-login:focus{
+  background-color: $white;
+}
+
+.login__inner {
+  @include size(75%, 100%);
+  @extend %flexCenter-Center-column;
+}
+.login__buttons {
+  @include size(100%, auto);
+  @extend %flexCenter-space-between-row;
+  @include distance(0 24px, 0);
+}
+.login__button {
+  @include size(45%, 30px);
+  @include distance(0, 8px 0);
+  background-color: $special;
+  font-size: 12px;
+  &:hover {
+    background-color: darken($special, 20%);
+  }
+}
+.login__fb {
+  @include size(calc(100% - 48px), 30px);
+  background-color: #3b5998;
+  @include distance(0, 16px 0);
+  &:hover {
+    background-color: darken(#3b5998, 10%);
+  }
+}
+.login__google {
+  @include size(calc(100% - 48px), 30px);
+  background-color: #dd4b39;
+  @include distance(0, 8px 24px);
+  &:hover {
+    background-color: darken(#dd4b39, 10%);
+  }
+}
+.login__line {
+  @include size(calc(100% - 48px), 1px);
+  background-color: lighten($button, 20);
+  @include distance(0, 32px 0 24px 0);
+ 
+}

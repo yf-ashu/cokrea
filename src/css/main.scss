@@ -8,7 +8,7 @@
   margin: $m;
 }
 @mixin background-center($url) {
-  background:url($url);
+  background: url($url);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -68,7 +68,7 @@
   justify-content: center;
   flex-flow: row wrap;
 }
-%flexFlex-start-center-column{
+%flexFlex-start-center-column {
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -86,22 +86,21 @@
   justify-content: flex-end;
   flex-flow: column wrap;
 }
-$header:#393939;
-$controller:#3c3c3c;
-$click:#303030;
-$editor:#737373;
-$hover:#4b4a4a;
-$button:#949D9C;
-$special:#64DDD2;
-$white:#f5f5f5;
-$search:#7e7d7d;
-$text-white:#f7f7f7;
-$text-black:#312F2F;
+$header: #393939;
+$controller: #3c3c3c;
+$click: #303030;
+$editor: #737373;
+$hover: #4b4a4a;
+$button: #949d9c;
+$special: #64ddd2;
+$white: #f5f5f5;
+$search: #7e7d7d;
+$text-white: #f7f7f7;
+$text-black: #312f2f;
 * {
   box-sizing: border-box;
   // font-family: 'Noto Sans', Arial, Helvetica, sans-serif; // border: 1px solid red;
   font-family: Helvetica, Arial, sans-serif; // border: 1px solid red;
-
 }
 
 body,
@@ -124,12 +123,12 @@ h4,
 h5,
 h6,
 p {
- @include distance(0, 0);
+  @include distance(0, 0);
 }
-h1{
+h1 {
   font-size: 47px;
 }
-h2{
+h2 {
   font-size: 22px;
 }
 ul,
@@ -166,36 +165,39 @@ button {
   @include size(120px, 30px);
   border-radius: 5px;
   color: $text-white;
-  @include distance(0,0 );
-
+  @include distance(0, 0);
 }
 
-input[type="text"]{
-  background-color: $search;
-  @include size(180px,28px );
-transition: all 0.5s;
-border: none;
-}
-input[type="text"]:focus{
-  background-color: $white;
-  @include size(240px,28px );
-
-}
-.input{
-  @extend %flexCenter-flexStart-row;
+.input {
+  @extend %flexCenter-Center-row;
   position: relative;
-  @include distance(0 24px,0 );
+  @include distance(0 24px, 0);
+  @include size(100%,auto);
+
 }
-.input__icon{
+
+input[type='text'].input-edit {
+  background-color: $search;
+  @include size(180px, 28px);
+  border: none;
+  transition: all 0.5s;
+}
+
+input[type='text'].input-edit:focus{
+  background-color: $white;
+  @include size(240px, 28px);
+}
+.input__icon {
   position: absolute;
-  @include size(22px,22px );
+  @include size(22px, 22px);
   left: 36px;
 }
-.input-control{
-  @include distance(4px 0 4px 44px,0 );
+.input-control {
+  @include distance(4px 0 4px 44px, 0);
 }
-.displayNone{
+.displayNone {
   display: none;
 }
 @import 'reset';
 @import 'editor';
+@import 'create';

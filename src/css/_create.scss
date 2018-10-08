@@ -1,0 +1,11 @@
+@import 'createHeader';
+@import 'createMain';
+@import 'login';
+
+.create{
+  @include size(100%,100vh);
+  display: grid;
+  grid-template:
+  'createHeader ' 80px
+  'createMain   ' 1fr / 1fr  ;
+}

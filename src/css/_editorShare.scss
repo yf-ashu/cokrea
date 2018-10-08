@@ -1,0 +1,42 @@
+.editorShare {
+  position: fixed;
+  @include size(500px, 500px);
+  // top: 380px;
+  // left: 160px;
+  z-index: 2000;
+  background-color: $white;
+  // @extend %flexCenter-Center-column;
+  // @include distance(16px, 0);
+  // @extend %flexFlex-start-center-row;
+
+  @include distance(8px, 0);
+}
+.editorShare__options {
+  @include size(100%, auto);
+
+  @extend %flexFlex-start-center-row;
+}
+.editorShare__option {
+  @extend %flexCenter-Center-row;
+  @include size(calc(50% - 16px), auto);
+  outline: 1px solid $click;
+
+  @include distance(8px, 6px);
+  div {
+    @include distance(0, 8px);
+  }
+}
+input[type='text'].editorShare__shareLink {
+  @include size(100%, 28px);
+}
+.editorShare__shareLink 
+{   
+
+
+}  
+.editorShare__shareLinkBlock{
+  @include size(100%, auto);
+      @include distance(0, 8px);
+
+
+}

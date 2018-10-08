@@ -9,7 +9,8 @@ module.exports = {
         publicPath: '/'
     },
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        // https: true
     },
     devtool: 'inline-source-map',
     module: {
