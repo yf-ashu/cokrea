@@ -97,7 +97,7 @@ export const initFirebase = () => {
     };
     let firebaseConnect = firebase.initializeApp(config);
     var database = firebase.database();
-console.log(database)
+    console.log(database);
     return firebaseConnect;
 };
 export const styleSetting = type => {

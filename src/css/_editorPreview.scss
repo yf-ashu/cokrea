@@ -17,6 +17,7 @@ overflow: hidden;
 
 }
 .mainCanvas {
+  @include size(100%,auto);
   outline: 1px solid black;
 }
 .editorPreview__controller {

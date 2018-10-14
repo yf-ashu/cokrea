@@ -7,20 +7,17 @@
 }
 .editorMain__canvas--outer {
   display: block;
-  // position: relative;
-  // display: flex;
+  
   padding: 100px;
 }
 .editorMain__canvas {
   @include size(100%, 100%);
   background-color: $white;
-  // overflow: hidden;
   position: relative;
   display: inline-block;
 }
 .editorMain__canvas--inner {
   @include size(100%, 100%);
-
   overflow: hidden;
   position: relative;
   display: inline-block;
@@ -63,16 +60,47 @@
   top: 0;
   left: 0;
 }
+
+.editorMain__item--select--red {
+  z-index: 1200;
+
+  position: absolute;
+  outline: #fd8970 2px solid;
+}
+.editorMain__item--select--yellow {
+  z-index: 1200;
+
+  position: absolute;
+  outline: #ffe930 2px solid;
+}
+.editorMain__item--select--name--red {
+  z-index: 1200;
+
+  position: absolute;
+  @include size(auto, 30px);
+  top: -30px;
+  left: 0;
+  @include distance(8px, 0);
+  background-color: #fd8970;
+}
+.editorMain__item--select--name--yellow {
+  z-index: 1200;
+
+  position: absolute;
+  @include size(auto, 30px);
+  top: -30px;
+  left: 0;
+  @include distance(8px, 0);
+  background-color: #ffe930;
+}
 .editorMain__item--select {
   position: absolute;
   cursor: move;
   left: -100%;
   transform-origin: right bottom;
-  // pointer-events: none;
   &-outside {
     @include size(100%, 100%);
     position: relative;
-    // border: red 1px solid;
   }
   &-inside-tl {
     position: absolute;

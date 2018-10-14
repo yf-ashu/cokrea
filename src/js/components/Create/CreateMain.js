@@ -11,9 +11,7 @@ class CreateMain extends Component {
             projectName: 'New Project'
         };
         this.addNewProject = this.addNewProject.bind(this);
-        this.canInterEdit = this.canInterEdit.bind(this);
-        this.onBlur = this.onBlur.bind(this);
-
+       
 
     }
     componentDidMount() {
@@ -64,30 +62,19 @@ class CreateMain extends Component {
         connectFetch(target, payload, getMemberData);
     }
 
-    onBlur(e) {
-        console.log(e.currentTarget);
-    }
-    canInterEdit(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        let find = this.state.project.findIndex(data => {
-            return data.projectId === e.currentTarget.dataset.data;
-        });
-        let copy = this.state.project.slice(0);
-        copy[find].contentEditable = 'true';
-        console.log(copy[find]);
-        this.setState({});
-    }
+   
+   
     render() {
         let createMain = this.state.project.map(data => {
             // console.log(data);
+            let id=data.projectId;
             return (
                 <CreateMainItem
                     key={data.projectId}
                     linkTo={data.link}
                     id={data.projectId}
                     project={data}
-                    canEdit={this.canInterEdit}
+                    projectImg={this.props.projectImg[id]}
                 />
             );
         });
@@ -112,5 +99,6 @@ class CreateMain extends Component {
 }
 CreateMain.propTypes = {
     userData: PropTypes.any.isRequired,
+    projectImg:PropTypes.object
 };
 export default CreateMain;

@@ -95,7 +95,7 @@ $button: #949d9c;
 $special: #64ddd2;
 $white: #f5f5f5;
 $search: #7e7d7d;
-$text-white: #f7f7f7;
+$text-white: #f5f5f5;
 $text-black: #312f2f;
 * {
   box-sizing: border-box;
@@ -172,8 +172,7 @@ button {
   @extend %flexCenter-Center-row;
   position: relative;
   @include distance(0 24px, 0);
-  @include size(100%,auto);
-
+  @include size(100%, auto);
 }
 
 input[type='text'].input-edit {
@@ -183,7 +182,7 @@ input[type='text'].input-edit {
   transition: all 0.5s;
 }
 
-input[type='text'].input-edit:focus{
+input[type='text'].input-edit:focus {
   background-color: $white;
   @include size(240px, 28px);
 }
@@ -198,6 +197,18 @@ input[type='text'].input-edit:focus{
 .displayNone {
   display: none;
 }
+.displayOpacity {
+  opacity: 0;
+  visibility: hidden;
+}
+.loading {
+  position: fixed;
+  @include size(100%, 100%);
+  background-color: $click;
+  z-index: 10000;
+  transition: all 0.5s;
+}
 @import 'reset';
 @import 'editor';
 @import 'create';
+@import 'public';

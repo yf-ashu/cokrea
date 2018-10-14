@@ -46,28 +46,28 @@ app.post('/app/getAccount', (req, res) => {
     });
   }
 });
-app.post('/app/getProject', (req, res) => {
-  let data = req.body;
-  if (!data.userId || !data.projectId) {
-    res.send({
-      error: 'Create Order Error: Wrong Data Format'
-    });
-    return;
-  }
-  db.ref('/projectData/' + data.projectId).once('value', snapshot => {
-    if (snapshot.exists()) {
-      let getData = snapshot.val();
-      console.log(getData);
-      delete getData.createTime;
-      delete getData.updateTime;
-      return res.json(getData);
-    } else {
-      return res.json({
-        error: 'No Project'
-      });
-    }
-  });
-});
+// app.post('/app/getProject', (req, res) => {
+//   let data = req.body;
+//   if (!data.userId || !data.projectId) {
+//     res.send({
+//       error: 'Create Order Error: Wrong Data Format'
+//     });
+//     return;
+//   }
+//   db.ref('/projectData/' + data.projectId).once('value', snapshot => {
+//     if (snapshot.exists()) {
+//       let getData = snapshot.val();
+//       console.log(getData);
+//       delete getData.createTime;
+//       delete getData.updateTime;
+//       return res.json(getData);
+//     } else {
+//       return res.json({
+//         error: 'No Project'
+//       });
+//     }
+//   });
+// });
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝New & Update Account
 app.post('/app/manageAccount', (req, res) => {
@@ -94,21 +94,34 @@ app.post('/app/manageAccount', (req, res) => {
       Object.keys(data).map(getdata => {
         console.log(getdata);
       });
-      if (data.userTel != null) {
+      if (data.userTel ) {
         getData.userTel = data.userTel;
       }
-      if (data.userAddress != null) {
+      if (data.userAddress ) {
         getData.userAddress = data.userAddress;
       }
-      if (data.userName != null) {
+      if (data.userName ) {
         getData.userName = data.userName;
+      }
+      if(data.projectId&&data.projectName){
+        getData.project.map(projectData=>{
+          if(projectData.projectId===data.projectId){
+            projectData.projectName=data.projectName
+          }
+        })
       }
 
       getData.updateTime = now.getTime();
       db.ref('/userData/' + userId).update(getData, error => {
-        res.send({
-          number: userId
-        });
+        if (error) {
+          res.send({
+            error: 'Create Account Error'
+          });
+        } else {
+          res.send({
+            success: 'Create Account'
+          });
+        }
       });
     } else {
       db.ref('/userData/' + userId).set(memberData, error => {
@@ -156,7 +169,13 @@ app.post('/app/addNewProject', (req, res) => {
     projectName: data.projectName,
     createTime: now.getTime(),
     updateTime: now.getTime(),
-    owner:userId
+    owner: userId,
+    share: [
+      {
+        public: 'private'
+      },
+      ['null']
+    ]
   };
   let usernew = data.newItem;
   console.log(usernew);

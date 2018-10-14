@@ -38,26 +38,26 @@ class EditorPreview extends Component {
                 display: this.props.display ? this.props.display : [],
                 editMainStyle: this.props.editMainStyle
             });
+            console.log('canvas更改');
             this.updateCanvas();
         }
     }
 
     updateCanvas() {
+        let scare=1;
         let display = this.props.display;
         let editMainStyle = this.props.editMainStyle[0];
         const canvas = this.canvas;
 
         const ctx = canvas.getContext('2d');
-        canvas.width = editMainStyle.style[0].width * 0.5;
-        canvas.height = editMainStyle.style[1].height * 0.5;
-
+        canvas.width = editMainStyle.style[0].width * scare;
+        canvas.height = editMainStyle.style[1].height * scare;
         ctx.clearRect(
             0,
             0,
             editMainStyle.style[0].width,
             editMainStyle.style[1].height
         );
-        ctx.scale(0.5, 0.5);
         ctx.textBaseline = 'top';
         ctx.textAlign = 'start';
         if (display.length === 0) {
@@ -69,10 +69,11 @@ class EditorPreview extends Component {
                 editMainStyle.style[1].height
             );
             let dataURL = canvas.toDataURL();
-
+            this.props.downloadUrl(dataURL);
             this.setState({
                 downloadUrl: dataURL
             });
+
             return;
         } else {
             ctx.globalCompositeOperation = 'source-over';
@@ -83,11 +84,16 @@ class EditorPreview extends Component {
                 editMainStyle.style[0].width,
                 editMainStyle.style[1].height
             );
+            ctx.scale(scare, scare);
 
             let loop = (display, index) => {
-                if (index === display.length) {
-                    let dataURL = canvas.toDataURL();
 
+                if (index === display.length) {
+                    // console.log()
+                    let dataURL = canvas.toDataURL();
+                    let encoder=canvas.toDataURL('image/png',0.1);
+                    // console.log(dataURL,encoder)
+                    this.props.downloadUrl(encoder);
                     this.setState({
                         downloadUrl: dataURL
                     });
@@ -105,7 +111,6 @@ class EditorPreview extends Component {
                             display[index].outside[0].width - 32,
                             display[index].outside[1].height - 32
                         );
-
                         loop(display, ++index);
                     };
                     img.src = display[index].attribute.src;
@@ -186,6 +191,7 @@ EditorPreview.propTypes = {
     display: PropTypes.array.isRequired,
     editMainStyle: PropTypes.array.isRequired,
     saveButton: PropTypes.any,
-    closeButton: PropTypes.any
+    closeButton: PropTypes.any,
+    downloadUrl:PropTypes.string
 };
 export default EditorPreview;

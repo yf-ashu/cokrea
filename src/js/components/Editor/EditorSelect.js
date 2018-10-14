@@ -11,12 +11,12 @@ const EditorSelect = ({
         controllCurrent[1] !== null
             ? Object.assign({}, ...controllCurrent[1].outside)
             : {};
-            if(id){
-                    let target = document.querySelector(`#${id}`);
+    if(id){
+        let target = document.querySelector(`#${id}`);
             
-                style.width= +target.offsetWidth
-                style.height= +target.offsetHeight
-            }
+        style.width= +target.offsetWidth;
+        style.height= +target.offsetHeight;
+    }
         
    
     return (

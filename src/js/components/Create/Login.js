@@ -12,7 +12,8 @@ class Login extends Component {
         this.state = {
             userName: '',
             password: '',
-            connect: null
+            connect: null,
+            storage: null
         };
         this.signupWithEmail = this.signupWithEmail.bind(this);
         this.loginWithEmail = this.loginWithEmail.bind(this);
@@ -21,9 +22,19 @@ class Login extends Component {
         this.handleInput = this.handleInput.bind(this);
     }
     componentDidMount() {
+        let storage;
         if (!firebase.apps.length) {
-           initFirebase();
+            let connect = initFirebase();
+            storage = connect.storage();
+            this.setState({
+                connect: connect,
+                storage: storage
+            });
         }
+        storage = firebase.storage();
+        this.setState({
+            storage: storage
+        });
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 console.log('有登入');
@@ -40,17 +51,45 @@ class Login extends Component {
                     })
                 };
                 let getMemberData = data => {
-                    this.props.checkLogin(user, data);
+                    let imgUrl = {};
+                    data.project.map(projectdata => {
+                        console.log(projectdata.projectId);
+                        storage
+                            .ref(projectdata.projectId + '/canvas.png')
+                            .getDownloadURL()
+                            .then(url => {
+                                imgUrl[projectdata.projectId] = url;
+                                if (
+                                    Object.keys(imgUrl).length ===
+                                    data.project.length
+                                ) {
+                                    console.log(imgUrl);
+
+                                    this.props.checkLogin(
+                                        user,
+                                        data,
+                                        this.state.connect,
+                                        imgUrl
+                                    );
+                                    this.props.loading();
+                                }
+                                // console.log(data.project);
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                    });
                     console.log(user, data);
                 };
                 console.log('在這裡');
+
                 connectFetch(target, payload, getMemberData);
             } else {
+                this.props.loading();
                 console.log('沒有登入');
             }
         });
     }
-    
 
     handleInput(e, type) {
         this.setState({
@@ -228,6 +267,7 @@ class Login extends Component {
     }
 }
 Login.propTypes = {
-    checkLogin:PropTypes.func.isRequired,
+    checkLogin: PropTypes.func.isRequired,
+    loading: PropTypes.any
 };
 export default Login;

@@ -9,7 +9,7 @@ const EditorMain = ({
     style,
     scale,
     onMouseDown,
-
+    otherSelect,
     select
 }) => {
     let outerStyle;
@@ -40,6 +40,7 @@ const EditorMain = ({
                 >
                     <div className="editorMain__canvas--inner">{children}</div>
                     {select}
+                    {otherSelect}
                 </div>
             </div>
         </div>
@@ -54,6 +55,7 @@ EditorMain.propTypes = {
     style: PropTypes.any.isRequired,
     onMouseDown: PropTypes.func,
     scale: PropTypes.number,
-    select: PropTypes.any
+    select: PropTypes.any,
+    otherSelect: PropTypes.any
 };
 export default EditorMain;

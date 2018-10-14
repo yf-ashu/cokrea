@@ -5,18 +5,34 @@ import CreateMain from '../Create/CreateMain';
 import PropTypes from 'prop-types';
 
 import firebase from 'firebase/app';
+import Loading from '../element/loading';
 require('firebase/auth');
 
 class Create extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            loading:true
+          
+        };
         this.checkLogin = this.checkLogin.bind(this);
         this.logout = this.logout.bind(this);
     }
 
-  
-    checkLogin(loginData,userData) {
-        this.props.getUserData(loginData,userData);
+    componentDidMount() {
+        // database
+        // .ref('temp/' + projectData + '/nowclick/' + user.uid)
+        // .set(null);
+        this.props.loginStatus&&this.props.userData?this.setState({
+            loading:false
+        }):null;
+        console.log('有進來',this.props.loginStatus);
+    }
+    
+    checkLogin(loginData,userData,database,projectImg) {
+        this.props.getUserData(loginData,userData,database,projectImg);
+        console.log('拿到使用者資料');
+
   
     }
     logout() {
@@ -28,7 +44,7 @@ class Create extends Component {
                 console.log('email sign out');
                 let loginData=null;
                 let userData=null;
-                that.props.getUserData(loginData,userData);
+                that.props.getUserData(loginData,userData,null);
 
             })
             .catch(function(error) {
@@ -36,6 +52,7 @@ class Create extends Component {
             });
     }
 
+   
  
     render() {
         // console.log(this.props.loginStatus);
@@ -43,17 +60,21 @@ class Create extends Component {
 
         let displayItem = '';
         
-        if (!this.props.loginStatus) {
-            displayItem = <Login checkLogin={this.checkLogin.bind(this)}/>;
+        if (!this.props.loginStatus||!this.props.userData) {
+            displayItem = <Login checkLogin={this.checkLogin.bind(this)}
+                loading={()=>{this.setState({loading:false});}}
+            />;
         } else {
             displayItem = (
                 <CreateMain
                     userData={this.props.userData}
+                    projectImg={this.props.projectImg}
                 />
             );
         }
         return (
             <div className="create">
+                <Loading loading={this.state.loading}/>
                 <CreateHeader
                     login={this.props.loginStatus}
                     logout={this.logout}
@@ -66,7 +87,8 @@ class Create extends Component {
 Create.propTypes = {
     getUserData: PropTypes.func.isRequired,
     loginStatus:PropTypes.any,
-    userData:PropTypes.any
+    userData:PropTypes.any,
+    projectImg:PropTypes.object
   
 };
 export default Create;

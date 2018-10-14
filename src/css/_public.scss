@@ -1,0 +1,37 @@
+@import 'createHeader';
+@import 'createMain';
+
+.public__views{
+  @include size(100%,100vh);
+  display: grid;
+  grid-template:
+  'createHeader ' 80px
+  'createMain   ' 1fr / 1fr  ;
+}
+.public__canvas {
+  @include size(100%, 100%);
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+.public__outer{
+  @include size(100%, 100%);
+ @extend %flexCenter-Center-row ;
+ background-color: $editor;
+
+}
+.public__items {
+  position: absolute;
+  overflow: hidden;
+  z-index: 1000;
+  pointer-events: auto;
+ 
+}
+.public__item {
+  white-space: nowrap;
+  z-index: 1001;
+  display: flex;
+  margin: 0;
+  padding: 16px;
+
+}

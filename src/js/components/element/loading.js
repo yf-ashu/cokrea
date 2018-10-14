@@ -1,19 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const EditorAlert = ({}) => {
-    return <div className="editorAlert" />;
+const loading = ({loading}) => {
+    return <div className={loading?'loading':'loading displayOpacity'} />;
 };
 
-EditorAlert.propTypes = {
-    // tag: PropTypes.string.isRequired,
-    // attribute: PropTypes.any.isRequired,
-    // option: PropTypes.any,
-    // style: PropTypes.any,
-    // outside: PropTypes.any,
-    // onBlur: PropTypes.func,
-    // onMouseDown: PropTypes.func,
-    // onDoubleClick: PropTypes.func,
-    // textContent:PropTypes.string
+loading.propTypes = {
+    loading:PropTypes.bool
 };
-export default EditorAlert;
+export default loading;
