@@ -10,7 +10,8 @@
       {
         "source": "/app/**",
         "function": "app"
-      }
+      },
+      {"source":"**","destination":"/index.html"}
     ],
     "ignore": [
       "firebase.json",

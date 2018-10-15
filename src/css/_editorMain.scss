@@ -73,7 +73,29 @@
   position: absolute;
   outline: #ffe930 2px solid;
 }
-.editorMain__item--select--name--red {
+.editorMain__item--select--green {
+  z-index: 1200;
+
+  position: absolute;
+  outline: #a5ff51 2px solid;
+}
+.editorMain__item--select--blue {
+  z-index: 1200;
+
+  position: absolute;
+  outline: #5ea4ff 2px solid;
+}
+.editorMain__item--select--purple {
+  z-index: 1200;
+  position: absolute;
+  outline: #920efd 2px solid;
+}
+.editorMain__item--select--orange {
+  z-index: 1200;
+  position: absolute;
+  outline: #fd6e0e 2px solid;
+}
+.editorMain__item--select--name-- {
   z-index: 1200;
 
   position: absolute;
@@ -81,18 +103,29 @@
   top: -30px;
   left: 0;
   @include distance(8px, 0);
-  background-color: #fd8970;
-}
-.editorMain__item--select--name--yellow {
-  z-index: 1200;
+  &red{
+    background-color: #fd8970;
+  }
+  &yellow{
+    background-color: #ffe930;
 
-  position: absolute;
-  @include size(auto, 30px);
-  top: -30px;
-  left: 0;
-  @include distance(8px, 0);
-  background-color: #ffe930;
+  }
+  &green{
+    background-color:#a5ff51 ;
+  }
+  &blue{
+    background-color:#5ea4ff ;
+ 
+  }
+  &purple{
+    background-color: #920efd ;
+  }
+  &orange{
+    background-color:#fd6e0e ;
+  }
+
 }
+
 .editorMain__item--select {
   position: absolute;
   cursor: move;

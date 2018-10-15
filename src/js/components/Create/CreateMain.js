@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import CreateMainItem from './CreateMainItem';
-import { connectFetch, random } from '../element/constant';
+import { connectFetch, random ,initFirebase} from '../element/constant';
 import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
 
+require('firebase/storage');
 class CreateMain extends Component {
     constructor(props) {
         super(props);
@@ -56,8 +58,28 @@ class CreateMain extends Component {
                 'Content-Type': 'application/json'
             })
         };
-        let getMemberData = data => {
-            console.log(data);
+        let getMemberData = () => {
+            if (!firebase.apps.length) {
+                initFirebase();
+              
+            }
+            let storage = firebase.storage();
+            console.log(storage);
+            //    storage
+            //    .ref('init.png')
+            //    .getDownloadURL()
+            //    .then(url => {
+            //        console.log(url)
+            let url=
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=';
+            firebase.storage().ref().child(projectId + '/canvas.png')
+                .putString(url, 'data_url')
+                .then(function() {
+                    console.log('Uploaded a base64url string!');
+                });
+            //    })
+
+           
         };
         connectFetch(target, payload, getMemberData);
     }
@@ -74,7 +96,7 @@ class CreateMain extends Component {
                     linkTo={data.link}
                     id={data.projectId}
                     project={data}
-                    projectImg={this.props.projectImg[id]}
+                    projectImg={this.props.projectImg?this.props.projectImg[id]:null}
                 />
             );
         });

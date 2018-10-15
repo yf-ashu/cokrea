@@ -141,14 +141,14 @@ class Editor extends Component {
         getData.editMainStyle = this.state.editMainStyle;
         let database = this.state.database;
         database.ref('/projectData/' + projectData).update(getData);
-        if (this.state.publicSetting === 'public') {
-            delete getData.share;
-            database.ref('/public/' + projectData).update(getData);
-            console.log('有public');
-        } else if (this.state.publicSetting === 'private') {
-            database.ref('/public/' + projectData).set(null);
-            console.log('枚有public');
-        }
+        // if (this.state.publicSetting === 'public') {
+        //     delete getData.share;
+        //     database.ref('/public/' + projectData).update(getData);
+        //     console.log('有public');
+        // } else if (this.state.publicSetting === 'private') {
+        //     database.ref('/public/' + projectData).set(null);
+        //     console.log('枚有public');
+        // }
 
         console.log('已存檔');
         // if (e.currentTarget.className==='editorHeader__button--save') {
@@ -156,19 +156,19 @@ class Editor extends Component {
         // }
     }
     timeout() {
-        console.log('開始倒數');
+        // console.log('開始倒數');
         let projectData = location.href.split('edit/')[1];
         let that = this;
     
         this.intervalId =setInterval(() => {
-            console.log(this.state.storage);
+            // console.log(this.state.storage);
             that.state.storage
                 .child(projectData + '/canvas.png')
                 .putString(that.state.downloadUrl, 'data_url')
                 .then(function() {
                     console.log('Uploaded a base64url string!');
                 });
-        }, 30000);
+        }, 10000);
     }
     checkLogin() {
         let projectData = location.href.split('edit/')[1];
@@ -182,7 +182,7 @@ class Editor extends Component {
 
             database = firebase.database();
             storage = firebase.storage().ref();
-            console.log(storage);
+            // console.log(storage);
             //auth要拆出去
             firebase.auth().onAuthStateChanged(user => {
                 if (user) {
@@ -192,12 +192,12 @@ class Editor extends Component {
                     database
                         .ref('/projectData/' + projectData)
                         .on('value', snapshot => {
-                            console.log(user.email);
+                            // console.log(user.email);
                             let data;
 
                             if (snapshot.exists()) {
                                 data = snapshot.val();
-                                console.log(snapshot.val());
+                                // console.log(snapshot.val());
                                 if (data.owner === user.uid) {
                                     console.log('擁有者1');
                                     let shareButton = this.state.shareButton;
@@ -214,7 +214,7 @@ class Editor extends Component {
                                         publicSetting: data.share[0].public
                                     });
                                     this.connectDb(database, user);
-                                    console.log(database, user);
+                                    // console.log(database, user);
                                     this.props.getUserData(
                                         user,
                                         null,
@@ -239,7 +239,7 @@ class Editor extends Component {
                                     });
                                     this.connectDb(database, user);
                                 } else {
-                                    console.log(data.share[0]);
+                                    // console.log(data.share[0]);
                                     if (data.share[0].public === 'public') {
                                         window.location.pathname =
                                             '/views/' + projectData;
@@ -259,7 +259,7 @@ class Editor extends Component {
                 }
             });
         } else {
-            console.log(this.props.loginStatus);
+            // console.log(this.props.loginStatus);
             this.setState({
                 loginStatus: this.props.loginStatus
             });
@@ -286,7 +286,7 @@ class Editor extends Component {
                                     : this.state.editMainStyle,
                                 shareButton: shareButton
                             });
-                            console.log(this.props.loginStatus);
+                            // console.log(this.props.loginStatus);
                             this.connectDb(database, this.props.loginStatus);
                         } else if (
                             data.share[1].map(data => {
@@ -365,7 +365,7 @@ class Editor extends Component {
         });
     }
     recoveryItem(action, id, value) {
-        console.log(action, id, value);
+        // console.log(action, id, value);
         let copy = [];
         copy = this.state[action[1]];
 
@@ -701,7 +701,7 @@ class Editor extends Component {
     onBlur(e) {
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
-        console.log(copy[copyDisplay]);
+        // console.log(copy[copyDisplay]);
         copy[copyDisplay].option[0]
             ? (copy[copyDisplay].option[0].contentEditable = 'false')
             : '';
@@ -1091,8 +1091,8 @@ class Editor extends Component {
             display: copy,
             controllCurrent: copyDisplay
         });
-        console.log(copy);
-        console.log(copyDisplay);
+        // console.log(copy);
+        // console.log(copyDisplay);
     }
 
     render() {
@@ -1116,17 +1116,17 @@ class Editor extends Component {
                 />
             );
         });
-        let color = ['red', 'yellow'];
+        let color = ['red', 'yellow','orange','blue','purple','green'];
         let other = Object.keys(this.state.othercontrollCurrent).map(
             (data, index) => {
-                console.log(this.state.othercontrollCurrent[data][0]);
+                // console.log(this.state.othercontrollCurrent[data][0]);
                 let name = this.state.othercontrollCurrent[data][1];
                 let main = this.state.othercontrollCurrent[data][0][1]
                     ? this.state.othercontrollCurrent[data][0][1].outside
                     : '';
                 let trans = Object.assign({}, ...main);
                 if (data === this.state.loginStatus.uid) {
-                    console.log('same');
+                    // console.log('same');
                 } else {
                     return (
                         <div
@@ -1167,7 +1167,7 @@ class Editor extends Component {
             );
         });
         // console.log(this.state.downloadUrl);
-        console.log(this.state.publicSetting);
+        // console.log(this.state.publicSetting);
         return (
             <div className="editor">
                 <Loading loading={this.state.loading} />

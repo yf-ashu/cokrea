@@ -174,7 +174,7 @@ app.post('/app/addNewProject', (req, res) => {
       {
         public: 'private'
       },
-      ['null']
+      ['no data']
     ]
   };
   let usernew = data.newItem;

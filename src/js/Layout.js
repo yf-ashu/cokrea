@@ -68,6 +68,7 @@ class Layout extends Component {
                         />
                         <Route
                             path="/edit/:id"
+                            exact
                             render={() => (
                                 <Editor
                                     userData={this.state.userData}
@@ -77,7 +78,7 @@ class Layout extends Component {
                                 />
                             )}
                         />
-                        <Route path="/views/:id" render={() => <Public database={this.state.database}/>} />
+                        <Route path="/views/:id"exact render={() => <Public database={this.state.database}/>} />
                     </Switch>{' '}
                 </div>
             </BrowserRouter>

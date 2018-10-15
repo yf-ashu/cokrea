@@ -10,11 +10,11 @@ const CreateMainItem = ({ linkTo, id, project,projectImg}) => {
                 <div className="createMainItem__display">
                     <img src={projectImg}></img>
 
-                    <div className="createMainItem__toggle">
+                    {/* <div className="createMainItem__toggle">
                         <span />
                         <span />
                         <span />
-                    </div>
+                    </div> */}
                     <NavLink
                         id={id}
                         className="createMainItem__button"

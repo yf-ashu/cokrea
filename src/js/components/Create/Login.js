@@ -52,7 +52,7 @@ class Login extends Component {
                 };
                 let getMemberData = data => {
                     let imgUrl = {};
-                    data.project.map(projectdata => {
+                    data.project?data.project.map(projectdata => {
                         console.log(projectdata.projectId);
                         storage
                             .ref(projectdata.projectId + '/canvas.png')
@@ -75,10 +75,20 @@ class Login extends Component {
                                 }
                                 // console.log(data.project);
                             })
-                            .catch(function(error) {
+                            .catch((error)=>{
                                 console.log(error);
+                         
                             });
-                    });
+                    }):
+                        null;
+                    this.props.checkLogin(
+                        user,
+                        data,
+                        this.state.connect,
+                        null
+                    );
+                    this.props.loading(); 
+                    
                     console.log(user, data);
                 };
                 console.log('在這裡');

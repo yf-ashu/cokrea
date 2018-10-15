@@ -11,19 +11,31 @@ class EditorShare extends Component {
             shareLink: 'share close',
             checkLink: [],
             inputCheck: '',
-            share: []
+            share: [],
+            test:null
         };
         this.checkShare = this.checkShare.bind(this);
         this.checkLink = this.checkLink.bind(this);
         this.updateShare = this.updateShare.bind(this);
         this.deleteAllowList = this.deleteAllowList.bind(this);
     }
+    componentDidMount(){
+        // this.shareLink = true;
+
+    }
     componentDidUpdate(nextProps) {
         if (nextProps.projectData && this.state.selected === null) {
+            let projectData = location.href.split('edit/')[1];
+
             console.log(nextProps.projectData.share[0].public);
             this.setState({
                 selected: nextProps.projectData.share[0].public
             });
+            if(nextProps.projectData.share[0].public=='public'){
+                this.setState({
+                    shareLink:'https://cokrea-editor.firebaseapp.com/views/'+projectData
+                })
+            }
         }
     }
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -35,21 +47,24 @@ class EditorShare extends Component {
     }
 
     checkShare(e) {
-        let copy = this.props.projectData.share;
-        copy[0] = {
+        let copy = this.props.projectData;
+        copy.share[0] = {
             public: e.currentTarget.value
         };
         this.setState({
             selected: e.currentTarget.value,
             share: copy
         });
+        console.log(copy)
+        console.log(this.state.share);
+
     }
 
     checkLink(e, value) {
         console.log(value);
         let insert;
         if (value === 'keypress') {
-            let share = this.props.projectData.share;
+            let share = this.props.projectData;
             if (this.props.projectData.share[1][0] === 'no data') {
                 insert = [];
             } else {
@@ -57,7 +72,7 @@ class EditorShare extends Component {
             }
             console.log(insert);
             insert.push(this.state.inputCheck);
-            share[1] = insert;
+            share.share[1] = insert;
             console.log(share);
 
             this.setState({
@@ -71,13 +86,31 @@ class EditorShare extends Component {
         }
     }
     updateShare() {
-        console.log(this.state.selected);
         let projectData = location.href.split('edit/')[1];
+
+        console.log(this.state.share);
+        let getData = Object.assign({},this.props.projectData) ;
+        if (this.state.selected === 'public') {
+            delete getData.share;
+            this.props.database.ref('/public/' + projectData).update(getData);
+            console.log('有public');
+            this.setState({
+                shareLink:'https://cokrea-editor.firebaseapp.com/views/'+projectData
+            })
+         
+        }else if (this.state.selected === 'private') {
+            this.props.database.ref('/public/' + projectData).set(null);
+            console.log('枚有public');
+            this.setState({
+                shareLink:'share close'
+            })
+        }
         let projectSendData = {
             userId: this.props.loginStatus.uid,
             projectId: projectData,
             share: this.state.share.share
         };
+        console.log(projectSendData)
         let target = '/app/manageProject';
         let payload = {
             method: 'POST',
@@ -91,18 +124,8 @@ class EditorShare extends Component {
             console.log(data);
         };
         connectFetch(target, payload, getProjectData);
-        let getData = this.props.projectData;
-        if (this.state.selected === 'public') {
-            delete getData.share;
-            this.props.database.ref('/public/' + projectData).update(getData);
-            console.log('有public');
-        }
-        // this.state.storage
-        // .child(projectData + '/canvas.png')
-        // .putString(this.state.downloadUrl, 'data_url')
-        // .then(function(snapshot) {
-        //     console.log('Uploaded a base64url string!');
-        // });
+    
+       
     }
     deleteAllowList(e) {
         let number = e.currentTarget.dataset.data;
@@ -198,9 +221,9 @@ class EditorShare extends Component {
                                     this.checkLink(e, 'keypress');
                                 }
                             }}
-                            disabled={
-                                this.state.selected === 'public' ? true : false
-                            }
+                            // disabled={
+                            //     this.state.selected === 'public' ? true : false
+                            // }
                         />
                     </div>
                     <div className="editorShare__shareLinkList">
@@ -253,7 +276,7 @@ class EditorShare extends Component {
     }
 }
 EditorShare.propTypes = {
-    projectData: PropTypes.object.isRequired,
+    projectData: PropTypes.object,
     loginStatus: PropTypes.object.isRequired,
     database:PropTypes.object.isRequired,
     shareLink: PropTypes.any,
