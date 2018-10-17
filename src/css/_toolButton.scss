@@ -76,8 +76,10 @@
   position: relative;
   cursor: pointer;
   transition: background-color 0.3s;
+  @extend %flexCenter-Center-row;
+
   img{
-    @include size(44px, 44px);
+    @include size(80%, 80%);
   }
   &:hover{
     background-color: $special;
@@ -121,6 +123,7 @@
   @include distance(16px,0);
 background-color: $white;
 @extend %flexCenter-Center-row;
+
 }
 .fileUpload{
   @include distance(16px 0,16px);

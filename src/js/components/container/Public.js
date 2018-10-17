@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CreateHeader from '../Create/CreateHeader';
-import { initFirebase } from '../element/constant';
+import { initFirebase } from '../element/auth';
 import firebase from 'firebase/app';
 import Loading from '../element/loading';
 require('firebase/database');

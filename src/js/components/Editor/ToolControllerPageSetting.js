@@ -37,7 +37,7 @@ const ToolControllerPageSetting = ({ style, action }) => {
                     data-value={style.style[4]['backgroundColor']}
                     data-data='backgroundColor'
                     onChange={action.pageonChangeStr}
-                />
+                    rgba={true}                />
             </div>
          
         </div>

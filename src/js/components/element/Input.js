@@ -1,7 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-const Input = ({ type, id, value, onChange,src,className,disabled,onBlur }) => (
+const Input = ({
+    type,
+    id,
+    value,
+    onChange,
+    src,
+    className,
+    disabled,
+    onBlur,
+    text
+}) => (
     <div className="input">
+        <label htmlFor={id}> {text}</label>
         <img className="input__icon" src={src} />
         <input
             type={type}
@@ -21,7 +32,9 @@ Input.propTypes = {
     src: PropTypes.string,
     onChange: PropTypes.func,
     className: PropTypes.string,
-    disabled:PropTypes.string,
-    onBlur:PropTypes.func
+    disabled: PropTypes.string,
+    onBlur: PropTypes.func,
+    text: PropTypes.string,
+
 };
 export default Input;

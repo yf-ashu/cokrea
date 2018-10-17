@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import CreateMainItem from './CreateMainItem';
-import { connectFetch, random ,initFirebase} from '../element/constant';
+import { connectFetch, random } from '../element/constant';
+import { initFirebase } from '../element/auth';
+
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 
@@ -15,6 +17,15 @@ class CreateMain extends Component {
         this.addNewProject = this.addNewProject.bind(this);
        
 
+    }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (
+            nextProps.userData !== prevState.userData 
+        ) {
+            return {
+                project: nextProps.userData.project?nextProps.userData.project:[]
+            };
+        } else return null;
     }
     componentDidMount() {
         let projectCheck;
@@ -31,10 +42,10 @@ class CreateMain extends Component {
     addNewProject() {
         let projectId = random();
         let projectArray =
-            this.state.project.length === 0 ? [] : this.state.project;
+        this.props.userData.project ?  this.props.userData.project:[];
         let data = {
             projectId: projectId,
-            link: '/edit/' + projectId,
+            link: '/dashboard/edit/' + projectId,
             contentEditable: false,
             projectName: this.state.projectName
         };
@@ -58,28 +69,23 @@ class CreateMain extends Component {
                 'Content-Type': 'application/json'
             })
         };
-        let getMemberData = () => {
+        let getMemberData = (data) => {
             if (!firebase.apps.length) {
                 initFirebase();
               
             }
             let storage = firebase.storage();
             console.log(storage);
-            //    storage
-            //    .ref('init.png')
-            //    .getDownloadURL()
-            //    .then(url => {
-            //        console.log(url)
+         
             let url=
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=';
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
             firebase.storage().ref().child(projectId + '/canvas.png')
                 .putString(url, 'data_url')
                 .then(function() {
                     console.log('Uploaded a base64url string!');
                 });
-            //    })
-
-           
+            console.log(data);
+            this.props.checkLogin(null,data,null,null);
         };
         connectFetch(target, payload, getMemberData);
     }
@@ -87,8 +93,8 @@ class CreateMain extends Component {
    
    
     render() {
-        let createMain = this.state.project.map(data => {
-            // console.log(data);
+        console.log(this.props.userData.project);
+        let createMain = this.state.project?this.state.project.map(data => {
             let id=data.projectId;
             return (
                 <CreateMainItem
@@ -97,9 +103,10 @@ class CreateMain extends Component {
                     id={data.projectId}
                     project={data}
                     projectImg={this.props.projectImg?this.props.projectImg[id]:null}
+                    deleteProject={this.props.deleteProject}
                 />
             );
-        });
+        }):null;
         return (
             <div className="createMain">
                 <div className="createMainItem">
@@ -120,7 +127,9 @@ class CreateMain extends Component {
     }
 }
 CreateMain.propTypes = {
-    userData: PropTypes.any.isRequired,
-    projectImg:PropTypes.object
+    userData: PropTypes.any,
+    projectImg:PropTypes.object,
+    checkLogin: PropTypes.func,
+    deleteProject: PropTypes.func
 };
 export default CreateMain;

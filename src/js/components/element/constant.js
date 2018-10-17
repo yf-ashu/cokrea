@@ -1,6 +1,10 @@
-import h1 from '../../../img/edit.svg';
-import firebase from 'firebase/app';
-require('firebase/auth');
+import edit from '../../../img/edit.svg';
+import user from '../../../img/user.svg';
+import h1 from '../../../img/text-01.png';
+import h2 from '../../../img/text-02.png';
+import p from '../../../img/text-04.png';
+import span from '../../../img/text-03.png';
+
 export const constant = {
     buttonDisplay: {
         text: [
@@ -13,14 +17,14 @@ export const constant = {
             },
             {
                 type: 'h2',
-                src: h1,
+                src: h2,
                 size: { width: 0.8, height: 55 },
                 textContent: 'Lorem ipsum dolor, sit amet .',
                 format: 'text'
             },
             {
                 type: 'p',
-                src: h1,
+                src: p,
                 size: { width: 0.8, height: 65 },
                 format: 'text',
                 textContent:
@@ -28,7 +32,7 @@ export const constant = {
             },
             {
                 type: 'span',
-                src: h1,
+                src: span,
                 size: { width: 0.8, height: 65 },
                 format: 'text',
                 textContent:
@@ -38,9 +42,15 @@ export const constant = {
         img: [
             {
                 type: 'img',
-                src: h1,
-                size: { width: 0.8, height: 0.8 },
-                format: 'image'
+                src: edit,
+                size: { width: 0.5, height: 55 },
+                format: 'edit'
+            },
+            {
+                type: 'img',
+                src: user,
+                size: { width: 0.5, height: 55 },
+                format: 'user'
             }
         ],
         square: []
@@ -86,20 +96,7 @@ export const connectFetch = (target, payload, fn) => {
             console.log('錯誤:', err);
         });
 };
-export const initFirebase = () => {
-    let config = {
-        apiKey: 'AIzaSyAncjAic0clz2IUCF-HOjHVOCe9_YCRzdo',
-        authDomain: 'cokrea-editor.firebaseapp.com',
-        databaseURL: 'https://cokrea-editor.firebaseio.com',
-        projectId: 'cokrea-editor',
-        storageBucket: 'cokrea-editor.appspot.com',
-        messagingSenderId: '751312443170'
-    };
-    let firebaseConnect = firebase.initializeApp(config);
-    var database = firebase.database();
-    console.log(database);
-    return firebaseConnect;
-};
+
 export const styleSetting = type => {
     let tmp = [];
     switch (type.type) {
@@ -124,7 +121,29 @@ export const styleSetting = type => {
 
             { fontWeight: 700 },
             { fontStyle: 'normal' },
-            { fontSize: 22 }
+            { fontSize: 36 }
+        ];
+        break;
+    }
+    case 'p': {
+        tmp = [
+            { backgroundColor: 'rgba(0,0,0,0)' },
+            { color: '#000000' },
+
+            { fontWeight: 700 },
+            { fontStyle: 'normal' },
+            { fontSize: 24 }
+        ];
+        break;
+    }
+    case 'span': {
+        tmp = [
+            { backgroundColor: 'rgba(0,0,0,0)' },
+            { color: '#000000' },
+
+            { fontWeight: 400 },
+            { fontStyle: 'normal' },
+            { fontSize: 16 }
         ];
         break;
     }

@@ -3,17 +3,40 @@ import PropTypes from 'prop-types';
 import Input from '../element/Input';
 import edit from '../../../img/edit.svg';
 import back from '../../../img/back.svg';
+import backDark from '../../../img/back-dark.svg';
+import nextDark from '../../../img/next-dark.svg';
+
+import firebase from 'firebase/app';
+require('firebase/auth');
 import next from '../../../img/next.svg';
 import { NavLink } from 'react-router-dom';
 import user from '../../../img/user.svg';
 import download from '../../../img/download.svg';
 import share from '../../../img/share.svg';
+import arrow from '../../../img/arrow.svg';
+import logo from '../../../img/logo.png';
+
 class EditorHeader extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            memberButton:false
+        };
+        this.logout=this.logout.bind(this);
     }
-
+    logout() {
+        firebase
+            .auth()
+            .signOut()
+            .then(function() {
+                console.log('email sign out');
+                window.location.pathname = '/dashboard';
+                // that.props.logout()
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
     render() {
         const {
             scale,
@@ -27,16 +50,18 @@ class EditorHeader extends Component {
             offline,
             projectName,
             onChange,
-            onBlur
+            onBlur,
+            saved
         } = this.props;
 
         return (
             <div className="editorHeader">
                 <NavLink
                     className="editorHeader__left"
-                    to="/"
+                    to="/dashboard"
                     onClick={offline}
-                />
+                >            <img src={logo}></img>
+                </NavLink>
                 <div className="editorHeader__center">
                     <div className="editorHeader__search">
                         <Input
@@ -80,7 +105,7 @@ class EditorHeader extends Component {
                             data-data="recovery"
                             disabled={unable[0].length === 0 ? true : false}
                         >
-                            <img src={back} />
+                            <img src={unable[0].length === 0?backDark:back} />
                         </button>
                         <button
                             className="editorHeader__redo"
@@ -88,7 +113,7 @@ class EditorHeader extends Component {
                             data-data="redo"
                             disabled={unable[1].length === 0 ? true : false}
                         >
-                            <img src={next} />
+                            <img src={unable[1].length === 0?nextDark:next}  />
                         </button>
                     </div>
                 </div>
@@ -98,6 +123,9 @@ class EditorHeader extends Component {
                         onClick={saveData}
                     >
                         SAVE
+                        <div className={saved[0]?'editorHeader__button--saveHint':'editorHeader__button--saveHint displayOpacity'}>{saved[1]}</div>
+                        <div className={saved[0]?'editorHeader__button--saveHint_tringle':'editorHeader__button--saveHint_tringle displayOpacity'}></div>
+
                     </button>
                     <button
                         className="editorHeader__button--download"
@@ -117,8 +145,15 @@ class EditorHeader extends Component {
                         </button>
                     </button>
 
-                    <div className="createHeader__member">
-                        <img src={login ? login.photoURL : user} />
+                    <div className="editorHeader__member"
+                        onMouseEnter={()=>{this.setState({memberButton:true});}}
+                        onMouseLeave={()=>{this.setState({memberButton:false});}}
+                    >
+                        <img src={login ? login.photoURL : user}className={'editorHeader__member--member'} />
+                        <img src={arrow} className={'editorHeader__member--arrow'}></img>
+                        <div className={this.state.memberButton?'editorHeader__member--option':'displayNone'}>
+                            <div onClick={this.logout}>LOGOUT</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,6 +174,7 @@ EditorHeader.propTypes = {
     offline:PropTypes.any,
     projectName:PropTypes.string,
     onChange:PropTypes.func,
+    saved:PropTypes.string
 
     // textContent: PropTypes.any
 };

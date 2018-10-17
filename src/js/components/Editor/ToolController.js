@@ -69,11 +69,18 @@ class ToolController extends Component {
     }
 
     handlePageOnChangeNum(e) {
+        let value;
+        console.log(e.currentTarget.value);
+        if(+e.currentTarget.value<1){
+            value=10;
+        }else{
+            value=+e.currentTarget.value;
+        }
         this.props.controll(
             'editMainStyle',
             'style',
             e.currentTarget.dataset.data,
-            e.currentTarget.value,
+            value,
             null
         );
     }

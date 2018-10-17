@@ -4,16 +4,22 @@ import user from '../../../img/user.svg';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 require('firebase/auth');
-import { initFirebase, connectFetch } from '../element/constant';
+import { connectFetch } from '../element/constant';
+import { initFirebase, authInfomation } from '../element/auth';
+import CreateHeader from './CreateHeader';
+import Loading from '../element/loading';
+import { Redirect, NavLink } from 'react-router-dom';
+import iconColor from '../../../img/icon-color.png';
 
 class Login extends Component {
     constructor(props) {
-        super(props);
+        +super(props);
         this.state = {
             userName: '',
             password: '',
-            connect: null,
-            storage: null
+            database: null,
+            storage: null,
+            loading: true
         };
         this.signupWithEmail = this.signupWithEmail.bind(this);
         this.loginWithEmail = this.loginWithEmail.bind(this);
@@ -22,83 +28,34 @@ class Login extends Component {
         this.handleInput = this.handleInput.bind(this);
     }
     componentDidMount() {
-        let storage;
+        let storage, database;
         if (!firebase.apps.length) {
             let connect = initFirebase();
+            database = connect.database();
             storage = connect.storage();
             this.setState({
-                connect: connect,
+                database: database,
                 storage: storage
             });
         }
+        database = firebase.database();
         storage = firebase.storage();
         this.setState({
+            database: database,
             storage: storage
         });
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                console.log('有登入');
-                let data = {
-                    id: user.uid
-                };
-                console.log(user);
-                let target = '/app/getAccount';
-                let payload = {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: new Headers({
-                        'Content-Type': 'application/json'
-                    })
-                };
-                let getMemberData = data => {
-                    let imgUrl = {};
-                    data.project?data.project.map(projectdata => {
-                        console.log(projectdata.projectId);
-                        storage
-                            .ref(projectdata.projectId + '/canvas.png')
-                            .getDownloadURL()
-                            .then(url => {
-                                imgUrl[projectdata.projectId] = url;
-                                if (
-                                    Object.keys(imgUrl).length ===
-                                    data.project.length
-                                ) {
-                                    console.log(imgUrl);
-
-                                    this.props.checkLogin(
-                                        user,
-                                        data,
-                                        this.state.connect,
-                                        imgUrl
-                                    );
-                                    this.props.loading();
-                                }
-                                // console.log(data.project);
-                            })
-                            .catch((error)=>{
-                                console.log(error);
-                         
-                            });
-                    }):
-                        null;
-                    this.props.checkLogin(
-                        user,
-                        data,
-                        this.state.connect,
-                        null
-                    );
-                    this.props.loading(); 
-                    
-                    console.log(user, data);
-                };
-                console.log('在這裡');
-
-                connectFetch(target, payload, getMemberData);
+        let authCheck = data => {
+            console.log(data);
+            if (data) {
+                this.props.getUserData(data[0], data[1], data[2], data[3]);
             } else {
-                this.props.loading();
-                console.log('沒有登入');
+                this.setState({
+                    loading: false
+                });
             }
-        });
+        };
+
+        authInfomation(authCheck);
     }
 
     handleInput(e, type) {
@@ -219,65 +176,130 @@ class Login extends Component {
             });
     }
     render() {
+        if (this.props.loginStatus || this.props.userData) {
+            //   window.location.pathname = '/dashboard';
+            return <Redirect to="/dashboard" />;
+        }
+        let address = location.pathname.split('/')[1];
+        console.log(address);
         return (
             <div className="login">
-                <div className="login__main">
-                    <div className="login__inner">
-                        <Input
-                            src={user}
-                            type="text"
-                            id="loginUser"
-                            className="input-login input-control"
-                            onChange={e => {
-                                this.handleInput(e, 'userName');
-                            }}
-                            value={this.state.userName}
-                        />
-                        <Input
-                            src={user}
-                            type="password"
-                            id="loginPwd"
-                            className="input-login input-control"
-                            onChange={e => {
-                                this.handleInput(e, 'password');
-                            }}
-                            value={this.state.password}
-                        />
-                        <div className="login__buttons">
-                            <button
-                                className="login__button"
-                                onClick={this.signupWithEmail}
-                            >
-                                Register
-                            </button>
-                            <button
-                                className="login__button"
-                                onClick={this.loginWithEmail}
-                            >
-                                Login
-                            </button>
+                <Loading loading={this.state.loading} />
+                <CreateHeader
+                    login={this.props.loginStatus}
+                    logout={this.logout}
+                    memberButton={this.state.memberButton}
+                    handlememberButton={e => {
+                        this.setState({
+                            memberButton: e
+                        });
+                    }}
+                />
+
+                {address==='login'?(
+                    <div className="loginMain">
+                        <div className="login__main">
+                            <div className="login__inner">
+                                <img src={iconColor} />
+                                <Input
+                                    src={user}
+                                    type="text"
+                                    id="loginUser"
+                                    className="input-login input-control"
+                                    onChange={e => {
+                                        this.handleInput(e, 'userName');
+                                    }}
+                                    value={this.state.userName}
+                                    text="Account"
+                                />
+                                <Input
+                                    src={user}
+                                    type="password"
+                                    id="loginPwd"
+                                    className="input-login input-control"
+                                    onChange={e => {
+                                        this.handleInput(e, 'password');
+                                    }}
+                                    value={this.state.password}
+                                    text="Password"
+                                />
+                                <div className="login__buttons">
+                        
+                                    <button
+                                        className="login__button"
+                                        onClick={this.loginWithEmail}
+                                    >
+                                        Login
+                                    </button>
+                                </div>
+                                <div className="login__line" />
+                                <button
+                                    className="login__fb"
+                                    onClick={this.loginWithFB}
+                                >
+                                    Login with Facebook
+                                </button>
+                                <button
+                                    className="login__google"
+                                    onClick={this.loginWithGoogle}
+                                >
+                                    Login with Google
+                                </button>
+                                <NavLink to="/signup" className="login__link">
+                                    New here? Create an account.
+                                </NavLink>
+                            </div>
                         </div>
-                        <div className="login__line" />
-                        <button
-                            className="login__fb"
-                            onClick={this.loginWithFB}
-                        >
-                            Facebook
-                        </button>
-                        <button
-                            className="login__google"
-                            onClick={this.loginWithGoogle}
-                        >
-                            Google
-                        </button>
-                    </div>
-                </div>
+                    </div>):
+
+                    (       <div className="loginMain">
+                        <div className="login__main">
+                            <div className="login__inner">
+                                <img src={iconColor} />
+                                <Input
+                                    src={user}
+                                    type="text"
+                                    id="loginUser"
+                                    className="input-login input-control"
+                                    onChange={e => {
+                                        this.handleInput(e, 'userName');
+                                    }}
+                                    value={this.state.userName}
+                                    text="Account"
+                                />
+                                <Input
+                                    src={user}
+                                    type="password"
+                                    id="loginPwd"
+                                    className="input-login input-control"
+                                    onChange={e => {
+                                        this.handleInput(e, 'password');
+                                    }}
+                                    value={this.state.password}
+                                    text="Password"
+                                />
+                                <div className="login__buttons">
+                            
+                                    <button
+                                        className="login__button"
+                                        onClick={this.signupWithEmail}
+                                    >
+                                    Signup
+                                    </button>
+                                </div>
+                           
+                            </div>
+                        </div>
+                    </div>)
+                }
             </div>
         );
     }
 }
 Login.propTypes = {
-    checkLogin: PropTypes.func.isRequired,
-    loading: PropTypes.any
+    getUserData: PropTypes.func.isRequired,
+    loading: PropTypes.any,
+    loginStatus: PropTypes.string,
+    userData: PropTypes.string
 };
 export default Login;

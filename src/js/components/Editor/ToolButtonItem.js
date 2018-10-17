@@ -10,6 +10,9 @@ const ToolButtonItem = ({
     src,
     format
 }) => {
+    // if(type='img'){
+    //     special=
+    // }
     return (
         <div
             onClick={onClick}
@@ -19,6 +22,7 @@ const ToolButtonItem = ({
             onDragStart={onDragStart}
             draggable="true"
             data-format={format}
+            // data-special={}
         >
             <img src={src} />
         </div>

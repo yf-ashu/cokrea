@@ -54,7 +54,7 @@ top: 0;
   @include size(100%, 50px);
   background-color: $white;
   border-top: 1px solid lighten($button, 20);
-  @include distance(8px, 0);
+  @include distance(12px, 0);
   @extend %flexCenter-space-between-row;
 }
 .createMainItem__button {
@@ -121,4 +121,13 @@ top: 0;
   span:last-child {
     transform: translate(-50%, -50%) rotate(90deg);
   }
+}
+.createMainItem__delete{
+    @include size(22px,22px);
+    @include background-center('../img/delete.png');
+cursor: pointer;
+      &:hover {
+        @include background-center('../img/deleteHover.png');
+      }    
+  
 }

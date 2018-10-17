@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const CreateMainItem = ({ linkTo, id, project,projectImg}) => {
+const CreateMainItem = ({ linkTo, id, project,projectImg,deleteProject}) => {
     console.log(projectImg);
     return (
         <div className="createMainItem">
@@ -33,7 +33,8 @@ const CreateMainItem = ({ linkTo, id, project,projectImg}) => {
                 >
                     {project.projectName}
                 </div>
-             
+                <div className="createMainItem__delete" onClick={deleteProject} data-data={id}> 
+                </div>
             </div>
         </div>
     );
@@ -42,8 +43,8 @@ CreateMainItem.propTypes = {
     linkTo: PropTypes.string.isRequired,
     id:PropTypes.string.isRequired,
     project:PropTypes.any,
-    projectImg:PropTypes.object
-
+    projectImg:PropTypes.string,
+    deleteProject:PropTypes.object
 
 };
 export default CreateMainItem;

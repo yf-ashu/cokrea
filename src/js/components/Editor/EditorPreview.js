@@ -38,7 +38,7 @@ class EditorPreview extends Component {
                 display: this.props.display ? this.props.display : [],
                 editMainStyle: this.props.editMainStyle
             });
-            console.log('canvas更改');
+            // console.log('canvas更改');
             this.updateCanvas();
         }
     }

@@ -92,7 +92,7 @@ $click: #303030;
 $editor: #737373;
 $hover: #4b4a4a;
 $button: #949d9c;
-$special: #64ddd2;
+$special: #6be2d8;
 $white: #f5f5f5;
 $search: #7e7d7d;
 $text-white: #f5f5f5;
@@ -129,7 +129,15 @@ h1 {
   font-size: 47px;
 }
 h2 {
-  font-size: 22px;
+  font-size: 36px;
+}
+span{
+  font-size: 16px;
+
+}
+p{
+  font-size: 24px;
+
 }
 ul,
 li {
@@ -169,31 +177,16 @@ button {
 }
 
 .input {
-  @extend %flexCenter-Center-row;
+  @extend %flexFlex-start-center-column;
   position: relative;
-  @include distance(0 24px, 0);
+  @include distance(0 24px, 0 0 12px 0);
   @include size(100%, auto);
+  label{
+    color: $editor;
+    font-size: 14px;
+  }
 }
 
-input[type='text'].input-edit {
-  background-color: $search;
-  @include size(180px, 28px);
-  border: none;
-  transition: all 0.5s;
-}
-
-input[type='text'].input-edit:focus {
-  background-color: $white;
-  @include size(240px, 28px);
-}
-.input__icon {
-  position: absolute;
-  @include size(22px, 22px);
-  left: 36px;
-}
-.input-control {
-  @include distance(4px 0 4px 44px, 0);
-}
 .displayNone {
   display: none;
 }
@@ -204,11 +197,20 @@ input[type='text'].input-edit:focus {
 .loading {
   position: fixed;
   @include size(100%, 100%);
-  background-color: $click;
+  background-color: $special;
   z-index: 10000;
   transition: all 0.5s;
+}
+@media screen  and (max-width: 600px) {
+  button {
+    
+    font-weight: 700;
+    @include size(60px, 30px);
+    @include distance(0, 0);
+  }
 }
 @import 'reset';
 @import 'editor';
 @import 'create';
 @import 'public';
+@import 'home';

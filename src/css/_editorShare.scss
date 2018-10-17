@@ -21,6 +21,7 @@ overflow: hidden;
 .editorShare__options {
   @include size(100%, auto);
   @extend %flexFlex-start-center-row;
+
 }
 .editorShare__option {
   @extend %flexCenter-Center-row;
@@ -30,51 +31,87 @@ overflow: hidden;
   &-item{
 @include size(100%,100px);
 @extend %flexCenter-Center-row;
-
+border-radius: 5px;
+cursor: pointer;
+&:hover{
+  background-color: $hover;
+}
   }
 }
+.editorShare__option-select{
+  @include size(15%, 100%);
+
+}
 .editorShare__option-text{
-  @include size(50%, 100%);
-  @extend %flexCenter-flexStart-row ;
-  @include distance(8px, 8px);
+  @include size(75%, auto);
+  // @extend %flexCenter-flexStart-row ;
+
 span{
   display: block;
-
+  @include distance(8px 0, 0);
   @include size(100%, auto);
+  font-weight: 700;
 }
 }
 input[type='text'].editorShare__shareLink {
   @include size(100%, 28px);
+  background-color: $search;
+// color:$text-white;
+@include distance(8px, 0);
+
+&:focus{
+  background-color: $white;
+  color:text-black;
+
+}
 }
 .editorShare__shareLinksetting 
 {  
-  @include size(100%,20%);
-  @include distance(8px, 0);
+  background-color: $hover;
 
+  @include size(100%,20%);
+  @include distance(8px 8px 16px 8px, 0);
+div{
+  @include distance(8px, 0);
+font-weight: 700;
+}
 
 
 }  
 .editorShare__shareLinkList {
   @include size(100%,auto);
-  @include distance(8px, 0);
-  // @extend %flexCenter-flexStart-column ;
+  @include distance(8px 8px 16px 8px, 0);
+  background-color: $hover;
+border-top: $white dotted 1px;
+  >div:nth-child(1){
+    @include distance(8px, 0);
+    font-weight: 700;
 
+  }
+}
+.editorShare__shareLinkList--item{
+  @include distance(2px 10px, 0);
 }
 .editorShare__shareLinkBlock{
   @include size(100%,20%);
 
   @include distance(8px, 0);
+  div{
+    @include distance(8px, 0);
+    font-weight: 700;
 
+  }
 
 }
 .editorShare__header{
   position: relative;
 
   background-color: $click;
-  @include size(100%,10%);
+  @include size(100%,60px);
 color: $text-white;
 @extend %flexCenter-Center-row;
-font-size: 30px;
+font-size: 28px;
+font-weight: 700;
 }
 .editorShare__close{
 
@@ -88,8 +125,16 @@ font-size: 30px;
   }
 }
 .editorShare__shareLinkList-item{
-  display:flex;
+  @include size(100%,auto);
+
   @include distance(8px, 0);
+  &:hover{
+    background-color: $hover;
+  }
+  
+}
+.editorShare__shareLinkList--items{
+  display:flex;
 
   img {
     @include size(16px, 16px);
@@ -102,7 +147,7 @@ font-size: 30px;
 }
 .editorShare__border{
   border: $special 1px solid;
-
+border-radius: 5px;
 }
 .editorShare__button{
   @include distance(0, 32px 8px );

@@ -11,17 +11,16 @@
         "source": "/app/**",
         "function": "app"
       },
-      {"source":"**","destination":"/index.html"}
-    ],
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   },
   "functions": {
-    "predeploy": [
-    ],
+    "predeploy": [],
     "source": "functions"
   }
 }
+
+

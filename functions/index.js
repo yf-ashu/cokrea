@@ -110,6 +110,10 @@ app.post('/app/manageAccount', (req, res) => {
           }
         })
       }
+      if(data.project){
+        getData.project = data.project;
+
+      }
 
       getData.updateTime = now.getTime();
       db.ref('/userData/' + userId).update(getData, error => {
@@ -118,9 +122,9 @@ app.post('/app/manageAccount', (req, res) => {
             error: 'Create Account Error'
           });
         } else {
-          res.send({
-            success: 'Create Account'
-          });
+          delete getData.createTime;
+          delete getData.updateTime;
+          res.json(getData);
         }
       });
     } else {
@@ -130,9 +134,7 @@ app.post('/app/manageAccount', (req, res) => {
             error: 'Create Account Error'
           });
         } else {
-          res.send({
-            success: 'Create Account'
-          });
+          res.json(getData);
         }
       });
     }
@@ -150,19 +152,7 @@ app.post('/app/addNewProject', (req, res) => {
   }
   let userId = data.userId;
   console.log(data);
-  db.ref('/userData/' + userId).once('value', snapshot => {
-    if (snapshot.exists()) {
-      let getData = snapshot.val();
 
-      getData.project = data.project;
-      getData.userId = data.userId;
-      getData.updateTime = now.getTime();
-      if (data.share) {
-        getData.share = data.share;
-      }
-      db.ref('/userData/' + userId).update(getData, error => {});
-    }
-  });
   //新增一個專案
   let projectData = {
     projectId: data.newItem,
@@ -180,13 +170,30 @@ app.post('/app/addNewProject', (req, res) => {
   let usernew = data.newItem;
   console.log(usernew);
   db.ref('/projectData/' + usernew).set(projectData, error => {
-    if (error) {
-      res.send({
-        error: 'Create project Error'
-      });
-    } else {
-      res.send({
-        success: 'Create project'
+  
+  });
+  db.ref('/userData/' + userId).once('value', snapshot => {
+    if (snapshot.exists()) {
+      let getData = snapshot.val();
+
+      getData.project = data.project;
+      getData.userId = data.userId;
+      getData.updateTime = now.getTime();
+      if (data.share) {
+        getData.share = data.share;
+      }
+      db.ref('/userData/' + userId).update(getData, error => {
+
+        if (error) {
+          res.send({
+            error: 'Create project Error'
+          });
+        } else {
+          delete getData.createTime;
+          delete getData.updateTime;
+          res.json(getData);
+        }
+
       });
     }
   });
@@ -223,7 +230,7 @@ app.post('/app/manageProject', (req, res) => {
           });
         } else {
           res.send({
-            success: 'Create project'
+            success: getData
           });
         }
       });

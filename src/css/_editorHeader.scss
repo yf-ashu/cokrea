@@ -5,9 +5,18 @@
   grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 60px 3fr 2fr;
 }
 .editorHeader__left {
-  @include size(60px, 100%);
-  background-color: $white;
+  @include size(100%, 100%);
+  background-color: $click;
   grid-area: editorHeader__left;
+  @extend %flexCenter-Center-row;
+
+  cursor: pointer;
+  &:hover{
+    background-color: $hover;
+  }
+    img{
+      @include size(55%, auto);
+    }
 }
 .editorHeader__center {
   grid-area: editorHeader__center;
@@ -21,13 +30,43 @@
   @include distance(0 16px, 0);
 }
 .editorHeader__button--save {
+  position: relative;
   background-color: $special;
   font-size: 12px;
   &:hover {
     background-color: darken($special, 20%);
   }
 }
-.editorHeader__button--share,.editorHeader__button--download {
+.editorHeader__button--saveHint {
+  position: absolute;
+  @include size(70px, 30px);
+  background-color: rgb(255, 214, 30);
+  border-radius: 5px;
+  top: -10px;
+  left: -60%;
+  @extend %flexCenter-Center-row;
+  // text-shadow: -1px 0 rgb(179, 177, 177), 0 1px  rgb(179, 177, 177), 1px 0 rgb(179, 177, 177), 0 -1px  rgb(179, 177, 177);
+  letter-spacing: 1px;
+  color: $click;
+  // opacity: 1;
+  // visibility: visible;
+  transition: all 0.5s;
+}
+.editorHeader__button--saveHint_tringle {
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 6px solid rgb(255, 214, 30);
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  left: -2px;
+  // opacity: 1;
+  // visibility: visible;
+  transition: all 0.5s;
+}
+
+.editorHeader__button--share,
+.editorHeader__button--download {
   // background-color: $button;
   @include size(30px, 30px);
 
@@ -37,32 +76,48 @@
     background-color: darken($button, 20%);
   }
 }
-.editorHeader__button--download{
+.editorHeader__button--download {
   @include distance(0, 0 16px);
-img{
-  @include size(22px, 22px);
-
+  img {
+    @include size(22px, 22px);
+  }
 }
-}
-.editorHeader__button--share{
+.editorHeader__button--share {
   @include distance(0, 0 16px 0 0);
-  button{
+  button {
     @include size(22px, 22px);
 
-    img{
-    @include size(22px, 22px);
-  
+    img {
+      @include size(22px, 22px);
+    }
   }
-  }
-  
 }
 .editorHeader__member {
-  @include size(36px, 36px);
-cursor: pointer;
-  img {
-    @include size(100%, 100%);
+  @extend %flexCenter-Center-column;
+
+  @include size(72px, 36px);
+  position: relative;
+  cursor: pointer;
+  &--member {
+    @include size(36px, 36px);
     border-radius: 50%;
     background-color: $white;
+  }
+  &--arrow {
+    @include size(10px, 10px);
+  }
+}
+.editorHeader__member--option {
+  @include size(auto, auto);
+  background-color: $click;
+  position: absolute;
+  border: $white 1px solid;
+  top:40px;
+  right:1%;
+  color: $text-white;
+  font-size: 16px;
+  div{
+    @include distance(16px,0)
 
   }
 }
@@ -80,7 +135,8 @@ cursor: pointer;
     color: $click;
   }
 }
-.editorHeader__recovery,.editorHeader__redo {
+.editorHeader__recovery,
+.editorHeader__redo {
   @include size(28px, 28px);
   @include distance(2px, 6px);
 
@@ -88,6 +144,35 @@ cursor: pointer;
     @include size(24px, 24px);
   }
   &:hover {
-    background-color: $hover;
+    background-color: darken($button, 20%);
+  }
+}
+input[type='text'].input-edit {
+  background-color: $search;
+  @include size(180px, 28px);
+  border: none;
+  transition: all 0.5s;
+  font-size: 14px;
+}
+
+input[type='text'].input-edit:focus {
+  background-color: $white;
+  @include size(240px, 28px);
+}
+.input__icon {
+  position: absolute;
+  @include size(22px, 22px);
+  left: 36px;
+}
+.input-control {
+  @include distance(4px 0 4px 44px, 0);
+}
+@media screen and (max-width: 600px) {
+  .editorHeader {
+    grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 50px 2fr 1fr;
+  }
+  .editorHeader__left {
+    @include size(100%, 100%);
+    grid-area: editorHeader__left;
   }
 }

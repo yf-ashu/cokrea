@@ -1,31 +1,49 @@
 .login {
-  @include size(100%, 100%);
+  @include size(100%, 100vh);
   grid-area: createMain;
   background-color: $editor;
+  display: grid;
+  grid-template:
+    'createHeader ' 80px
+    'loginMain' 1fr / 1fr;
+  // @extend %flexCenter-Center-row;
+}
+.loginMain {
+  @include size(100%, 100%);
+  grid-area: loginMain;
   @extend %flexCenter-Center-row;
 }
 .login__main {
-  @include size(40%,500px);
+  @include size(40%, auto);
   max-width: 500px;
   min-width: 350px;
 
   background-color: $white;
   @extend %flexCenter-Center-row;
-border-radius: 5px;
+  border-radius: 5px;
+  @include distance(40px 0 60px 0,0);
+
   .input__icon {
     position: absolute;
     @include size(21px, 21px);
     left: 10%;
+    top: 30px;
+  }
+  img{
+    @include size(80%, auto);
+
   }
 }
-input[type='text'].input-login,input[type='password'].input-login{
+input[type='text'].input-login,
+input[type='password'].input-login {
   @include size(100%, 30px);
   border: lighten($button, 30) 0.5px solid;
   transition: all 0.5s;
   @include distance(0 15%, 8px 0);
   background-color: lighten($button, 20);
 }
-input[type='text'].input-login:focus,input[type='password'].input-login:focus{
+input[type='text'].input-login:focus,
+input[type='password'].input-login:focus {
   background-color: $white;
 }
 
@@ -39,7 +57,7 @@ input[type='text'].input-login:focus,input[type='password'].input-login:focus{
   @include distance(0 24px, 0);
 }
 .login__button {
-  @include size(45%, 30px);
+  @include size(100%, 30px);
   @include distance(0, 8px 0);
   background-color: $special;
   font-size: 12px;
@@ -50,6 +68,8 @@ input[type='text'].input-login:focus,input[type='password'].input-login:focus{
 .login__fb {
   @include size(calc(100% - 48px), 30px);
   background-color: #3b5998;
+  font-size: 12px;
+
   @include distance(0, 16px 0);
   &:hover {
     background-color: darken(#3b5998, 10%);
@@ -58,6 +78,8 @@ input[type='text'].input-login:focus,input[type='password'].input-login:focus{
 .login__google {
   @include size(calc(100% - 48px), 30px);
   background-color: #dd4b39;
+  font-size: 12px;
+
   @include distance(0, 8px 24px);
   &:hover {
     background-color: darken(#dd4b39, 10%);
@@ -67,5 +89,9 @@ input[type='text'].input-login:focus,input[type='password'].input-login:focus{
   @include size(calc(100% - 48px), 1px);
   background-color: lighten($button, 20);
   @include distance(0, 32px 0 24px 0);
- 
+}
+.login__link{
+  color:$special;
+  @include distance(6px 0,0);
+
 }

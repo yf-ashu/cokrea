@@ -34,7 +34,7 @@ class EditorShare extends Component {
             if(nextProps.projectData.share[0].public=='public'){
                 this.setState({
                     shareLink:'https://cokrea-editor.firebaseapp.com/views/'+projectData
-                })
+                });
             }
         }
     }
@@ -55,7 +55,7 @@ class EditorShare extends Component {
             selected: e.currentTarget.value,
             share: copy
         });
-        console.log(copy)
+        console.log(copy);
         console.log(this.state.share);
 
     }
@@ -96,21 +96,21 @@ class EditorShare extends Component {
             console.log('有public');
             this.setState({
                 shareLink:'https://cokrea-editor.firebaseapp.com/views/'+projectData
-            })
+            });
          
         }else if (this.state.selected === 'private') {
             this.props.database.ref('/public/' + projectData).set(null);
             console.log('枚有public');
             this.setState({
                 shareLink:'share close'
-            })
+            });
         }
         let projectSendData = {
             userId: this.props.loginStatus.uid,
             projectId: projectData,
             share: this.state.share.share
         };
-        console.log(projectSendData)
+        console.log(projectSendData);
         let target = '/app/manageProject';
         let payload = {
             method: 'POST',
@@ -169,6 +169,7 @@ class EditorShare extends Component {
                                 htmlFor="public"
                             >
                                 <input
+                                    className="editorShare__option-select"
                                     type="radio"
                                     id="public"
                                     name="publicRadio"
@@ -178,7 +179,7 @@ class EditorShare extends Component {
                                 />
                                 <div className="editorShare__option-text">
                                     <span>public</span>
-                                    <span>every can visit</span>
+                                    <div>Everyone can view.</div>
                                 </div>
                             </label>
                         </div>
@@ -192,6 +193,8 @@ class EditorShare extends Component {
                                 htmlFor="private"
                             >
                                 <input
+                                    className="editorShare__option-select"
+
                                     type="radio"
                                     id="private"
                                     name="hiddenRadio"
@@ -201,14 +204,14 @@ class EditorShare extends Component {
                                 />
                                 <div className="editorShare__option-text">
                                     <span>private</span>
-                                    <span>only allow list can edit</span>
+                                    <div>Only who has access can edit.</div>
                                 </div>
                             </label>
                         </div>
                     </div>
 
                     <div className="editorShare__shareLinksetting">
-                        <div>Enter email to allow list</div>
+                        <div>Add people (use Email)</div>
                         <input
                             type="text"
                             id="shareLink"
@@ -221,13 +224,14 @@ class EditorShare extends Component {
                                     this.checkLink(e, 'keypress');
                                 }
                             }}
+                            placeholder='enter "Enter" to input'
                             // disabled={
                             //     this.state.selected === 'public' ? true : false
                             // }
                         />
                     </div>
                     <div className="editorShare__shareLinkList">
-                        <div>Allow List</div>
+                        <div>Who can edit</div>
                         {/* {this.state.share} */}
                         {(this.state.share
                             ? this.state.share.share[1]
@@ -236,11 +240,11 @@ class EditorShare extends Component {
                             : []
                         ).map((data, index) => {
                             return (
-                                <div
-                                    className="editorShare__shareLinkList-item"
+                                <div 
+                                    className="editorShare__shareLinkList--items"
                                     key={index}
                                 >
-                                    <div> {data}</div>
+                                    <div className="editorShare__shareLinkList--item"> {data}</div>
                                     {this.state.share.share[1][0] ===
                                     'no data' ? null : (
                                             <img

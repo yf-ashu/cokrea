@@ -7,21 +7,22 @@ const EditorSelect = ({
     display
 }) => {
     let id = controllCurrent[1] !== null ? controllCurrent[1].key : '';
+    
     let style =
         controllCurrent[1] !== null
-            ? Object.assign({}, ...controllCurrent[1].outside)
+            ? Object.assign({}, ...display[controllCurrent[2]].outside)
             : {};
     if(id){
         let target = document.querySelector(`#${id}`);
-            
         style.width= +target.offsetWidth;
         style.height= +target.offsetHeight;
+
     }
-        
+    // console.log(controllCurrent)
    
     return (
         <div
-            className="editorMain__item--select"
+            className={controllCurrent[1]?'editorMain__item--select':'displayNone'}
             style={
                 style
             }
@@ -38,6 +39,7 @@ const EditorSelect = ({
                         ? style.height
                         : 0
                 }
+            
                 className="editorMain__item--select-svg"
             />
 

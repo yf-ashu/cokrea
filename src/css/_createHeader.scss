@@ -8,8 +8,16 @@
 }
 .createHeader__left {
   @include size(60px, 100%);
-  background-color: $white;
+  background-color: $click;
   grid-area: createHeader__left;
+  @extend %flexCenter-Center-row;
+  cursor: pointer;
+&:hover{
+  background-color: $hover;
+}
+  img{
+    @include size(55%, auto);
+  }
 }
 .createHeader__center {
   grid-area: createHeader__center;
@@ -23,14 +31,33 @@
   @include distance(0 16px, 0);
 }
 .createHeader__member {
-  @include size(36px, 36px);
+  @extend %flexCenter-Center-column;
 
-  img {
-    @include size(100%, 100%);
+  @include size(72px, 36px);
+  position: relative;
+  cursor: pointer;
+  &--member {
+    @include size(36px, 36px);
     border-radius: 50%;
     background-color: $white;
-
+  }
+  &--arrow {
+    @include size(10px, 10px);
   }
 
   // @include background-center('../img/self-01.jpg');
+}
+.createHeader__member--option {
+  @include size(auto, auto);
+  background-color: $click;
+  position: absolute;
+  border: $white 1px solid;
+  top:40px;
+  right:1%;
+  color: $text-white;
+  font-size: 16px;
+  div{
+    @include distance(16px,0)
+
+  }
 }
