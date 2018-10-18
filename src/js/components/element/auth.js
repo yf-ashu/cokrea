@@ -25,8 +25,9 @@ export const authInfomation = func => {
             };
             let getMemberData = data => {
                 let imgUrl = {};
-                data.project
-                    ? data.project.map(projectdata => {
+            
+                if(data.project){
+                     data.project.map(projectdata => {
                         console.log(projectdata.projectId);
                         storage
                             .ref(projectdata.projectId + '/canvas.png')
@@ -50,14 +51,22 @@ export const authInfomation = func => {
                             .catch(error => {
                                 console.log(error);
                             });
+
                     })
-                    : (authInfomation = [
+                }else{
+
+                
+                    
+                    console.log('沒有圖片')
+                    authInfomation = [
                         user,
                         data,
                         database,
                         null
-                    ]);
-                return func(authInfomation);
+                    ]
+                    return func(authInfomation);
+                }
+                    
 
             };
             console.log('在這裡');

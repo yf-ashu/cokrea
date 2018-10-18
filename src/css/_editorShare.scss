@@ -51,6 +51,8 @@ span{
   @include distance(8px 0, 0);
   @include size(100%, auto);
   font-weight: 700;
+  font-size: 20px;
+  text-transform:uppercase;
 }
 }
 input[type='text'].editorShare__shareLink {

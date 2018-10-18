@@ -7,12 +7,8 @@ import EditorMain from '../Editor/Editormain';
 import EditorItem from '../Editor/EditorItem';
 import ToolController from '../Editor/ToolController';
 import ToolButtonItem from '../Editor/ToolButtonItem';
-import {
-    random,
-    constant,
-    styleSetting
-} from '../element/constant';
-import { initFirebase } from '../element/auth';
+import { random, constant, styleSetting } from '../element/constant';
+import { initFirebase, authInfomation } from '../element/auth';
 
 import EditorPreview from '../Editor/EditorPreview';
 import PropTypes from 'prop-types';
@@ -90,13 +86,14 @@ class Editor extends Component {
         this.connectDb = this.connectDb.bind(this);
         this.changeProjectName = this.changeProjectName.bind(this);
         this.changeProjectNameonBlur = this.changeProjectNameonBlur.bind(this);
+        this.getProjectData = this.getProjectData.bind(this)
     }
 
     componentDidMount() {
         this.checkLogin();
     }
     componentWillUnmount() {
-        clearInterval(this.state.intervalId);
+        // clearInterval(this.state.intervalId);
         console.log('解除');
     }
     connectDb(database, user) {
@@ -137,7 +134,7 @@ class Editor extends Component {
         });
     }
 
-    saveData(e,display) {
+    saveData(e, display) {
         console.log(this.state.display);
         this.setState({
             saved: [true, '儲存中']
@@ -153,13 +150,12 @@ class Editor extends Component {
         database.ref('/projectData/' + projectData).update(getData, error => {
             if (error) {
                 console.log('error');
-
             } else {
                 console.log('完成');
                 this.setState({
                     saved: [true, '已存檔']
                 });
-               
+
                 setTimeout(() => {
                     this.setState({
                         saved: [false, '已存檔']
@@ -172,172 +168,112 @@ class Editor extends Component {
     }
     timeout() {
         // console.log('開始倒數');
-        let projectData = location.href.split('edit/')[1];
-        let that = this;
+        // let projectData = location.href.split('edit/')[1];
+        // let that = this;
 
-        let intervalId = setInterval(() => {
-            // console.log(this.state.storage);
-            that.state.storage
-                .child(projectData + '/canvas.png')
-                .putString(that.state.downloadUrl, 'data_url')
-                .then(function() {
-                    console.log('Uploaded a base64url string!');
-                });
-        }, 10000);
-        this.setState({
-            intervalId: intervalId
-        });
+        // let intervalId = setInterval(() => {
+        //     // console.log(this.state.storage);
+        //     that.state.storage
+        //         .child(projectData + '/canvas.png')
+        //         .putString(that.state.downloadUrl, 'data_url')
+        //         .then(function() {
+        //             console.log('Uploaded a base64url string!');
+        //         });
+        // }, 10000);
+        // this.setState({
+        //     intervalId: intervalId
+        // });
     }
     checkLogin() {
-        let projectData = location.href.split('edit/')[1];
-        let database, storage;
+        let storage,database;
         if (!this.props.loginStatus) {
+            console.log('沒有登入資訊')
             if (!firebase.apps.length) {
                 let connect = initFirebase();
                 database = connect.database();
                 storage = connect.storage().ref();
             }
-
             database = firebase.database();
             storage = firebase.storage().ref();
-            // console.log(storage);
-            //auth要拆出去
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    this.setState({
-                        loginStatus: user
-                    });
-                    database
-                        .ref('/projectData/' + projectData)
-                        .on('value', snapshot => {
-                            // console.log(user.email);
-                            let data;
-                            if (snapshot.exists()) {
-                                data = snapshot.val();
-                                // console.log(snapshot.val());
-                                if (data.owner === user.uid) {
-                                    console.log('擁有者1');
-                                    let shareButton = this.state.shareButton;
-                                    shareButton[1] = true;
-                                    this.setState({
-                                        projectData: data,
-                                        display: data.display
-                                            ? data.display
-                                            : [],
-                                        editMainStyle: data.editMainStyle
-                                            ? data.editMainStyle
-                                            : this.state.editMainStyle,
-                                        shareButton: shareButton
-                                    });
-                                    this.connectDb(database, user);
-                                    this.props.getUserData(
-                                        user,
-                                        null,
-                                        database,
-                                        null
-                                    );
-                                } else if (
-                                    data.share[1]
-                                        ? data.share[1].map(data => {
-                                            data === user.email;
-                                            return true;
-                                        })
-                                        : false
-                                ) {
-                                    this.setState({
-                                        projectData: data,
-                                        display: data.display
-                                            ? data.display
-                                            : [],
-                                        editMainStyle: data.editMainStyle
-                                            ? data.editMainStyle
-                                            : this.state.editMainStyle
-                                    });
-                                    this.connectDb(database, user);
-                                } else {
-                                    // console.log(data.share[0]);
-                                    if (data.share[0].public === 'public') {
-                                        window.location.pathname =
-                                            '/views/' + projectData;
-                                    } else {
-                                        alert('沒有存取權');
-                                        window.location.pathname = '/';
-                                    }
-                                }
-                            } else {
-                                alert('沒有此檔案');
-                                window.location.pathname = '/';
-                            }
-                        });
+
+            let authCheck = data => {
+
+                if (data) {
+                    console.log(data)
+                    this.props.getUserData(data[0], data[1], data[2], data[3]);
+                    this.getProjectData();
                 } else {
+                    // location.pathname='/'
                     window.location.pathname = '/';
                     console.log('沒有登入');
                 }
-            });
+            };
+            authInfomation(authCheck);
         } else {
-            // console.log(this.props.loginStatus);
-            this.setState({
-                loginStatus: this.props.loginStatus
-            });
-            database = firebase.database();
-            storage = firebase.storage().ref();
-
-            database
-                .ref('/projectData/' + projectData)
-                .on('value', snapshot => {
-                    if (snapshot.exists()) {
-                        let data = snapshot.val();
-                        if (
-                            snapshot.val().owner === this.props.loginStatus.uid
-                        ) {
-                            console.log('擁有者');
-                            let shareButton = this.state.shareButton;
-                            shareButton[1] = true;
-                            this.setState({
-                                projectData: data,
-
-                                display: data.display ? data.display : [],
-                                editMainStyle: data.editMainStyle
-                                    ? data.editMainStyle
-                                    : this.state.editMainStyle,
-                                shareButton: shareButton
-                            });
-                            // console.log(this.props.loginStatus);
-                            this.connectDb(database, this.props.loginStatus);
-                        } else if (
-                            data.share[1].map(data => {
-                                data === this.props.loginStatus.email;
-                                return true;
-                            })
-                        ) {
-                            this.setState({
-                                projectData: data,
-                                display: data.display ? data.display : [],
-                                editMainStyle: data.editMainStyle
-                                    ? data.editMainStyle
-                                    : this.state.editMainStyle
-                            });
-                            this.connectDb(database, this.props.loginStatus);
-                        } else {
-                            if (data.share[0].public === 'public') {
-                                window.location.pathname =
-                                    '/views/' + projectData;
-                            } else {
-                                alert('沒有存取權');
-                                window.location.pathname = '/';
-                            }
-                        }
-                    } else {
-                        alert('沒有此檔案');
-                        window.location.pathname = '/';
-                    }
-                });
+            this.getProjectData();
         }
+
         this.setState({
             database: database,
             storage: storage
         });
         this.timeout();
+    }
+
+    getProjectData() {
+        console.log('資料')
+      let  database = firebase.database();
+
+        this.setState({
+            loginStatus: this.props.loginStatus
+        });
+        let projectData = location.href.split('edit/')[1];
+
+       database
+            .ref('/projectData/' + projectData)
+            .on('value', snapshot => {
+                if (snapshot.exists()) {
+                    let data = snapshot.val();
+                    if (snapshot.val().owner === this.props.loginStatus.uid) {
+                        console.log('擁有者');
+                        let shareButton = this.state.shareButton;
+                        shareButton[1] = true;
+                        this.setState({
+                            projectData: data,
+                            display: data.display ? data.display : [],
+                            editMainStyle: data.editMainStyle
+                                ? data.editMainStyle
+                                : this.state.editMainStyle,
+                            shareButton: shareButton
+                        });
+                        this.connectDb(database, this.props.loginStatus);
+                    } else if (
+                        data.share[1].map(data => {
+                            data === this.props.loginStatus.email;
+                            return true;
+                        })
+                    ) {
+                        this.setState({
+                            projectData: data,
+                            display: data.display ? data.display : [],
+                            editMainStyle: data.editMainStyle
+                                ? data.editMainStyle
+                                : this.state.editMainStyle
+                        });
+                        this.connectDb(database, this.props.loginStatus);
+                    } else {
+                        if (data.share[0].public === 'public') {
+                            window.location.pathname = '/views/' + projectData;
+                        } else {
+                            alert('沒有存取權');
+                            window.location.pathname = '/';
+                        }
+                    }
+                } else {
+                    alert('沒有此檔案');
+                    window.location.pathname = '/';
+                }
+            });
     }
 
     recordStep(value) {
@@ -455,6 +391,7 @@ class Editor extends Component {
         }
     }
     handleCloseButton() {
+        console.log('清除');
         this.setState({
             type: { type: null, name: null },
             buttonItem: []
@@ -600,18 +537,17 @@ class Editor extends Component {
     addNewItem(type, e, special) {
         console.log(type, e.currentTarget, special);
         if (type) {
+            console.log(type.format);
             let check;
-            if (type.type==='img'&& special !== 'img') {
-                console.log(check);
-                check = this.state.buttonItem.findIndex(
-                    object => object.format === type.format
-                );
-               
+            if (type.type === 'img' && special !== 'img') {
+                check = this.state.buttonItem.findIndex(object => {
+                    return object.format[1] === type.format.split(',')[1];
+                });
+                console.log(type.format.split(',')[1]);
             } else {
                 check = this.state.buttonItem.findIndex(
                     object => object.type === type.type
                 );
-               
             }
 
             console.log(check);
@@ -740,7 +676,7 @@ class Editor extends Component {
         copy[copyDisplay].option[0]
             ? (copy[copyDisplay].option[0].contentEditable = 'false')
             : '';
-        let pretextContent=copy[copyDisplay].textContent;
+        let pretextContent = copy[copyDisplay].textContent;
         copy[copyDisplay].textContent = e.currentTarget.innerHTML;
         this.setState({
             mouseEvent: 'true',
@@ -990,14 +926,13 @@ class Editor extends Component {
         };
 
         let copyCurrent = this.state.controllCurrent.slice(0);
-    
+
         copyCurrent[1] = this.state.display[copyDisplay];
         // copy[3] = e.currentTarget;
-      
+
         this.setState({
             display: copy,
             controllCurrent: copyCurrent
-
         });
         // console.log( copy[copyDisplay].outside)
 
@@ -1141,12 +1076,10 @@ class Editor extends Component {
             display: copy,
             controllCurrent: copyDisplay
         });
-        this.saveData(null,copy);
-   
+        this.saveData(null, copy);
     }
 
     render() {
-
         let item = this.state.display.map(data => {
             return (
                 <EditorItem
@@ -1161,13 +1094,16 @@ class Editor extends Component {
                             ? this.elementOnMouseDown.bind(this)
                             : null
                     }
-                    onTouchStart={()=>{console.log('觸碰');}}
+                    onTouchStart={() => {
+                        console.log('觸碰');
+                    }}
                     onBlur={this.onBlur}
                     onDoubleClick={this.canInterEdit.bind(this)}
                     textContent={data.textContent}
                 />
             );
         });
+        // console.log(item)
         let color = ['red', 'yellow', 'orange', 'blue', 'purple', 'green'];
         let other = Object.keys(this.state.othercontrollCurrent).map(
             (data, index) => {
@@ -1205,26 +1141,45 @@ class Editor extends Component {
                 }
             }
         );
-        // console.log(other)
-        let buttonItem = [];
-        buttonItem = this.state.buttonItem.map(data => {
+        // // console.log(other)
+        // let buttonItem = [];
+        // for (let i = 0; i < this.state.buttonItem.length; i++) {
+        //     let data = this.state.buttonItem[i];
+        //     console.log(data);
+
+        //     let item = (
+        //         <ToolButtonItem
+        //             key={'toolButton__item--' + data.type+i}
+        //             onClick={this.clickToolButtonItem}
+        //             type={data.type}
+        //             format={data.format}
+        //             className={'toolButton__item--' + data.type}
+        //             id={data.type}
+        //             onDragStart={this.toolButtonItemDragStart}
+        //             src={data.src}
+        //         />
+        //     );
+
+        //     buttonItem.push(item);
+        //     // buttonItem=
+        // }
+
+        let buttonItem = this.state.buttonItem.map((data, index) => {
+            console.log(data);
             return (
-                <div key={'toolButton__item--outer' + data.type}
-                >
-                    <ToolButtonItem
-                        key={'toolButton__item--' + data.type}
-                        onClick={this.clickToolButtonItem}
-                        type={data.type}
-                        format={data.format}
-                        className={'toolButton__item--' + data.type}
-                        id={data.type}
-                        onDragStart={this.toolButtonItemDragStart}
-                        src={data.src}
-                    />
-                </div>
+                <ToolButtonItem
+                    key={'toolButton__item--' + data.type + '-' + index}
+                    onClick={this.clickToolButtonItem}
+                    type={data.type}
+                    format={data.format}
+                    className={'toolButton__item--' + data.type}
+                    id={data.type}
+                    onDragStart={this.toolButtonItemDragStart}
+                    src={data.src}
+                />
             );
         });
-        // console.log(buttonItem);
+        console.log(buttonItem);
         // console.log(this.state.publicSetting);
         return (
             <div className="editor">

@@ -25,22 +25,22 @@ class Create extends Component {
 
     componentDidMount(){
         if (
-            this.props.userData === null &&
+            this.props.userData === null ||
             this.props.loginStatus === null
         ){
             console.log('都沒有3');
-            this.initCheck();
+            console.log(this.props.loginStatus)
+            // this.initCheck();
         }
     }
     initCheck() {
 
         if (!firebase.apps.length) {
             initFirebase();
-          
         }
     
         let authCheck = data => {
-            console.log(data);
+            console.log('要檔案');
             if (data) {
                 this.props.getUserData(data[0], data[1], data[2], data[3]);
                 setTimeout(() => {
@@ -79,13 +79,14 @@ class Create extends Component {
     }
     componentDidUpdate(){
         if (
-            this.props.userData === null &&
+            this.props.userData === null ||
             this.props.loginStatus === null
         ){
             console.log('都沒有2');
         }
     }
     checkLogin(loginData, userData, database, projectImg) {
+        console.log('要檔案２')
         this.props.getUserData(loginData, userData, database, projectImg);
     }
     logout() {
@@ -128,7 +129,7 @@ class Create extends Component {
         ) {
             return <Redirect to="/" />;
         } else if (
-            this.props.loginStatus === null &&
+            this.props.loginStatus === null ||
             this.props.userData === null
         ) {
             console.log('測看看3');

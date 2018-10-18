@@ -20,7 +20,7 @@ class CreateMain extends Component {
     }
     static getDerivedStateFromProps(nextProps, prevState) {
         if (
-            nextProps.userData !== prevState.userData 
+            nextProps.userData !== prevState.userData && nextProps.userData!==null
         ) {
             return {
                 project: nextProps.userData.project?nextProps.userData.project:[]
@@ -29,7 +29,7 @@ class CreateMain extends Component {
     }
     componentDidMount() {
         let projectCheck;
-        if (this.props.userData.project) {
+        if (this.props.userData) {
             //拿到projectid 名稱
             projectCheck = this.props.userData.project;
         } else {
@@ -93,7 +93,7 @@ class CreateMain extends Component {
    
    
     render() {
-        console.log(this.props.userData.project);
+        // console.log(this.props.userData.project);
         let createMain = this.state.project?this.state.project.map(data => {
             let id=data.projectId;
             return (
@@ -118,6 +118,7 @@ class CreateMain extends Component {
                             <span />
                             <span />
                         </div>
+                        <span>click + add new project</span>
                     </div>
                     <div className="createMainItem__bottom" />
                 </div>

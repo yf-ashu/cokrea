@@ -13,20 +13,20 @@ export const constant = {
                 src: h1,
                 size: { width: 0.8, height: 75 },
                 textContent: 'Lorem ipsum dolor sit .',
-                format: 'text'
+                format: ['text', 'text']
             },
             {
                 type: 'h2',
                 src: h2,
                 size: { width: 0.8, height: 55 },
                 textContent: 'Lorem ipsum dolor, sit amet .',
-                format: 'text'
+                format: ['text', 'text']
             },
             {
                 type: 'p',
                 src: p,
                 size: { width: 0.8, height: 65 },
-                format: 'text',
+                format: ['text', 'text'],
                 textContent:
                     'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati !'
             },
@@ -34,7 +34,7 @@ export const constant = {
                 type: 'span',
                 src: span,
                 size: { width: 0.8, height: 65 },
-                format: 'text',
+                format: ['text', 'text'],
                 textContent:
                     'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum !'
             }
@@ -44,13 +44,13 @@ export const constant = {
                 type: 'img',
                 src: edit,
                 size: { width: 0.5, height: 55 },
-                format: 'edit'
+                format: ['image', 'edit']
             },
             {
                 type: 'img',
                 src: user,
                 size: { width: 0.5, height: 55 },
-                format: 'user'
+                format: ['image', 'user']
             }
         ],
         square: []
@@ -101,7 +101,7 @@ export const styleSetting = type => {
     let tmp = [];
     switch (type.type) {
     case 'img': {
-        tmp = [{ backgroundColor: '#ffffff' }];
+        tmp = [{ backgroundColor: 'rgba(0,0,0,0)' }];
         break;
     }
     case 'h1': {

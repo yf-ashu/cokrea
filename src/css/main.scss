@@ -179,7 +179,7 @@ button {
 .input {
   @extend %flexFlex-start-center-column;
   position: relative;
-  @include distance(0 24px, 0 0 12px 0);
+  @include distance(0 24px, 0);
   @include size(100%, auto);
   label{
     color: $editor;

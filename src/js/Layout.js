@@ -73,7 +73,6 @@ class Layout extends Component {
     }
     getUserData(loginStatusout, userDataout, databaseout, projectImgout) {
         console.log('有傳送');
-        console.log(userData);
         let loginStatus = this.state.loginStatus,
             userData = this.state.userData,
             database = this.state.database,
@@ -110,6 +109,7 @@ class Layout extends Component {
     render() {
         console.log(this.state.userData);
         console.log(this.state.loginStatus);
+        console.log(this.state.database);
 
         // if(this.state.loginStatus || this.state.userData){
         //   window.location.pathname = '/dashboard';
@@ -186,6 +186,8 @@ class Layout extends Component {
                                     loginStatus={this.state.loginStatus}
                                     changeProjectName={this.changeProjectName}
                                     getUserData={this.getUserData}
+                                    projectImg={this.state.projectImg}
+
                                 />
                             )}
                         />

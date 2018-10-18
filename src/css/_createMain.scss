@@ -18,9 +18,12 @@
 .createMainItem__inner {
   @include size(100%, 350px);
   @include distance(8px, 0);
-
   transition: all 0.5s;
-  @extend %flexCenter-Center-row;
+  @extend %flexCenter-Center-column;
+  >span{
+    @include distance(24px, 0);
+color:$button;
+  }
 }
 .createMainItem__display {
   @include size(100%, 100%);

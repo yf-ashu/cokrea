@@ -44,7 +44,7 @@ class EditorPreview extends Component {
     }
 
     updateCanvas() {
-        let scare=1;
+        let scare = 1;
         let display = this.props.display;
         let editMainStyle = this.props.editMainStyle[0];
         const canvas = this.canvas;
@@ -87,11 +87,10 @@ class EditorPreview extends Component {
             ctx.scale(scare, scare);
 
             let loop = (display, index) => {
-
                 if (index === display.length) {
                     // console.log()
                     let dataURL = canvas.toDataURL();
-                    let encoder=canvas.toDataURL('image/png',0.1);
+                    let encoder = canvas.toDataURL('image/png', 0.1);
                     // console.log(dataURL,encoder)
                     this.props.downloadUrl(encoder);
                     this.setState({
@@ -111,11 +110,11 @@ class EditorPreview extends Component {
                             display[index].outside[0].width - 32,
                             display[index].outside[1].height - 32
                         );
+
                         loop(display, ++index);
                     };
                     img.src = display[index].attribute.src;
                 } else {
-            
                     let findColor = display[index].style.findIndex(
                         data => data.color
                     );
@@ -125,16 +124,53 @@ class EditorPreview extends Component {
                     let findSize = display[index].style.findIndex(
                         data => data.fontSize
                     );
+                    let findBGColor = display[index].style.findIndex(
+                        data => data.backgroundColor
+                    );
+                    console.log(findBGColor);
+                    console.log(display[index].outside);
+
+                    ctx.fillStyle =
+                        display[index].style[findBGColor].backgroundColor;
+                    ctx.fillRect(
+                        display[index].outside[2].left,
+                        display[index].outside[3].top,
+                        display[index].outside[0].width,
+                        display[index].outside[1].height
+                    );
 
                     ctx.font = `${
                         display[index].style[findWeight].fontWeight
                     } ${display[index].style[findSize].fontSize}px Helvetica`;
                     ctx.fillStyle = display[index].style[findColor].color;
+                    ctx.save();
+
+                    ctx.beginPath();
+
+                    ctx.rect(
+                        0,
+                        0,
+                        display[index].outside[0].width + 16,
+                        editMainStyle.style[1].height
+                    );
+                    ctx.closePath();
+
+                    ctx.clip();
+
                     ctx.fillText(
                         display[index].textContent,
                         display[index].outside[2].left + 16,
                         display[index].outside[3].top + 16
                     );
+                    ctx.restore();
+
+                    // ctx.clearRect(
+                    //     0,
+                    //     0,
+                    //     display[index].outside[0].width + 16,
+                    //     display[index].outside[1].height
+                    // );
+
                     loop(display, ++index);
                 }
             };
@@ -192,6 +228,6 @@ EditorPreview.propTypes = {
     editMainStyle: PropTypes.array.isRequired,
     saveButton: PropTypes.any,
     closeButton: PropTypes.any,
-    downloadUrl:PropTypes.string
+    downloadUrl: PropTypes.string
 };
 export default EditorPreview;

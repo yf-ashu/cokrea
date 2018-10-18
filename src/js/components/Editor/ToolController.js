@@ -9,7 +9,7 @@ const components = {
     pageSetting: ToolControllerPageSetting,
     text: ToolControllerText,
     page: ToolControllerPage,
-    image:ToolControllerImage
+    image:ToolControllerImage,
 };
 class ToolController extends Component {
     constructor(props) {
@@ -97,11 +97,13 @@ class ToolController extends Component {
         // console.log(this.state.current);
         // console.log(this.props.controllCurrent[0])
         let Item;
+        let str=this.props.controllCurrent[0].split(',')[0]
+        console.log(str)
         if (this.state.current === 'pageSetting') {
             Item = components[this.state.current];
         } else {
             if (this.props.controllCurrent[0] !== this.state.current) {
-                Item = components[this.props.controllCurrent[0]];
+                Item = components[str];
             }else{
                 Item = components[this.state.current]; 
             }
@@ -132,10 +134,10 @@ class ToolController extends Component {
                                     ? ''
                                     : 'toolController--click'
                             }
-                            data-data={this.props.controllCurrent[0]}
+                            data-data={str}
                             onClick={this.handleClickLi}
                         >
-                            {this.props.controllCurrent[0]}
+                            {str}
                         </li>
                         <li
                             onClick={this.handleClickLi}
