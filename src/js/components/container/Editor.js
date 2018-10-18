@@ -8,7 +8,7 @@ import EditorItem from '../Editor/EditorItem';
 import ToolController from '../Editor/ToolController';
 import ToolButtonItem from '../Editor/ToolButtonItem';
 import { random, constant, styleSetting } from '../element/constant';
-import { initFirebase, authInfomation } from '../element/auth';
+import { initFirebase } from '../element/auth';
 
 import EditorPreview from '../Editor/EditorPreview';
 import PropTypes from 'prop-types';
@@ -86,14 +86,13 @@ class Editor extends Component {
         this.connectDb = this.connectDb.bind(this);
         this.changeProjectName = this.changeProjectName.bind(this);
         this.changeProjectNameonBlur = this.changeProjectNameonBlur.bind(this);
-        this.getProjectData = this.getProjectData.bind(this)
     }
 
     componentDidMount() {
         this.checkLogin();
     }
     componentWillUnmount() {
-        // clearInterval(this.state.intervalId);
+        clearInterval(this.state.intervalId);
         console.log('解除');
     }
     connectDb(database, user) {
@@ -168,112 +167,172 @@ class Editor extends Component {
     }
     timeout() {
         // console.log('開始倒數');
-        // let projectData = location.href.split('edit/')[1];
-        // let that = this;
+        let projectData = location.href.split('edit/')[1];
+        let that = this;
 
-        // let intervalId = setInterval(() => {
-        //     // console.log(this.state.storage);
-        //     that.state.storage
-        //         .child(projectData + '/canvas.png')
-        //         .putString(that.state.downloadUrl, 'data_url')
-        //         .then(function() {
-        //             console.log('Uploaded a base64url string!');
-        //         });
-        // }, 10000);
-        // this.setState({
-        //     intervalId: intervalId
-        // });
+        let intervalId = setInterval(() => {
+            // console.log(this.state.storage);
+            that.state.storage
+                .child(projectData + '/canvas.png')
+                .putString(that.state.downloadUrl, 'data_url')
+                .then(function() {
+                    console.log('Uploaded a base64url string!');
+                });
+        }, 10000);
+        this.setState({
+            intervalId: intervalId
+        });
     }
     checkLogin() {
-        let storage,database;
+        let projectData = location.href.split('edit/')[1];
+        let database, storage;
         if (!this.props.loginStatus) {
-            console.log('沒有登入資訊')
             if (!firebase.apps.length) {
                 let connect = initFirebase();
                 database = connect.database();
                 storage = connect.storage().ref();
             }
+
             database = firebase.database();
             storage = firebase.storage().ref();
-
-            let authCheck = data => {
-
-                if (data) {
-                    console.log(data)
-                    this.props.getUserData(data[0], data[1], data[2], data[3]);
-                    this.getProjectData();
+            // console.log(storage);
+            //auth要拆出去
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    this.setState({
+                        loginStatus: user
+                    });
+                    database
+                        .ref('/projectData/' + projectData)
+                        .on('value', snapshot => {
+                            // console.log(user.email);
+                            let data;
+                            if (snapshot.exists()) {
+                                data = snapshot.val();
+                                // console.log(snapshot.val());
+                                if (data.owner === user.uid) {
+                                    console.log('擁有者1');
+                                    let shareButton = this.state.shareButton;
+                                    shareButton[1] = true;
+                                    this.setState({
+                                        projectData: data,
+                                        display: data.display
+                                            ? data.display
+                                            : [],
+                                        editMainStyle: data.editMainStyle
+                                            ? data.editMainStyle
+                                            : this.state.editMainStyle,
+                                        shareButton: shareButton
+                                    });
+                                    this.connectDb(database, user);
+                                    this.props.getUserData(
+                                        user,
+                                        null,
+                                        database,
+                                        null
+                                    );
+                                } else if (
+                                    data.share[1]
+                                        ? data.share[1].map(data => {
+                                            data === user.email;
+                                            return true;
+                                        })
+                                        : false
+                                ) {
+                                    this.setState({
+                                        projectData: data,
+                                        display: data.display
+                                            ? data.display
+                                            : [],
+                                        editMainStyle: data.editMainStyle
+                                            ? data.editMainStyle
+                                            : this.state.editMainStyle
+                                    });
+                                    this.connectDb(database, user);
+                                } else {
+                                    // console.log(data.share[0]);
+                                    if (data.share[0].public === 'public') {
+                                        window.location.pathname =
+                                            '/views/' + projectData;
+                                    } else {
+                                        alert('沒有存取權');
+                                        window.location.pathname = '/';
+                                    }
+                                }
+                            } else {
+                                alert('沒有此檔案');
+                                window.location.pathname = '/';
+                            }
+                        });
                 } else {
-                    // location.pathname='/'
                     window.location.pathname = '/';
                     console.log('沒有登入');
                 }
-            };
-            authInfomation(authCheck);
+            });
         } else {
-            this.getProjectData();
-        }
+            // console.log(this.props.loginStatus);
+            this.setState({
+                loginStatus: this.props.loginStatus
+            });
+            database = firebase.database();
+            storage = firebase.storage().ref();
 
+            database
+                .ref('/projectData/' + projectData)
+                .on('value', snapshot => {
+                    if (snapshot.exists()) {
+                        let data = snapshot.val();
+                        if (
+                            snapshot.val().owner === this.props.loginStatus.uid
+                        ) {
+                            console.log('擁有者');
+                            let shareButton = this.state.shareButton;
+                            shareButton[1] = true;
+                            this.setState({
+                                projectData: data,
+
+                                display: data.display ? data.display : [],
+                                editMainStyle: data.editMainStyle
+                                    ? data.editMainStyle
+                                    : this.state.editMainStyle,
+                                shareButton: shareButton
+                            });
+                            // console.log(this.props.loginStatus);
+                            this.connectDb(database, this.props.loginStatus);
+                        } else if (
+                            data.share[1].map(data => {
+                                data === this.props.loginStatus.email;
+                                return true;
+                            })
+                        ) {
+                            this.setState({
+                                projectData: data,
+                                display: data.display ? data.display : [],
+                                editMainStyle: data.editMainStyle
+                                    ? data.editMainStyle
+                                    : this.state.editMainStyle
+                            });
+                            this.connectDb(database, this.props.loginStatus);
+                        } else {
+                            if (data.share[0].public === 'public') {
+                                window.location.pathname =
+                                    '/views/' + projectData;
+                            } else {
+                                alert('沒有存取權');
+                                window.location.pathname = '/';
+                            }
+                        }
+                    } else {
+                        alert('沒有此檔案');
+                        window.location.pathname = '/';
+                    }
+                });
+        }
         this.setState({
             database: database,
             storage: storage
         });
         this.timeout();
-    }
-
-    getProjectData() {
-        console.log('資料')
-      let  database = firebase.database();
-
-        this.setState({
-            loginStatus: this.props.loginStatus
-        });
-        let projectData = location.href.split('edit/')[1];
-
-       database
-            .ref('/projectData/' + projectData)
-            .on('value', snapshot => {
-                if (snapshot.exists()) {
-                    let data = snapshot.val();
-                    if (snapshot.val().owner === this.props.loginStatus.uid) {
-                        console.log('擁有者');
-                        let shareButton = this.state.shareButton;
-                        shareButton[1] = true;
-                        this.setState({
-                            projectData: data,
-                            display: data.display ? data.display : [],
-                            editMainStyle: data.editMainStyle
-                                ? data.editMainStyle
-                                : this.state.editMainStyle,
-                            shareButton: shareButton
-                        });
-                        this.connectDb(database, this.props.loginStatus);
-                    } else if (
-                        data.share[1].map(data => {
-                            data === this.props.loginStatus.email;
-                            return true;
-                        })
-                    ) {
-                        this.setState({
-                            projectData: data,
-                            display: data.display ? data.display : [],
-                            editMainStyle: data.editMainStyle
-                                ? data.editMainStyle
-                                : this.state.editMainStyle
-                        });
-                        this.connectDb(database, this.props.loginStatus);
-                    } else {
-                        if (data.share[0].public === 'public') {
-                            window.location.pathname = '/views/' + projectData;
-                        } else {
-                            alert('沒有存取權');
-                            window.location.pathname = '/';
-                        }
-                    }
-                } else {
-                    alert('沒有此檔案');
-                    window.location.pathname = '/';
-                }
-            });
     }
 
     recordStep(value) {
@@ -540,8 +599,8 @@ class Editor extends Component {
             console.log(type.format);
             let check;
             if (type.type === 'img' && special !== 'img') {
-                check = this.state.buttonItem.findIndex(object => {
-                    return object.format[1] === type.format.split(',')[1];
+                check=   this.state.buttonItem.findIndex(object => {
+                  return object.format[1] === type.format.split(',')[1];
                 });
                 console.log(type.format.split(',')[1]);
             } else {
