@@ -97,8 +97,8 @@ class ToolController extends Component {
         // console.log(this.state.current);
         // console.log(this.props.controllCurrent[0])
         let Item;
-        let str=this.props.controllCurrent[0].split(',')[0]
-        console.log(str)
+        let str=this.props.controllCurrent[0].split(',')[0];
+        console.log(str);
         if (this.state.current === 'pageSetting') {
             Item = components[this.state.current];
         } else {

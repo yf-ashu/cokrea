@@ -29,8 +29,8 @@ class Create extends Component {
             this.props.loginStatus === null
         ){
             console.log('都沒有3');
-            console.log(this.props.loginStatus)
-            // this.initCheck();
+            console.log(this.props.loginStatus);
+            this.initCheck();
         }
     }
     initCheck() {
@@ -86,7 +86,7 @@ class Create extends Component {
         }
     }
     checkLogin(loginData, userData, database, projectImg) {
-        console.log('要檔案２')
+        console.log('要檔案２');
         this.props.getUserData(loginData, userData, database, projectImg);
     }
     logout() {

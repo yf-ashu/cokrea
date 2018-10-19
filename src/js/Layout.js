@@ -110,6 +110,7 @@ class Layout extends Component {
         console.log(this.state.userData);
         console.log(this.state.loginStatus);
         console.log(this.state.database);
+        console.log(this.state.projectImg);
 
         // if(this.state.loginStatus || this.state.userData){
         //   window.location.pathname = '/dashboard';
