@@ -15,7 +15,8 @@ class Create extends Component {
         this.state = {
             memberButton: 'false',
             logout: false,
-            loading: true
+            loading: true,
+            unloadAction: null
         };
         this.checkLogin = this.checkLogin.bind(this);
         this.logout = this.logout.bind(this);
@@ -23,22 +24,53 @@ class Create extends Component {
         this.initCheck = this.initCheck.bind(this);
     }
 
-    componentDidMount(){
-        if (
-            this.props.userData === null ||
-            this.props.loginStatus === null
-        ){
+    componentDidMount() {
+        console.log();
+        let unloadAction = e => {
+
+
+            let storage = firebase.storage().ref();
+            Object.keys(that.props.projectImg).map(projectData => {
+                console.log(that.props.projectImg[projectData].split(':')[0]);
+                if (
+                    that.props.projectImg[projectData].split(':')[0]==='data'
+                ) {
+                    console.log('上傳')
+
+let image=new Image();
+image.src=that.props.projectImg[projectData]
+console.log(image.size)
+
+                    storage
+                        .child(projectData + '/canvas.png')
+                        .putString(that.props.projectImg[projectData], 'data_url')
+                        .then(function() {
+                            console.log('Uploaded a base64url string!');
+                        });
+                }
+            });
+            e.preventDefault();
+            e.returnValue = '';
+        };
+        let that = this;
+        window.addEventListener('beforeunload', unloadAction);
+        this.setState({
+            unloadAction: unloadAction
+        });
+        if (this.props.userData === null || this.props.loginStatus === null) {
             console.log('都沒有3');
-            console.log(this.props.loginStatus)
-            // this.initCheck();
+            this.initCheck();
         }
     }
-    initCheck() {
 
+    componentWillUnmount() {
+        window.removeEventListener('beforeunload', this.state.unloadAction);
+    }
+    initCheck() {
         if (!firebase.apps.length) {
             initFirebase();
         }
-    
+
         let authCheck = data => {
             console.log('要檔案');
             if (data) {
@@ -77,16 +109,13 @@ class Create extends Component {
             return {};
         } else return null;
     }
-    componentDidUpdate(){
-        if (
-            this.props.userData === null ||
-            this.props.loginStatus === null
-        ){
+    componentDidUpdate() {
+        if (this.props.userData === null || this.props.loginStatus === null) {
             console.log('都沒有2');
         }
     }
     checkLogin(loginData, userData, database, projectImg) {
-        console.log('要檔案２')
+        console.log('要檔案２');
         this.props.getUserData(loginData, userData, database, projectImg);
     }
     logout() {
@@ -168,7 +197,7 @@ Create.propTypes = {
     loginStatus: PropTypes.any,
     userData: PropTypes.any,
     projectImg: PropTypes.object,
-    logout:PropTypes.func.isRequired,
-    handleDeleteProject:PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
+    handleDeleteProject: PropTypes.func.isRequired
 };
 export default Create;

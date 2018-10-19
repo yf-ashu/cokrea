@@ -86,11 +86,22 @@ class Editor extends Component {
         this.connectDb = this.connectDb.bind(this);
         this.changeProjectName = this.changeProjectName.bind(this);
         this.changeProjectNameonBlur = this.changeProjectNameonBlur.bind(this);
-        this.getProjectData = this.getProjectData.bind(this)
+        this.getProjectData = this.getProjectData.bind(this);
     }
 
     componentDidMount() {
         this.checkLogin();
+    }
+    componentDidUpdate() {
+        // if (
+        //     this.props.userData === null ||
+        //     this.props.loginStatus === null
+        // ){
+        //     console.log('都沒有2');
+        // }else{
+        //     console.log('有');
+        // }.
+        // this.checkLogin();
     }
     componentWillUnmount() {
         // clearInterval(this.state.intervalId);
@@ -101,7 +112,7 @@ class Editor extends Component {
         let that = this;
         let projectData = location.href.split('edit/')[1];
         let connectedRef = database.ref('.info/connected');
-
+        connectedRef.off()
         connectedRef.on('value', function(snap) {
             if (snap.val() === true) {
                 console.log('偵測連線', user.uid);
@@ -163,6 +174,11 @@ class Editor extends Component {
                 }, 5000);
             }
         });
+        console.log('圖片', this.props.projectImg);
+        let copy = Object.assign({}, this.props.projectImg);
+        copy[projectData] = this.state.downloadUrl;
+        this.props.getUserData(null, null, null, copy);
+        console.log('圖片', copy);
 
         console.log('已存檔');
     }
@@ -170,7 +186,6 @@ class Editor extends Component {
         // console.log('開始倒數');
         // let projectData = location.href.split('edit/')[1];
         // let that = this;
-
         // let intervalId = setInterval(() => {
         //     // console.log(this.state.storage);
         //     that.state.storage
@@ -185,9 +200,9 @@ class Editor extends Component {
         // });
     }
     checkLogin() {
-        let storage,database;
+        let storage, database;
         if (!this.props.loginStatus) {
-            console.log('沒有登入資訊')
+            console.log('沒有登入資訊');
             if (!firebase.apps.length) {
                 let connect = initFirebase();
                 database = connect.database();
@@ -195,11 +210,13 @@ class Editor extends Component {
             }
             database = firebase.database();
             storage = firebase.storage().ref();
-
+            this.setState({
+                database: database,
+                storage: storage
+            });
             let authCheck = data => {
-
                 if (data) {
-                    console.log(data)
+                    console.log(data);
                     this.props.getUserData(data[0], data[1], data[2], data[3]);
                     this.getProjectData();
                 } else {
@@ -210,70 +227,69 @@ class Editor extends Component {
             };
             authInfomation(authCheck);
         } else {
+            database = firebase.database();
+            storage = firebase.storage().ref();
+            this.setState({
+                database: database,
+                storage: storage
+            });
             this.getProjectData();
         }
 
-        this.setState({
-            database: database,
-            storage: storage
-        });
         this.timeout();
     }
 
     getProjectData() {
-        console.log('資料')
-      let  database = firebase.database();
-
+        console.log('資料');
+        let database = firebase.database();
         this.setState({
             loginStatus: this.props.loginStatus
         });
         let projectData = location.href.split('edit/')[1];
-
-       database
-            .ref('/projectData/' + projectData)
-            .on('value', snapshot => {
-                if (snapshot.exists()) {
-                    let data = snapshot.val();
-                    if (snapshot.val().owner === this.props.loginStatus.uid) {
-                        console.log('擁有者');
-                        let shareButton = this.state.shareButton;
-                        shareButton[1] = true;
-                        this.setState({
-                            projectData: data,
-                            display: data.display ? data.display : [],
-                            editMainStyle: data.editMainStyle
-                                ? data.editMainStyle
-                                : this.state.editMainStyle,
-                            shareButton: shareButton
-                        });
-                        this.connectDb(database, this.props.loginStatus);
-                    } else if (
-                        data.share[1].map(data => {
-                            data === this.props.loginStatus.email;
-                            return true;
-                        })
-                    ) {
-                        this.setState({
-                            projectData: data,
-                            display: data.display ? data.display : [],
-                            editMainStyle: data.editMainStyle
-                                ? data.editMainStyle
-                                : this.state.editMainStyle
-                        });
-                        this.connectDb(database, this.props.loginStatus);
-                    } else {
-                        if (data.share[0].public === 'public') {
-                            window.location.pathname = '/views/' + projectData;
-                        } else {
-                            alert('沒有存取權');
-                            window.location.pathname = '/';
-                        }
-                    }
+        database.ref('/projectData/' + projectData).off()
+        database.ref('/projectData/' + projectData).on('value', snapshot => {
+            if (snapshot.exists()) {
+                let data = snapshot.val();
+                if (snapshot.val().owner === this.props.loginStatus.uid) {
+                    console.log('擁有者');
+                    let shareButton = this.state.shareButton;
+                    shareButton[1] = true;
+                    this.setState({
+                        projectData: data,
+                        display: data.display ? data.display : [],
+                        editMainStyle: data.editMainStyle
+                            ? data.editMainStyle
+                            : this.state.editMainStyle,
+                        shareButton: shareButton
+                    });
+                    this.connectDb(database, this.props.loginStatus);
+                } else if (
+                    data.share[1].map(data => {
+                        data === this.props.loginStatus.email;
+                        return true;
+                    })
+                ) {
+                    this.setState({
+                        projectData: data,
+                        display: data.display ? data.display : [],
+                        editMainStyle: data.editMainStyle
+                            ? data.editMainStyle
+                            : this.state.editMainStyle
+                    });
+                    this.connectDb(database, this.props.loginStatus);
                 } else {
-                    alert('沒有此檔案');
-                    window.location.pathname = '/';
+                    if (data.share[0].public === 'public') {
+                        window.location.pathname = '/views/' + projectData;
+                    } else {
+                        alert('沒有存取權');
+                        window.location.pathname = '/';
+                    }
                 }
-            });
+            } else {
+                alert('沒有此檔案');
+                window.location.pathname = '/';
+            }
+        });
     }
 
     recordStep(value) {
@@ -1080,6 +1096,10 @@ class Editor extends Component {
     }
 
     render() {
+        console.log(this.props.loginStatus);
+        console.log(this.props.userData);
+        console.log(this.props.projectImg);
+
         let item = this.state.display.map(data => {
             return (
                 <EditorItem
@@ -1179,7 +1199,6 @@ class Editor extends Component {
                 />
             );
         });
-        console.log(buttonItem);
         // console.log(this.state.publicSetting);
         return (
             <div className="editor">

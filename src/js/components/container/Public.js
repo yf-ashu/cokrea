@@ -24,6 +24,7 @@ class Public extends Component {
             database = firebase.database();
         }
         let projectData = location.href.split('views/')[1];
+        database.ref('/public/' + projectData).off()
         database.ref('/public/' + projectData).on('value', snapshot => {
             if (snapshot.exists()) {
                 console.log(snapshot.val());

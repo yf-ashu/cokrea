@@ -20,6 +20,9 @@ class Layout extends Component {
         this.changeProjectName = this.changeProjectName.bind(this);
         this.handleDeleteProject = this.handleDeleteProject.bind(this);
     }
+    componentDidUpdate(){
+        console.log('改變了')
+    }
 
     handleDeleteProject(project, id) {
         console.log(this.state.database);
@@ -110,7 +113,9 @@ class Layout extends Component {
         console.log(this.state.userData);
         console.log(this.state.loginStatus);
         console.log(this.state.database);
-
+        console.log(this.state.projectImg);
+        let projectData = location.pathname.split('/')[1];
+console.log(projectData)
         // if(this.state.loginStatus || this.state.userData){
         //   window.location.pathname = '/dashboard';
         // }
@@ -172,6 +177,7 @@ class Layout extends Component {
                                     handleDeleteProject={
                                         this.handleDeleteProject
                                     }
+                                    projectImg={this.state.projectImg}
                                     logout={this.logout.bind(this)}
                                 />
                             )}

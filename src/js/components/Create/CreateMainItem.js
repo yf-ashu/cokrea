@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const CreateMainItem = ({ linkTo, id, project,projectImg,deleteProject}) => {
-    console.log(projectImg);
     return (
         <div className="createMainItem">
             <div className="createMainItem__inner">
