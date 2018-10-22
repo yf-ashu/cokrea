@@ -22,6 +22,7 @@ display: flex;
   overflow: hidden;
   position: relative;
   display: inline-block;
+  transform-origin: top left;
 }
 .editorMain__canvas--select {
   @include size(100%, 100%);
@@ -43,7 +44,9 @@ display: flex;
 }
 .editorMain__item {
   // word-break: break-all;
-  white-space: nowrap;
+  // white-space: nowrap;
+  white-space: wrap;
+
   z-index: 1500;
   display: flex;
   margin: 0;
@@ -62,30 +65,42 @@ display: flex;
   left: 0;
 }
 
-.editorMain__item--select {
-  z-index: 1200;
+.editorMain__item--select-outer {
+  z-index: 2000;
   position: absolute;
+  background-color: transparent;
   &--red{
+    pointer-events: auto;
 
   outline: #fd8970 2px solid;
   }
   &--yellow{
+    pointer-events: auto;
+
     outline: #ffe930 2px solid;
 
   }
   &--green{
+    pointer-events: auto;
+
     outline: #a5ff51 2px solid;
 
   }
   &--blue{
+    pointer-events: auto;
+
     outline: #5ea4ff 2px solid;
 
   }
   &--purple{
+    pointer-events: auto;
+
     outline: #920efd 2px solid;
 
   }
   &--orange{
+    pointer-events: auto;
+
     outline: #fd6e0e 2px solid;
 
   }
@@ -242,6 +257,15 @@ display: flex;
     @include background-center('../img/delete.png');
     &:hover {
       @include background-center('../img/deleteHover.png');
+    }
+  }
+  .editorMain__item--select__features--copy {
+    @include distance(0, 0 0 6px 0);
+
+    @include size(22px, 22px);
+    @include background-center('../img/copy.png');
+    &:hover {
+      @include background-center('../img/copyHover.png');
     }
   }
 }

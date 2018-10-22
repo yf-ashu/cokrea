@@ -10,9 +10,7 @@ const ToolButtonItem = ({
     src,
     format
 }) => {
-    // if(type='img'){
-    //     special=
-    // }
+
     return (
         <div
             onClick={onClick}

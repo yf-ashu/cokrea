@@ -7,5 +7,6 @@
   display: grid;
   grid-template:
   'createHeader ' 80px
-  'createMain   ' 1fr / 1fr  ;
+  'createMain   ' 100% /1fr  ;
+  transition: all 0.5s;
 }

@@ -87,7 +87,6 @@ class EditorShare extends Component {
     }
     updateShare() {
         let projectData = location.href.split('edit/')[1];
-
         console.log(this.state.share);
         let getData = Object.assign({},this.props.projectData) ;
         if (this.state.selected === 'public') {
@@ -140,7 +139,7 @@ class EditorShare extends Component {
     }
 
     render() {
-        // console.log(this.state.share);
+        console.log(this.state.share);
         // console.log(this.props.projectData);
 
         return (

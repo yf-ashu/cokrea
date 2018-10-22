@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import close from '../../../img/close.svg';
 
 class EditorPreview extends Component {
     constructor(props) {
@@ -8,7 +9,8 @@ class EditorPreview extends Component {
         this.state = {
             downloadUrl: null,
             display: [],
-            editMainStyle: []
+            editMainStyle: [],
+            scale: 1
         };
         this.updateCanvas = this.updateCanvas.bind(this);
     }
@@ -90,13 +92,26 @@ class EditorPreview extends Component {
                 if (index === display.length) {
                     // console.log()
                     let dataURL = canvas.toDataURL();
-                    let encoder = canvas.toDataURL('image/png', 0.1);
-                    // console.log(dataURL,encoder)
-                    this.props.downloadUrl(encoder);
-                    this.setState({
+
+                    let that = this;
+                    // let dataURL = canvas.toBlob(
+                    //     function(blob) {
+                    //         let url = URL.createObjectURL(blob);
+                    //         console.log(url);
+                    //         // console.log(dataURL);
+                    //         that.props.downloadUrl(url);
+                    //         that.setState({
+                    //             downloadUrl: url
+                    //         });
+                    //     },
+                    //     'image/jpeg',
+                    //     0.8
+                    // );
+                    // console.log(test2);
+                    that.props.downloadUrl(dataURL);
+                    that.setState({
                         downloadUrl: dataURL
                     });
-
                     return;
                 }
                 if (display[index].tag === 'img') {
@@ -127,8 +142,8 @@ class EditorPreview extends Component {
                     let findBGColor = display[index].style.findIndex(
                         data => data.backgroundColor
                     );
-                    console.log(findBGColor);
-                    console.log(display[index].outside);
+                    // console.log(findBGColor);
+                    // console.log(display[index].outside);
 
                     ctx.fillStyle =
                         display[index].style[findBGColor].backgroundColor;
@@ -148,9 +163,9 @@ class EditorPreview extends Component {
                     ctx.beginPath();
 
                     ctx.rect(
+                        display[index].outside[2].left,
                         0,
-                        0,
-                        display[index].outside[0].width + 16,
+                        display[index].outside[0].width,
                         editMainStyle.style[1].height
                     );
                     ctx.closePath();
@@ -164,13 +179,6 @@ class EditorPreview extends Component {
                     );
                     ctx.restore();
 
-                    // ctx.clearRect(
-                    //     0,
-                    //     0,
-                    //     display[index].outside[0].width + 16,
-                    //     display[index].outside[1].height
-                    // );
-
                     loop(display, ++index);
                 }
             };
@@ -181,7 +189,8 @@ class EditorPreview extends Component {
         let element = document.createElement('a');
         let file = this.state.downloadUrl;
         element.href = file;
-        element.download = 'myFile.png';
+        console.log(this.props.projectData);
+        element.download = this.props.projectData.projectName+'.png';
         element.click();
     }
 
@@ -211,12 +220,33 @@ class EditorPreview extends Component {
                         >
                             Download
                         </button>
-                        <button
+                        <div
                             className="editorPreview--close"
                             onClick={this.props.closeButton}
                         >
-                            Close
+                            <img src={close} onClick={this.props.closeButton} />
+                        </div>
+                        {/* <div className="editorPreview__scale">
+                        <button
+                            id="editorPreview__scale--subtract"
+                            data-num="0"
+                        >
+                            -
                         </button>
+
+                        <div
+                            className="editorPreview__scale--main"
+                            id="editorPreview__scale--main"
+                        >
+                            {this.state.scale * 100 + '%'}
+                        </div>
+                        <button
+                            id="editorPreview__scale--add"
+                            data-num="1"
+                        >
+                            +
+                        </button>
+                    </div> */}
                     </div>
                 </div>
             </div>
@@ -228,6 +258,7 @@ EditorPreview.propTypes = {
     editMainStyle: PropTypes.array.isRequired,
     saveButton: PropTypes.any,
     closeButton: PropTypes.any,
-    downloadUrl: PropTypes.string
+    downloadUrl: PropTypes.string,
+    projectData:PropTypes.string
 };
 export default EditorPreview;

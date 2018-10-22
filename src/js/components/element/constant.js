@@ -1,5 +1,5 @@
-import edit from '../../../img/edit.svg';
-import user from '../../../img/user.svg';
+import phone from '../../../img/phone.svg';
+import mail from '../../../img/mail.svg';
 import h1 from '../../../img/text-01.png';
 import h2 from '../../../img/text-02.png';
 import p from '../../../img/text-04.png';
@@ -12,14 +12,14 @@ export const constant = {
                 type: 'h1',
                 src: h1,
                 size: { width: 0.8, height: 75 },
-                textContent: 'Lorem ipsum dolor sit .',
+                textContent: 'Double click to edit',
                 format: ['text', 'text']
             },
             {
                 type: 'h2',
                 src: h2,
                 size: { width: 0.8, height: 55 },
-                textContent: 'Lorem ipsum dolor, sit amet .',
+                textContent: 'Double click to edit',
                 format: ['text', 'text']
             },
             {
@@ -28,7 +28,7 @@ export const constant = {
                 size: { width: 0.8, height: 65 },
                 format: ['text', 'text'],
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati !'
+                    'Double click to edit'
             },
             {
                 type: 'span',
@@ -36,21 +36,21 @@ export const constant = {
                 size: { width: 0.8, height: 65 },
                 format: ['text', 'text'],
                 textContent:
-                    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, sunt laboriosam ea omnis obcaecati incidunt quaerat ipsam a delectus dolore dolorum !'
+                    'Double click to edit'
             }
         ],
         img: [
             {
                 type: 'img',
-                src: edit,
+                src: phone,
                 size: { width: 0.5, height: 55 },
-                format: ['image', 'edit']
+                format: ['image', 'phone']
             },
             {
                 type: 'img',
-                src: user,
+                src: mail,
                 size: { width: 0.5, height: 55 },
-                format: ['image', 'user']
+                format: ['image', 'mail']
             }
         ],
         square: []
@@ -59,7 +59,7 @@ export const constant = {
 
 export const random = () => {
     let date = Date.now().toString();
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_';
     let random = '';
     for (let i = 1; i < 15; i += 3) {
         let str = possible.charAt(Math.floor(Math.random() * possible.length));
@@ -101,7 +101,10 @@ export const styleSetting = type => {
     let tmp = [];
     switch (type.type) {
     case 'img': {
-        tmp = [{ backgroundColor: 'rgba(0,0,0,0)' }];
+        tmp = [{ backgroundColor: 'rgba(0,0,0,0)' },
+            { color: '#000000' },
+            {borderRadius:'0'}
+        ];
         break;
     }
     case 'h1': {
@@ -118,7 +121,6 @@ export const styleSetting = type => {
         tmp = [
             { backgroundColor: 'rgba(0,0,0,0)' },
             { color: '#000000' },
-
             { fontWeight: 700 },
             { fontStyle: 'normal' },
             { fontSize: 36 }

@@ -43,7 +43,7 @@ CreateMainItem.propTypes = {
     id:PropTypes.string.isRequired,
     project:PropTypes.any,
     projectImg:PropTypes.string,
-    deleteProject:PropTypes.object
+    deleteProject:PropTypes.string
 
 };
 export default CreateMainItem;

@@ -24,7 +24,7 @@ class Public extends Component {
             database = firebase.database();
         }
         let projectData = location.href.split('views/')[1];
-        database.ref('/public/' + projectData).off()
+        database.ref('/public/' + projectData).off();
         database.ref('/public/' + projectData).on('value', snapshot => {
             if (snapshot.exists()) {
                 console.log(snapshot.val());
@@ -32,41 +32,60 @@ class Public extends Component {
                     projectData: snapshot.val(),
                     display: snapshot.val().display,
                     editMainStyle: snapshot.val().editMainStyle,
-                    loading:false
+                    loading: false
                 });
-            }else{
+            } else {
+                // location.reload()
                 this.setState({
-                    projectData:'No allow'
-                }); 
+                    projectData: 'No allow',
+                    loading: false
+                });
             }
         });
     }
     render() {
-        let item = (this.state.display?this.state.display:[]).map((data,index) => {
-            let Tag = data.tag;
-            return (
-                <div
-                    key={index}
-                    className="public__items"
-                    style={Object.assign({}, ...data.outside)}
-                >
-                    <Tag
-                        className='public__item'
-                        type={data.attribute.type}
-                        style={Object.assign({}, ...data.style)}
-                        src={data.attribute.src}
-                    >{data.tag!=='img'?data.textContent:null}</Tag>
-                </div>
-            );
-        });
+        let item = this.state.display
+            ? this.state.display.map((data, index) => {
+                let Tag = data.tag;
+                return (
+                    <div
+                        key={index}
+                        className={
+                            this.state.projectData === 'No allow'
+                                ? 'displayNone'
+                                : 'public__items'
+                        }
+                        style={Object.assign({}, ...data.outside)}
+                    >
+                        <Tag
+                            className={
+                                this.state.projectData === 'No allow'
+                                    ? 'displayNone'
+                                    : 'public__item'
+                            }
+                            type={data.attribute.type}
+                            style={Object.assign({}, ...data.style)}
+                            src={data.attribute.src}
+                        >
+                            {data.tag !== 'img' ? data.textContent : null}
+                        </Tag>
+                    </div>
+                );
+            })
+            : null;
+        console.log(item);
         return (
             <div className="public__views">
                 <Loading loading={this.state.loading} />
-                {this.state.projectData==='No allow'?alert('沒有公開存取'):null}
+      
                 <CreateHeader />
                 <div className="public__outer">
                     <div
-                        className="public__canvas"
+                        className={
+                            this.state.projectData === 'No allow'
+                                ? 'displayNone'
+                                : 'public__canvas'
+                        }
                         style={
                             this.state.editMainStyle
                                 ? Object.assign(
@@ -76,7 +95,17 @@ class Public extends Component {
                                 : null
                         }
                     >
+                        {' '}
                         {item}
+                    </div>
+                    <div
+                        className={
+                            this.state.projectData === 'No allow'
+                                ? 'public__close'
+                                : 'displayNone'
+                        }
+                    >   
+                        <div className="public__close--inner">此編輯頁面非公開</div>
                     </div>
                 </div>
             </div>

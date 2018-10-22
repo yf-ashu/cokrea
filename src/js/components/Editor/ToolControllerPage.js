@@ -2,8 +2,8 @@ import React from 'react';
 
 const ToolControllerPage = () => {
     return (
-        <div className="editorMain">
-          page 
+        <div className="toolControllerPage">
+          即將開放
         </div>
     );
 };

@@ -200,13 +200,99 @@ button {
   background-color: $special;
   z-index: 10000;
   transition: all 0.5s;
+ @extend %flexCenter-Center-row;
 }
-@media screen  and (max-width: 600px) {
-  button {
+
+.loading__outer{
+  animation: rotate 6s  infinite;
+  @include size(100px, 100px);
+  background-color: $white;
+  border-radius: 50%;
+
+}
+.loading {
+
+  &__face {
+    @include size(100px, 100px);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  &__eye {
+    @include size(15px,15px);
+
+    border-radius: 50%;
+    background-color: #4c83ff;
+    display: inline-block;
+    animation: blink 1s linear infinite;
     
+    &--1 {
+      position: absolute;
+      top: 40%;
+      left: 10%;
+    }
+    
+    &--2 {
+      position: absolute;
+      top: 40%;
+      left: 75%;
+    }
+  }
+  
+  &__mouth {
+    content: '';
+    display: block;
+    @include size(40px, 60px);
+
+    border-radius: 50%;
+    border: 5px solid transparent;
+    border-bottom-color:  #4c83ff;
+    position: absolute;
+    top: -5%;
+    left: 30%;
+  }
+}
+.loading__text{
+  color:$white;
+  font-size: 24px;
+  font-weight: 700;
+  @include distance(20px, 0);
+
+}
+@keyframes rotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  
+  50% {
+    transform: rotate(360deg);
+  }
+}
+
+.smallSize{
+  position: fixed;
+  @include size(100%, 100%);
+  background-color: $special;
+  z-index: 15000;
+  transition: opacity 0.2s;
+  opacity: 0;
+  visibility: hidden;
+ @extend %flexCenter-Center-row;
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  button {
     font-weight: 700;
     @include size(60px, 30px);
     @include distance(0, 0);
+  }
+}
+@media screen and (max-width: 768px)  {
+  .smallSize{
+  
+    opacity: 1;
+    visibility: visible;
   }
 }
 @import 'reset';

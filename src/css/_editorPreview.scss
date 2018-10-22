@@ -21,20 +21,21 @@ overflow: hidden;
   outline: 1px solid black;
 }
 .editorPreview__controller {
+  position: relative;
   @include size(300px, 100%);
   background-color: $controller;
-  @extend %flexFlex-start-center-row;
 }
 .editorPreview__canvas {
   @include size(calc(100% - 300px), 100%);
   overflow: auto;
   // @extend %flexFlex-start-center-row;
   text-align: center;
-  @include distance(16px 0 0 0, 0);
+  @include distance(16px , 0);
 
 }
 .editorPreview--button {
   @include distance(0, 5px 0);
+  @include distance(0 , 16px);
 
   background-color: $special;
   font-size: 12px;
@@ -46,10 +47,29 @@ overflow: hidden;
   }
 }
 .editorPreview--close {
-  background-color: $button;
-  font-size: 12px;
-  @include distance(0, 5px 0);
-  &:hover{
-    background-color:  darken($button, 20%) ;
+ 
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 30px;
+  right: 8px;
+  img {
+    @include size(16px, 16px);
+    cursor: pointer;
+  }
+}
+
+
+.editorPreview__scale{
+  @include size(200px, 28px);
+  @extend %flexCenter-Center-row;
+  background-color: $white;
+  border-radius: 4px;
+  &--main {
+    @include size(100px, 28px);
+    @extend %flexCenter-Center-row;
+  }
+  button {
+    @include size(20px, 28px);
+    color: $click;
   }
 }

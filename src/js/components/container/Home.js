@@ -76,7 +76,7 @@ class Home extends Component {
                                 inspire your kreations !
                             </div>
                             <div className="home__subtitle">
-                                用簡單的方式來製作美麗的圖像吧！
+                                跟朋友們一起來製作美麗的圖像吧！
                             </div>
                             <button className="home__main--login">
                                 {' '}
@@ -94,12 +94,10 @@ class Home extends Component {
                     <div className="home__image">
                         <div className="webpage">
                             <div className="screen" />
-                            <div className="screen--text02" />
-
-                            <div className="screen--text" />
                             <div className="screen--image02" />
-
                             <div className="screen--image" />
+                            <div className="screen--text02" />
+                            <div className="screen--text" />
                             <div className="finger" />
 
 

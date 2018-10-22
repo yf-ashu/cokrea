@@ -4,7 +4,8 @@ const EditorSelect = ({
     controllCurrent,
     changeSize,
     onMouseDown,
-    display
+    display,
+    onCopy
 }) => {
     let id = controllCurrent[1] !== null ? controllCurrent[1].key : '';
     
@@ -89,6 +90,11 @@ const EditorSelect = ({
                     disabled={controllCurrent[2] === 0 ? true : false}
                 />
                 <button
+                    className="editorMain__item--select__features--copy"
+                    onMouseDown={onCopy}
+                    data-data="layercopy"
+                />
+                <button
                     className="editorMain__item--select__features--delete"
                     onMouseDown={onMouseDown}
                     data-data="layerdelete"
@@ -102,6 +108,7 @@ EditorSelect.propTypes = {
     controllCurrent: PropTypes.any,
     changeSize: PropTypes.func,
     onMouseDown: PropTypes.func,
+    onCopy:PropTypes.func,
     display: PropTypes.any
 };
 export default EditorSelect;

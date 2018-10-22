@@ -9,7 +9,6 @@ import ToolController from '../Editor/ToolController';
 import ToolButtonItem from '../Editor/ToolButtonItem';
 import { random, constant, styleSetting } from '../element/constant';
 import { initFirebase, authInfomation } from '../element/auth';
-
 import EditorPreview from '../Editor/EditorPreview';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
@@ -21,7 +20,6 @@ require('firebase/storage');
 import font from '../../../img/font.svg';
 import close from '../../../img/close.svg';
 import picture from '../../../img/picture.svg';
-// import square from '../../../img/square.svg';
 import Loading from '../element/loading';
 
 class Editor extends Component {
@@ -57,7 +55,8 @@ class Editor extends Component {
             loading: true,
             downloadUrl: null,
             intervalId: null,
-            saved: [false, '已存檔']
+            saved: [false, '已存檔'],
+            trashCan: {}
 
             //前面是public是否有,後面是特定某些人有
         };
@@ -87,52 +86,61 @@ class Editor extends Component {
         this.changeProjectName = this.changeProjectName.bind(this);
         this.changeProjectNameonBlur = this.changeProjectNameonBlur.bind(this);
         this.getProjectData = this.getProjectData.bind(this);
+        this.copyLayer = this.copyLayer.bind(this);
     }
 
     componentDidMount() {
         this.checkLogin();
     }
-    componentDidUpdate() {
-        // if (
-        //     this.props.userData === null ||
-        //     this.props.loginStatus === null
-        // ){
-        //     console.log('都沒有2');
-        // }else{
-        //     console.log('有');
-        // }.
-        // this.checkLogin();
-    }
     componentWillUnmount() {
-        // clearInterval(this.state.intervalId);
-        console.log('解除');
+        let projectData = location.href.split('edit/')[1];
+        // database.ref('/projectData/' + projectData).off();
+        console.log(projectData);
     }
+
     connectDb(database, user) {
         console.log('連接', user);
         let that = this;
         let projectData = location.href.split('edit/')[1];
         let connectedRef = database.ref('.info/connected');
-        connectedRef.off()
+        connectedRef.off();
         connectedRef.on('value', function(snap) {
             if (snap.val() === true) {
-                console.log('偵測連線', user.uid);
-
                 let dataconnect = database.ref(
                     'temp/' + projectData + '/nowclick/' + user.uid
                 );
-                console.log(that.state.controllCurrent);
                 dataconnect.set([that.state.controllCurrent, user.displayName]);
                 dataconnect.onDisconnect().remove();
                 database
                     .ref('temp/' + projectData + '/nowclick')
                     .on('value', snapshot => {
-                        // console.log(snapshot.val());
                         that.setState({
                             othercontrollCurrent: snapshot.val()
                                 ? snapshot.val()
                                 : []
                         });
                     });
+
+                let trash = database.ref('temp/' + projectData + '/trash');
+                trash.onDisconnect().remove();
+                database
+                    .ref('temp/' + projectData + '/trash')
+                    .on('value', snapshot => {
+                        if (snapshot.val()) {
+                            console.log(snapshot.val());
+                            let combine;
+                            if (that.state.trashCan !== null) {
+                                combine = Object.assign(
+                                    snapshot.val(),
+                                    that.state.trashCan
+                                );
+                            }
+                            that.setState({
+                                trashCan: combine
+                            });
+                        }
+                    });
+
                 that.setState({
                     loading: false
                 });
@@ -141,23 +149,32 @@ class Editor extends Component {
                 database
                     .ref('temp/' + projectData + '/nowclick/' + user.uid)
                     .set(null);
+                database
+                    .ref('temp/' + projectData + '/trash')
+                    .set(that.state.trashCan);
             }
         });
     }
 
     saveData(e, display) {
-        console.log(this.state.display);
         this.setState({
             saved: [true, '儲存中']
         });
         let projectData = location.href.split('edit/')[1];
-        let getData = this.state.projectData;
+        let getData = Object.assign({}, this.state.projectData);
+        let database = this.state.database;
+
         if (this.state.display) {
             getData.display = display ? display : this.state.display;
         }
-        console.log(getData);
+
+        if (this.state.projectData.share[0].public === 'public') {
+            console.log('公開中');
+            delete getData.share;
+            database.ref('/public/' + projectData).update(getData);
+        }
+
         getData.editMainStyle = this.state.editMainStyle;
-        let database = this.state.database;
         database.ref('/projectData/' + projectData).update(getData, error => {
             if (error) {
                 console.log('error');
@@ -174,31 +191,23 @@ class Editor extends Component {
                 }, 5000);
             }
         });
-        console.log('圖片', this.props.projectImg);
+        let copyNowclick = this.state.controllCurrent.slice(0);
+
+        database
+            .ref(
+                'temp/' +
+                    projectData +
+                    '/nowclick/' +
+                    this.state.loginStatus.uid
+            )
+            .set([copyNowclick, this.state.loginStatus.displayName]);
+
         let copy = Object.assign({}, this.props.projectImg);
         copy[projectData] = this.state.downloadUrl;
         this.props.getUserData(null, null, null, copy);
-        console.log('圖片', copy);
-
         console.log('已存檔');
     }
-    timeout() {
-        // console.log('開始倒數');
-        // let projectData = location.href.split('edit/')[1];
-        // let that = this;
-        // let intervalId = setInterval(() => {
-        //     // console.log(this.state.storage);
-        //     that.state.storage
-        //         .child(projectData + '/canvas.png')
-        //         .putString(that.state.downloadUrl, 'data_url')
-        //         .then(function() {
-        //             console.log('Uploaded a base64url string!');
-        //         });
-        // }, 10000);
-        // this.setState({
-        //     intervalId: intervalId
-        // });
-    }
+
     checkLogin() {
         let storage, database;
         if (!this.props.loginStatus) {
@@ -220,7 +229,6 @@ class Editor extends Component {
                     this.props.getUserData(data[0], data[1], data[2], data[3]);
                     this.getProjectData();
                 } else {
-                    // location.pathname='/'
                     window.location.pathname = '/';
                     console.log('沒有登入');
                 }
@@ -235,21 +243,19 @@ class Editor extends Component {
             });
             this.getProjectData();
         }
-
-        this.timeout();
     }
 
     getProjectData() {
-        console.log('資料');
         let database = firebase.database();
         this.setState({
             loginStatus: this.props.loginStatus
         });
         let projectData = location.href.split('edit/')[1];
-        database.ref('/projectData/' + projectData).off()
+        database.ref('/projectData/' + projectData).off();
         database.ref('/projectData/' + projectData).on('value', snapshot => {
             if (snapshot.exists()) {
                 let data = snapshot.val();
+                // console.log(data)
                 if (snapshot.val().owner === this.props.loginStatus.uid) {
                     console.log('擁有者');
                     let shareButton = this.state.shareButton;
@@ -263,20 +269,33 @@ class Editor extends Component {
                         shareButton: shareButton
                     });
                     this.connectDb(database, this.props.loginStatus);
-                } else if (
-                    data.share[1].map(data => {
-                        data === this.props.loginStatus.email;
-                        return true;
-                    })
-                ) {
-                    this.setState({
-                        projectData: data,
-                        display: data.display ? data.display : [],
-                        editMainStyle: data.editMainStyle
-                            ? data.editMainStyle
-                            : this.state.editMainStyle
+                    // this.saveHistory(database);
+                } else if (data.share[1] !== 'no data') {
+                    console.log(data.share[1]);
+                    let okMail = '';
+                    data.share[1].map(userdata => {
+                        console.log(userdata);
+                        if (userdata === this.props.loginStatus.email) {
+                            okMail = 'ok';
+                            console.log(userdata);
+                            this.setState({
+                                projectData: data,
+                                display: data.display ? data.display : [],
+                                editMainStyle: data.editMainStyle
+                                    ? data.editMainStyle
+                                    : this.state.editMainStyle
+                            });
+                            this.connectDb(database, this.props.loginStatus);
+                            return;
+                        }
                     });
-                    this.connectDb(database, this.props.loginStatus);
+                    if (okMail === 'ok') {
+                        console.log('ok');
+                    } else {
+                        alert('沒有存取權');
+                        window.location.pathname = '/';
+                    }
+
                 } else {
                     if (data.share[0].public === 'public') {
                         window.location.pathname = '/views/' + projectData;
@@ -284,9 +303,10 @@ class Editor extends Component {
                         alert('沒有存取權');
                         window.location.pathname = '/';
                     }
+                    console.log('第三階段');
                 }
             } else {
-                alert('沒有此檔案');
+                // alert('沒有此檔案');
                 window.location.pathname = '/';
             }
         });
@@ -304,7 +324,7 @@ class Editor extends Component {
     redoStep(e) {
         let record = this.state.history.slice(0);
         let newRecord;
-        let redoRecord = this.state.redoItem;
+        let redoRecord = this.state.redoItem.slice(0);
         if (e.currentTarget.dataset.data === 'recovery') {
             newRecord = record.pop();
             redoRecord.push(newRecord);
@@ -332,7 +352,6 @@ class Editor extends Component {
         });
     }
     recoveryItem(action, id, value) {
-        // console.log(action, id, value);
         let copy = [];
         copy = this.state[action[1]];
 
@@ -345,13 +364,28 @@ class Editor extends Component {
                 copy[id[0]] = now;
                 copy[id[1]] = previous;
             } else if (action[0] === 'changeLayerDelete') {
-                copy.splice(id[1], 0, value[0]); //生成
+                let find = this.state[action[1]].findIndex(data => {
+                    return data.key === id[0];
+                });
+                if (find < 0) {
+                    copy.splice(id[1], 0, value[0]); //生成
+                }
             } else {
                 let find = this.state[action[1]].findIndex(data => {
                     return data.key === id[0];
                 });
                 console.log(find);
-                copy[find][value[1]] = value[0];
+                if (find >= 0) {
+                    copy[find][value[1]] = value[0];
+                } else {
+                    let trash = Object.assign({}, this.state.trashCan[id[0]]);
+                    console.log(trash);
+                    console.log(id[0]);
+                    copy.splice(trash.id[1], 0, trash.value[0]);
+                    copy[trash.id[1]][value[1]] = value[0];
+                    //生成
+                    console.log('被刪掉了');
+                }
             }
         } else {
             copy[0][value[1]] = value[0];
@@ -367,7 +401,12 @@ class Editor extends Component {
         copy = this.state[action[1]];
         if (action[1] === 'display') {
             if (action[0] === 'addNewItem') {
-                copy.splice(id[1], 0, value[0]); //生成
+                let find = this.state[action[1]].findIndex(data => {
+                    return data.key === id[0];
+                });
+                if (find < 0) {
+                    copy.splice(id[1], 0, value[0]); //生成
+                }
             } else if (action[0] === 'changeLayer') {
                 let previous = copy[id[0]];
                 let now = copy[id[1]];
@@ -379,7 +418,16 @@ class Editor extends Component {
                 let find = this.state[action[1]].findIndex(data => {
                     return data.key === id[0];
                 });
-                copy[find][value[1]] = value[0];
+                if (find >= 0) {
+                    copy[find][value[1]] = value[0];
+                } else {
+                    let trash = Object.assign({}, this.state.trashCan[id[0]]);
+                    console.log(trash);
+                    console.log(id[0]);
+                    copy.splice(trash.id[1], 0, trash.value[0]);
+                    copy[trash.id[1]][value[1]] = value[0];
+                    console.log('被刪掉了');
+                }
             }
         } else {
             copy = this.state[action[1]];
@@ -407,7 +455,6 @@ class Editor extends Component {
         }
     }
     handleCloseButton() {
-        console.log('清除');
         this.setState({
             type: { type: null, name: null },
             buttonItem: []
@@ -597,13 +644,17 @@ class Editor extends Component {
                     height: '100%'
                 }
             ];
-            let src =
-                special === 'img'
-                    ? this.state.fileUpload.imgUrl
-                    : this.state.buttonItem[check].src;
+            let src;
+            if (special === 'img') {
+                src = this.state.fileUpload.imgUrl;
+            } else if (type.type === 'img') {
+                src = this.state.buttonItem[check].src;
+            } else {
+                src = '';
+            }
             let tmp = styleSetting(type);
 
-            let value = {
+            const value = {
                 tag: type.type,
                 key: randomClass,
                 attribute: {
@@ -674,8 +725,8 @@ class Editor extends Component {
         e.stopPropagation();
     }
     canInterEdit(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        this.cancelDefault(e);
+      
         console.log('雙極');
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
@@ -688,65 +739,74 @@ class Editor extends Component {
     onBlur(e) {
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
-        // console.log(copy[copyDisplay]);
-        copy[copyDisplay].option[0]
-            ? (copy[copyDisplay].option[0].contentEditable = 'false')
-            : '';
-        let pretextContent = copy[copyDisplay].textContent;
-        copy[copyDisplay].textContent = e.currentTarget.innerHTML;
-        this.setState({
-            mouseEvent: 'true',
-            display: copy
-        });
+        if (copy[copyDisplay].option[0].contentEditable === 'true') {
+            copy[copyDisplay].option[0]
+                ? (copy[copyDisplay].option[0].contentEditable = 'false')
+                : '';
+            let pretextContent = copy[copyDisplay].textContent;
+            copy[copyDisplay].textContent = e.currentTarget.innerHTML;
+            this.setState({
+                mouseEvent: 'true',
+                display: copy
+            });
 
-        this.recordStep({
-            old: {
-                func: 'onBlur-display',
-                id: [copy[copyDisplay].key],
-                value: [pretextContent, 'textContent']
-            },
-            now: {
-                func: 'onBlur-display',
-                id: [copy[copyDisplay].key],
-                value: [e.currentTarget.innerHTML, 'textContent']
-            }
-        });
+            this.recordStep({
+                old: {
+                    func: 'onBlur-display',
+                    id: [copy[copyDisplay].key],
+                    value: [pretextContent, 'textContent']
+                },
+                now: {
+                    func: 'onBlur-display',
+                    id: [copy[copyDisplay].key],
+                    value: [e.currentTarget.innerHTML, 'textContent']
+                }
+            });
 
-        let that = this;
-        let move = function(e) {
-            if (e.target.className === 'editorMain__canvas--inner') {
-                that.setState({
-                    controllCurrent: ['page', null, null, null]
-                });
-                let projectData = location.href.split('edit/')[1];
-                that.state.database
-                    .ref(
-                        'temp/' +
-                            projectData +
-                            '/nowclick/' +
-                            that.state.loginStatus.uid
-                    )
-                    .set([
-                        ['page', null, null, null],
-                        that.state.loginStatus.displayName
-                    ]);
-                return;
-            }
-        };
-        document.addEventListener('click', move);
-        this.init(e, move);
+            let that = this;
+            let move = function(e) {
+                if (e.target.className === 'editorMain__canvas--inner') {
+                    that.setState({
+                        controllCurrent: ['page', null, null, null]
+                    });
+                    let projectData = location.href.split('edit/')[1];
+                    that.state.database
+                        .ref(
+                            'temp/' +
+                                projectData +
+                                '/nowclick/' +
+                                that.state.loginStatus.uid
+                        )
+                        .set([
+                            ['page', null, null, null],
+                            that.state.loginStatus.displayName
+                        ]);
+                    return;
+                }
+            };
+            document.addEventListener('click', move);
+            this.init(e, move);
+        }
     }
     //移動座標時
     changePosition(e, elem, pre, init) {
-        e.preventDefault();
-        e.stopPropagation();
-        let currentX = e.pageX;
-        let currentY = e.pageY;
-        let distanceX = currentX - pre[0];
-        let distanceY = currentY - pre[1];
-        let copyDisplay = parseInt(
+        let currentX, currentY, distanceX, distanceY, copyDisplay;
+        if (e.type === 'mousemove') {
+            this.cancelDefault(e);
+
+            currentX = e.pageX;
+            currentY = e.pageY;
+        } else {
+            currentX = e.touches[0].pageX;
+            currentY = e.touches[0].pageY;
+        }
+
+        distanceX = currentX - pre[0];
+        distanceY = currentY - pre[1];
+        copyDisplay = parseInt(
             this.state.display.findIndex(data => data.key === elem.dataset.id)
         );
+
         let copy = this.state.display.slice(0);
         let left = distanceX / this.state.editMainStyle[0].scale + +init.left;
         let top = distanceY / this.state.editMainStyle[0].scale + +init.top;
@@ -762,8 +822,13 @@ class Editor extends Component {
         copy[copyDisplay].outside[3] = {
             top: top
         };
+
+        let copyCurrent = this.state.controllCurrent.slice(0);
+        copyCurrent[1] = this.state.display[copyDisplay];
+
         this.setState({
-            display: copy
+            display: copy,
+            controllCurrent: copyCurrent
         });
         return {
             id: [elem.dataset.id, copyDisplay],
@@ -772,8 +837,8 @@ class Editor extends Component {
     }
     //偵測目前點到誰
     editorItemClick(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        this.cancelDefault(e);
+
         let copy = this.state.controllCurrent.slice(0);
         let copyDisplay = this.state.display.findIndex(
             data => data.key === e.currentTarget.dataset.id
@@ -797,10 +862,9 @@ class Editor extends Component {
     }
     //要移動
     elementOnMouseDown(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        this.cancelDefault(e);
+
         e.currentTarget.focus();
-        console.log(e.currentTarget);
         this.editorItemClick(e);
         let elem = e.currentTarget;
         let that = this;
@@ -826,6 +890,27 @@ class Editor extends Component {
             e.preventDefault();
             result = that.changePosition(e, elem, pre, init);
         };
+
+        document.addEventListener('touchmove', move, { passive: false });
+        document.addEventListener('touchend', function() {
+            document.removeEventListener('touchmove', move);
+            result
+                ? that.recordStep({
+                    old: {
+                        func: 'changePosition-display',
+                        id: result.id,
+                        value: [opt, 'outside']
+                    },
+                    now: {
+                        func: 'changePosition-display',
+                        id: result.id,
+                        value: [result.value, 'outside']
+                    }
+                })
+                : null;
+            result = null;
+        });
+
         document.addEventListener('mousemove', move);
         document.addEventListener('mouseup', function() {
             document.removeEventListener('mousemove', move);
@@ -847,9 +932,8 @@ class Editor extends Component {
         });
     }
     init(e, move) {
-        // document.removeEventListener('click', move);
-        e.preventDefault();
-        e.stopPropagation();
+        this.cancelDefault(e);
+
         setTimeout(function() {
             document.removeEventListener('click', move);
         }, 100);
@@ -876,11 +960,21 @@ class Editor extends Component {
         }
     }
     changeSizeset(e, pre, init, pull) {
-        let currentX = e.pageX;
-        let currentY = e.pageY;
-        let distanceX = currentX - pre[0];
-        let distanceY = currentY - pre[1];
-        let copyDisplay = this.state.controllCurrent[2];
+        let currentX, currentY, distanceX, distanceY, copyDisplay;
+        if (e.type === 'mousemove') {
+            this.cancelDefault(e);
+
+            currentX = e.pageX;
+            currentY = e.pageY;
+        } else {
+            currentX = e.touches[0].pageX;
+            currentY = e.touches[0].pageY;
+        }
+
+        distanceX = currentX - pre[0];
+        distanceY = currentY - pre[1];
+
+        copyDisplay = this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
         let left, top, height, width;
         console.log(distanceX);
@@ -944,13 +1038,11 @@ class Editor extends Component {
         let copyCurrent = this.state.controllCurrent.slice(0);
 
         copyCurrent[1] = this.state.display[copyDisplay];
-        // copy[3] = e.currentTarget;
 
         this.setState({
             display: copy,
             controllCurrent: copyCurrent
         });
-        // console.log( copy[copyDisplay].outside)
 
         return {
             id: [copy[copyDisplay].key, copyDisplay],
@@ -958,10 +1050,8 @@ class Editor extends Component {
         };
     }
     changeSize(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log(e.currentTarget);
-        // this.editorItemClick(e);
+        this.cancelDefault(e);
+
 
         let that = this;
         let pre = [e.pageX, e.pageY];
@@ -985,6 +1075,27 @@ class Editor extends Component {
         let move = function(e) {
             result = that.changeSizeset(e, pre, init, pull);
         };
+
+        document.addEventListener('touchmove', move, { passive: false });
+        document.addEventListener('touchend', function() {
+            document.removeEventListener('touchmove', move);
+            result
+                ? that.recordStep({
+                    old: {
+                        func: 'changeSize-display',
+                        id: result.id,
+                        value: [opt, 'outside']
+                    },
+                    now: {
+                        func: 'changeSize-display',
+                        id: result.id,
+                        value: [result.value, 'outside']
+                    }
+                })
+                : null;
+            result = null;
+        });
+
         document.addEventListener('mousemove', move);
         document.addEventListener('mouseup', function() {
             document.removeEventListener('mousemove', move);
@@ -1027,10 +1138,12 @@ class Editor extends Component {
         reader.readAsDataURL(file);
     }
     changeLayer(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        this.cancelDefault(e);
+
+        let projectData = location.href.split('edit/')[1];
         let copy = this.state.display.slice(0);
         let copyDisplay = this.state.controllCurrent.slice(0);
+        console.log(copyDisplay);
         if (e.currentTarget.dataset.data === 'layerdown') {
             let previous = copy[copyDisplay[2] - 1];
             let now = copy[copyDisplay[2]];
@@ -1071,21 +1184,38 @@ class Editor extends Component {
                 }
             });
         } else {
+            let name = copyDisplay[1].key;
+
             this.recordStep({
                 old: {
                     func: 'changeLayerDelete-display',
-                    id: [null, copy[copyDisplay[2]]],
+                    id: [name, copyDisplay[2]],
                     value: [copy[copyDisplay[2]], '']
                 },
 
                 now: {
                     func: 'changeLayerDelete-display',
-                    id: [null, copy[copyDisplay[2]]],
+                    id: [name, copyDisplay[2]],
                     value: [{}, '']
                 }
             });
+            let trash = this.state.trashCan;
+            console.log(trash);
+            trash[name] = {
+                func: 'changeLayerDelete-display',
+                id: [name, copyDisplay[2]],
+                value: [copy[copyDisplay[2]], '']
+            };
+
+            this.state.database
+                .ref('temp/' + projectData + '/trash')
+                .set(trash);
+
             copy.splice(copyDisplay[2], 1);
             copyDisplay = ['page', null, null, null];
+            this.setState({
+                trashCan: trash
+            });
         }
 
         this.setState({
@@ -1094,11 +1224,32 @@ class Editor extends Component {
         });
         this.saveData(null, copy);
     }
+    copyLayer() {
+        console.log(this.state.controllCurrent[1]);
+        let copy = JSON.stringify(
+            Object.assign({}, this.state.controllCurrent[1])
+        );
+        let randomClass = random();
+        let copyTerm = JSON.parse(copy);
+        copyTerm.attribute.className =
+            'editorMain__item ' +
+            randomClass +
+            ' editorMain__item--' +
+            copyTerm.attribute.type;
+        copyTerm.attribute.id = randomClass;
+        copyTerm.key = randomClass;
+        let insert = this.state.display.slice(0);
+        insert.push(copyTerm);
+        this.setState({
+            display: insert
+        });
+        console.log(copyTerm);
+    }
 
     render() {
-        console.log(this.props.loginStatus);
-        console.log(this.props.userData);
-        console.log(this.props.projectImg);
+        // console.log(this.props.loginStatus);
+        // console.log(this.props.userData);
+        // console.log(this.state.trashCan);
 
         let item = this.state.display.map(data => {
             return (
@@ -1140,9 +1291,9 @@ class Editor extends Component {
                         <div
                             className={
                                 this.state.othercontrollCurrent[data][0][1]
-                                    ? 'editorMain__item--select--' +
+                                    ? 'editorMain__item--select-outer--' +
                                       color[index] +
-                                      ' editorMain__item--select'
+                                      ' editorMain__item--select-outer'
                                     : 'displayNone'
                             }
                             style={trans}
@@ -1161,31 +1312,8 @@ class Editor extends Component {
                 }
             }
         );
-        // // console.log(other)
-        // let buttonItem = [];
-        // for (let i = 0; i < this.state.buttonItem.length; i++) {
-        //     let data = this.state.buttonItem[i];
-        //     console.log(data);
-
-        //     let item = (
-        //         <ToolButtonItem
-        //             key={'toolButton__item--' + data.type+i}
-        //             onClick={this.clickToolButtonItem}
-        //             type={data.type}
-        //             format={data.format}
-        //             className={'toolButton__item--' + data.type}
-        //             id={data.type}
-        //             onDragStart={this.toolButtonItemDragStart}
-        //             src={data.src}
-        //         />
-        //     );
-
-        //     buttonItem.push(item);
-        //     // buttonItem=
-        // }
 
         let buttonItem = this.state.buttonItem.map((data, index) => {
-            console.log(data);
             return (
                 <ToolButtonItem
                     key={'toolButton__item--' + data.type + '-' + index}
@@ -1199,9 +1327,12 @@ class Editor extends Component {
                 />
             );
         });
-        // console.log(this.state.publicSetting);
         return (
             <div className="editor">
+                <div className="smallSize">
+                    <span>請換至平板或電腦使用</span>{' '}
+                </div>
+
                 <Loading loading={this.state.loading} />
                 {/* 可以拆出去 */}
                 <EditorShare
@@ -1218,6 +1349,7 @@ class Editor extends Component {
 
                 <EditorPreview
                     editMainStyle={this.state.editMainStyle}
+                    projectData={this.state.projectData}
                     display={this.state.display}
                     fileUpload={this.state.fileUpload}
                     saveButton={this.state.saveButton}
@@ -1389,6 +1521,7 @@ class Editor extends Component {
                             controllCurrent={this.state.controllCurrent}
                             changeSize={this.changeSize}
                             onMouseDown={this.changeLayer}
+                            onCopy={this.copyLayer}
                             display={this.state.display}
                         />
                     }
@@ -1410,6 +1543,7 @@ Editor.propTypes = {
     userData: PropTypes.any,
     loginStatus: PropTypes.any,
     getUserData: PropTypes.any,
-    changeProjectName: PropTypes.any
+    changeProjectName: PropTypes.any,
+    projectImg: PropTypes.string
 };
 export default Editor;

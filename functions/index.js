@@ -167,6 +167,13 @@ app.post('/app/addNewProject', (req, res) => {
       ['no data']
     ]
   };
+  if (data.display ) {
+    projectData.display = data.display;
+  }
+  if (data.editMainStyle ) {
+    projectData.editMainStyle = data.editMainStyle;
+  }
+  
   let usernew = data.newItem;
   console.log(usernew);
   db.ref('/projectData/' + usernew).set(projectData, error => {

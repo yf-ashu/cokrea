@@ -16,55 +16,119 @@ class Create extends Component {
             memberButton: 'false',
             logout: false,
             loading: true,
-            unloadAction: null
+            unloadAction: null,
+            contorllSideBar:false
         };
         this.checkLogin = this.checkLogin.bind(this);
         this.logout = this.logout.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.initCheck = this.initCheck.bind(this);
+
     }
 
     componentDidMount() {
-        console.log();
-        let unloadAction = e => {
+        // let data=sample
+        // console.log(data);
+        // let that = this;
 
+        // let unloadAction = e => {
+        //     let storage = firebase.storage().ref();
+        //     Object.keys(that.props.projectImg).map(projectData => {
+        //         console.log(that.props.projectImg[projectData].split(':')[0]);
+        //         if (
+        //             that.props.projectImg[projectData].split(':')[0] === 'data'
+        //         ) {
+        //             console.log('上傳');
 
-            let storage = firebase.storage().ref();
-            Object.keys(that.props.projectImg).map(projectData => {
-                console.log(that.props.projectImg[projectData].split(':')[0]);
-                if (
-                    that.props.projectImg[projectData].split(':')[0]==='data'
-                ) {
-                    console.log('上傳')
+        //             // let image = new Image();
+        //             // let resizedImage, dataUrl;
 
-let image=new Image();
-image.src=that.props.projectImg[projectData]
-console.log(image.size)
-
-                    storage
-                        .child(projectData + '/canvas.png')
-                        .putString(that.props.projectImg[projectData], 'data_url')
-                        .then(function() {
-                            console.log('Uploaded a base64url string!');
-                        });
-                }
-            });
-            e.preventDefault();
-            e.returnValue = '';
-        };
-        let that = this;
-        window.addEventListener('beforeunload', unloadAction);
-        this.setState({
-            unloadAction: unloadAction
-        });
+        //             // image.onload = function(imageEvent) {
+        //             //     console.log('Hello');
+        //             //     let canvas = document.createElement('canvas'),
+        //             //         max_size = 544, // TODO : pull max size from a site config
+        //             //         width = image.width,
+        //             //         height = image.height;
+        //             //     if (width > height) {
+        //             //         if (width > max_size) {
+        //             //             height *= max_size / width;
+        //             //             width = max_size;
+        //             //         }
+        //             //     } else {
+        //             //         if (height > max_size) {
+        //             //             width *= max_size / height;
+        //             //             height = max_size;
+        //             //         }
+        //             //     }
+        //             //     canvas.width = width;
+        //             //     canvas.height = height;
+        //             //     canvas
+        //             //         .getContext('2d')
+        //             //         .drawImage(image, 0, 0, width, height);
+        //             //     dataUrl = canvas.toDataURL('image/jpeg');
+        //             //     console.log(dataUrl);
+        //             //     //  resizedImage = dataURLToBlob(dataUrl);
+        //             // };
+        //             // image.onerror = function(e) {
+        //             //     console.log('error', e);
+        //             // };
+        //             // image.src = that.props.projectImg[projectData];
+        //             // document.body.appendChild(image);
+        //             // // console.log(that.props.projectImg[projectData])
+        //             // console.log(this.props.projectImg[projectData]);
+        //             storage
+        //                 .child(projectData + '/canvas.png')
+        //                 .putString(
+        //                     that.props.projectImg[projectData],
+        //                     'data_url'
+        //                 )
+        //                 .then(function() {
+        //                     console.log('Uploaded a base64url string!');
+        //                 });
+        //         }
+        //     });
+        //     e.preventDefault();
+        //     e.returnValue = '';
+        // };
+        // window.addEventListener('beforeunload', unloadAction);
+        // this.setState({
+        //     unloadAction: unloadAction
+        // });
         if (this.props.userData === null || this.props.loginStatus === null) {
             console.log('都沒有3');
             this.initCheck();
+        } else {
+            console.log('有東西');
+            let that = this;
+            let storage = firebase.storage().ref();
+            if (that.props.projectImg) {
+                Object.keys(that.props.projectImg).map(projectData => {
+                    console.log(
+                        that.props.projectImg[projectData].split(':')[0]
+                    );
+                    if (
+                        that.props.projectImg[projectData].split(':')[0] ===
+                        'data'
+                    ) {
+                        console.log('上傳');
+
+                        storage
+                            .child(projectData + '/canvas.png')
+                            .putString(
+                                that.props.projectImg[projectData],
+                                'data_url'
+                            )
+                            .then(function() {
+                                console.log('Uploaded a base64url string!');
+                            });
+                    }
+                });
+            }
         }
     }
 
     componentWillUnmount() {
-        window.removeEventListener('beforeunload', this.state.unloadAction);
+        // window.removeEventListener('beforeunload', this.state.unloadAction);
     }
     initCheck() {
         if (!firebase.apps.length) {
@@ -109,11 +173,7 @@ console.log(image.size)
             return {};
         } else return null;
     }
-    componentDidUpdate() {
-        if (this.props.userData === null || this.props.loginStatus === null) {
-            console.log('都沒有2');
-        }
-    }
+   
     checkLogin(loginData, userData, database, projectImg) {
         console.log('要檔案２');
         this.props.getUserData(loginData, userData, database, projectImg);
@@ -144,7 +204,7 @@ console.log(image.size)
         copy.project.splice(find, 1);
         this.props.handleDeleteProject(copy, e.currentTarget.dataset.data);
     }
-
+ 
     render() {
         console.log(this.props.loginStatus);
         console.log(this.props.userData);
@@ -187,6 +247,7 @@ console.log(image.size)
                         });
                     }}
                 />
+             
                 {displayItem}
             </div>
         );

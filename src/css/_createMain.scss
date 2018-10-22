@@ -1,28 +1,36 @@
 .createMain {
-  @include size(100%, 100%);
+  @include size(100%, calc(100% - 80px));
+
   grid-area: createMain;
+  display: grid;
+  grid-template: 'createMainSide createMainCenter';
+  grid-template-columns: 60px 1fr;
+  transition: all 0.5s;
+}
+.createMainCenter {
+  grid-area: createMainCenter;
+  @include size(100%, 100%);
+
   background-color: $editor;
   @extend %flexCenter-Center-row;
-  @include distance(16px,0);
-
+  @include distance(16px, 0);
 }
+
 .createMainItem {
   @include size(250px, auto);
   background-color: $white;
   border-radius: 5px;
   overflow: hidden;
   @include distance(0, 8px);
-
-
 }
 .createMainItem__inner {
   @include size(100%, 350px);
   @include distance(8px, 0);
   transition: all 0.5s;
   @extend %flexCenter-Center-column;
-  >span{
+  > span {
     @include distance(24px, 0);
-color:$button;
+    color: $button;
   }
 }
 .createMainItem__display {
@@ -31,20 +39,19 @@ color:$button;
   position: relative;
   box-shadow: 0px 0px 30px rgba($color: #000000, $alpha: 0.5);
   overflow: hidden;
-  img{
+  img {
     position: absolute;
-    @include size(100%,auto);
-pointer-events: none;
-top: 0;
+    @include size(100%, auto);
+    pointer-events: none;
+    top: 0;
   }
   &:hover {
-      background-color: $special;
-
-      img{
-      
-        opacity: 0;
-        visibility: hidden;
-      } 
+    background-color: $special;
+    opacity: 0.9;
+    img {
+      opacity: 0.5;
+      // visibility: hidden;
+    }
 
     .createMainItem__toggle,
     .createMainItem__button {
@@ -61,15 +68,14 @@ top: 0;
   @extend %flexCenter-space-between-row;
 }
 .createMainItem__button {
+  z-index: 1500;
   @include size(40%, 10%);
   border: 1px solid $white;
   font-size: 14px;
   opacity: 0;
-
   visibility: hidden;
   transition: all 0.5s;
-
-  color:$text-white;
+  color: $text-white;
   @extend %flexCenter-Center-row;
 
   &:hover {
@@ -125,12 +131,75 @@ top: 0;
     transform: translate(-50%, -50%) rotate(90deg);
   }
 }
-.createMainItem__delete{
-    @include size(22px,22px);
-    @include background-center('../img/delete.png');
-cursor: pointer;
-      &:hover {
-        @include background-center('../img/deleteHover.png');
-      }    
-  
+.createMainItem__delete {
+  @include size(22px, 22px);
+  @include background-center('../img/delete.png');
+  cursor: pointer;
+  &:hover {
+    @include background-center('../img/deleteHover.png');
+  }
+}
+.createMainSide {
+  grid-area: createMainSide;
+  background-color: $header;
+  display: flex;
+}
+.createMainSide--main {
+  @include size(calc(100% - 60px), 100%);
+  @extend %flexFlex-start-center-row ;
+}
+.createMainSide--controller {
+  @include size(60px, 100%);
+  cursor: pointer;
+  background-color: $click;
+  transition: all 0.5s;
+  @extend %flexCenter-Center-row;
+img{
+  transition: all 0.5s;
+
+}
+
+  &:hover {
+    background-color: $hover;
+  }
+}
+.createMainSideItem {
+  @include size(90%, 200px);
+  @extend %flexCenter-Center-column;
+  cursor: pointer;
+  border-radius: 5px;
+  overflow: hidden;
+  &:hover {
+    background-color: $special;
+    opacity: 0.9;
+  }
+  transition: all 0.5s;
+  &--main {
+    @include size(100%, 80%);
+    background-color: $white;
+    img{
+      @include size(100%, 100%);
+
+    }
+  }
+  &--text {
+    @include size(100%, 20%);
+    @extend %flexCenter-Center-column;
+    color: $text-white;
+  }
+}
+.rotateLeft {
+  @include size(22px, 22px);
+  transform: rotate(-90deg);
+}
+.rotateRight {
+  @include size(22px, 22px);
+  transform: rotate(90deg);
+}
+.createMainSide--header{
+  @include size(100%, 60px);
+  background-color: $click;
+  position: relative;
+  color: $text-white;
+  @extend %flexCenter-Center-row;
 }

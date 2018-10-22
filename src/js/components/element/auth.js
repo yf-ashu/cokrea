@@ -27,7 +27,7 @@ export const authInfomation = func => {
                 let imgUrl = {};
             
                 if(data.project){
-                     data.project.map(projectdata => {
+                    data.project.map(projectdata => {
                         console.log(projectdata.projectId);
                         storage
                             .ref(projectdata.projectId + '/canvas.png')
@@ -52,18 +52,18 @@ export const authInfomation = func => {
                                 console.log(error);
                             });
 
-                    })
+                    });
                 }else{
 
                 
                     
-                    console.log('沒有圖片')
+                    console.log('沒有圖片');
                     authInfomation = [
                         user,
                         data,
                         database,
                         null
-                    ]
+                    ];
                     return func(authInfomation);
                 }
                     
@@ -75,7 +75,6 @@ export const authInfomation = func => {
             // this.props.loading();
             authInfomation = null;
             console.log('沒有登入');
-
             return func(authInfomation);
         }
     });
