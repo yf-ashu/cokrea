@@ -9,7 +9,8 @@ const Input = ({
     className,
     disabled,
     onBlur,
-    text
+    text,
+    placeholder
 }) => (
     <div className="input">
         <label htmlFor={id}> {text}</label>
@@ -22,6 +23,7 @@ const Input = ({
             onChange={onChange}
             disabled={disabled}
             onBlur={onBlur}
+            placeholder={placeholder}
         />
     </div>
 );
@@ -35,6 +37,6 @@ Input.propTypes = {
     disabled: PropTypes.string,
     onBlur: PropTypes.func,
     text: PropTypes.string,
-
+    placeholder: PropTypes.string
 };
 export default Input;

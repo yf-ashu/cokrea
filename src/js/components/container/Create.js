@@ -17,83 +17,15 @@ class Create extends Component {
             logout: false,
             loading: true,
             unloadAction: null,
-            contorllSideBar:false
+            contorllSideBar: false
         };
         this.checkLogin = this.checkLogin.bind(this);
         this.logout = this.logout.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.initCheck = this.initCheck.bind(this);
-
     }
 
     componentDidMount() {
-        // let data=sample
-        // console.log(data);
-        // let that = this;
-
-        // let unloadAction = e => {
-        //     let storage = firebase.storage().ref();
-        //     Object.keys(that.props.projectImg).map(projectData => {
-        //         console.log(that.props.projectImg[projectData].split(':')[0]);
-        //         if (
-        //             that.props.projectImg[projectData].split(':')[0] === 'data'
-        //         ) {
-        //             console.log('上傳');
-
-        //             // let image = new Image();
-        //             // let resizedImage, dataUrl;
-
-        //             // image.onload = function(imageEvent) {
-        //             //     console.log('Hello');
-        //             //     let canvas = document.createElement('canvas'),
-        //             //         max_size = 544, // TODO : pull max size from a site config
-        //             //         width = image.width,
-        //             //         height = image.height;
-        //             //     if (width > height) {
-        //             //         if (width > max_size) {
-        //             //             height *= max_size / width;
-        //             //             width = max_size;
-        //             //         }
-        //             //     } else {
-        //             //         if (height > max_size) {
-        //             //             width *= max_size / height;
-        //             //             height = max_size;
-        //             //         }
-        //             //     }
-        //             //     canvas.width = width;
-        //             //     canvas.height = height;
-        //             //     canvas
-        //             //         .getContext('2d')
-        //             //         .drawImage(image, 0, 0, width, height);
-        //             //     dataUrl = canvas.toDataURL('image/jpeg');
-        //             //     console.log(dataUrl);
-        //             //     //  resizedImage = dataURLToBlob(dataUrl);
-        //             // };
-        //             // image.onerror = function(e) {
-        //             //     console.log('error', e);
-        //             // };
-        //             // image.src = that.props.projectImg[projectData];
-        //             // document.body.appendChild(image);
-        //             // // console.log(that.props.projectImg[projectData])
-        //             // console.log(this.props.projectImg[projectData]);
-        //             storage
-        //                 .child(projectData + '/canvas.png')
-        //                 .putString(
-        //                     that.props.projectImg[projectData],
-        //                     'data_url'
-        //                 )
-        //                 .then(function() {
-        //                     console.log('Uploaded a base64url string!');
-        //                 });
-        //         }
-        //     });
-        //     e.preventDefault();
-        //     e.returnValue = '';
-        // };
-        // window.addEventListener('beforeunload', unloadAction);
-        // this.setState({
-        //     unloadAction: unloadAction
-        // });
         if (this.props.userData === null || this.props.loginStatus === null) {
             console.log('都沒有3');
             this.initCheck();
@@ -131,14 +63,11 @@ class Create extends Component {
         // window.removeEventListener('beforeunload', this.state.unloadAction);
     }
     initCheck() {
-        if (!firebase.apps.length) {
-            initFirebase();
-        }
-
         let authCheck = data => {
             console.log('要檔案');
             if (data) {
                 this.props.getUserData(data[0], data[1], data[2], data[3]);
+                console.log(data);
                 setTimeout(() => {
                     this.setState({
                         loading: false
@@ -162,18 +91,9 @@ class Create extends Component {
             return {
                 loading: false
             };
-        } else if (
-            nextProps.userData !== prevState.userData &&
-            nextProps.userData === null &&
-            nextProps.loginStatus === null
-        ) {
-            console.log(nextProps.userData);
-            console.log('都沒有');
-
-            return {};
         } else return null;
     }
-   
+
     checkLogin(loginData, userData, database, projectImg) {
         console.log('要檔案２');
         this.props.getUserData(loginData, userData, database, projectImg);
@@ -199,12 +119,15 @@ class Create extends Component {
         let find = copy.project.findIndex(data => {
             return data.projectId === e.currentTarget.dataset.data;
         });
-        alert('確認刪除');
-        console.log(find);
-        copy.project.splice(find, 1);
-        this.props.handleDeleteProject(copy, e.currentTarget.dataset.data);
+        let check = confirm('確認刪除');
+        console.log(check);
+        if (check ===true) {
+            console.log(find);
+            copy.project.splice(find, 1);
+            this.props.handleDeleteProject(copy, e.currentTarget.dataset.data);
+        }
     }
- 
+
     render() {
         console.log(this.props.loginStatus);
         console.log(this.props.userData);
@@ -247,7 +170,7 @@ class Create extends Component {
                         });
                     }}
                 />
-             
+
                 {displayItem}
             </div>
         );

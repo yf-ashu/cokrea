@@ -46,28 +46,7 @@ app.post('/app/getAccount', (req, res) => {
     });
   }
 });
-// app.post('/app/getProject', (req, res) => {
-//   let data = req.body;
-//   if (!data.userId || !data.projectId) {
-//     res.send({
-//       error: 'Create Order Error: Wrong Data Format'
-//     });
-//     return;
-//   }
-//   db.ref('/projectData/' + data.projectId).once('value', snapshot => {
-//     if (snapshot.exists()) {
-//       let getData = snapshot.val();
-//       console.log(getData);
-//       delete getData.createTime;
-//       delete getData.updateTime;
-//       return res.json(getData);
-//     } else {
-//       return res.json({
-//         error: 'No Project'
-//       });
-//     }
-//   });
-// });
+
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝New & Update Account
 app.post('/app/manageAccount', (req, res) => {
@@ -134,7 +113,7 @@ app.post('/app/manageAccount', (req, res) => {
             error: 'Create Account Error'
           });
         } else {
-          res.json(getData);
+          res.json(memberData);
         }
       });
     }
@@ -146,7 +125,7 @@ app.post('/app/addNewProject', (req, res) => {
   let now = new Date();
   if (!data.userId || !data.project) {
     res.send({
-      error: 'Create Order Error: Wrong Data Format'
+      error: data
     });
     return;
   }
@@ -245,16 +224,5 @@ app.post('/app/manageProject', (req, res) => {
   });
 });
 
-let maskValue = function(value) {
-  let newValue = '';
-  for (let i = 0; i < value.length; i++) {
-    if (i % 2 === 0) {
-      newValue += '*';
-    } else {
-      newValue += value.charAt(i);
-    }
-  }
-  return newValue;
-};
 
 exports.app = functions.https.onRequest(app);

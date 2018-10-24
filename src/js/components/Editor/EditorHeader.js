@@ -15,6 +15,8 @@ import download from '../../../img/download.svg';
 import share from '../../../img/share.svg';
 import arrow from '../../../img/arrow.svg';
 import logo from '../../../img/logo.png';
+import bee from '../../../img/bee.png';
+
 
 class EditorHeader extends Component {
     constructor(props) {
@@ -23,6 +25,65 @@ class EditorHeader extends Component {
             memberButton:false
         };
         this.logout=this.logout.bind(this);
+        this.headerSizeClick = this.headerSizeClick.bind(this);
+
+    }
+
+    headerSizeClick(e) {
+        let elem=e.currentTarget;
+        this.setState((state,props)=> {
+            //   let copyDisplay = props.editMainStyle.slice(0);
+            console.log(props);
+            let  copy = JSON.parse(JSON.stringify(props.editMainStyle));
+            // let copy = copyDisplay[0];
+            console.log(copy);
+            if (elem.dataset.num === '0') {
+                if (copy.scale <= 0.25) {
+                    let find = copy.style.findIndex(data => data.transform);
+                    copy.style[find] = { transform: 'scale(0.25)' };
+                } else if (copy.scale <= 1) {
+                    let data = (copy.scale = parseFloat(copy.scale - 0.25));
+                    let find = copy.style.findIndex(data => data.transform);
+                    copy.style[find] = { transform: 'scale(' + data + ')' };
+                    let findTransform = copy.style.findIndex(
+                        data => data['transformOrigin']
+                    );
+                    copy.style[findTransform] = {
+                        transformOrigin: 'top center'
+                    };
+                } else {
+                    let data = (copy.scale = parseFloat(copy.scale - 0.25));
+                    let find = copy.style.findIndex(data => data.transform);
+                    copy.style[find] = { transform: 'scale(' + data + ')' };
+                }
+            } else {
+                if (copy.scale > 5) {
+                    let find = copy.style.findIndex(data => data.transform);
+                    copy.style[find] = { transform: 'scale(5)' };
+                } else if (copy.scale >= 1) {
+                    let data = (copy.scale = parseFloat(copy.scale + 0.25));
+                    let find = copy.style.findIndex(data => data.transform);
+                    copy.style[find] = { transform: 'scale(' + data + ')' };
+                    let findTransform = copy.style.findIndex(
+                        data => data['transformOrigin']
+                    );
+                    copy.style[findTransform] = { transformOrigin: '0 0' };
+                } else {
+                    let data = (copy.scale = parseFloat(copy.scale + 0.25));
+                    let find = copy.style.findIndex(data => data.transform);
+                    copy.style[find] = { transform: 'scale(' + data + ')' };
+                }
+            }
+            let copyDisplay=[];
+            copyDisplay.push(copy);
+            this.props.headerSizeClick(copyDisplay);
+
+            return {
+                editMainStyle: copyDisplay
+            };
+
+        });
+     
     }
     logout() {
         firebase
@@ -31,7 +92,6 @@ class EditorHeader extends Component {
             .then(function() {
                 console.log('email sign out');
                 window.location.pathname = '/dashboard';
-                // that.props.logout()
             })
             .catch(function(error) {
                 console.log(error);
@@ -39,15 +99,14 @@ class EditorHeader extends Component {
     }
     render() {
         const {
-            scale,
+            editMainStyle,
             onClick,
             onDownload,
             onHistory,
             unable,
-            login,
+            loginStatus,
             saveData,
             shareLink,
-            offline,
             projectName,
             onChange,
             onBlur,
@@ -59,7 +118,6 @@ class EditorHeader extends Component {
                 <NavLink
                     className="editorHeader__left"
                     to="/dashboard"
-                    onClick={offline}
                 >            <img src={logo}></img>
                 </NavLink>
                 <div className="editorHeader__center">
@@ -79,7 +137,7 @@ class EditorHeader extends Component {
                         <button
                             id="editorHeader__scale--subtract"
                             data-num="0"
-                            onClick={onClick}
+                            onClick={this.headerSizeClick}
                         >
                             -
                         </button>
@@ -88,12 +146,12 @@ class EditorHeader extends Component {
                             className="editorHeader__scale--main"
                             id="editorHeader__scale--main"
                         >
-                            {scale * 100 + '%'}
+                            {editMainStyle.scale * 100 + '%'}
                         </div>
                         <button
                             id="editorHeader__scale--add"
                             data-num="1"
-                            onClick={onClick}
+                            onClick={this.headerSizeClick}
                         >
                             +
                         </button>
@@ -149,7 +207,7 @@ class EditorHeader extends Component {
                         onMouseEnter={()=>{this.setState({memberButton:true});}}
                         onMouseLeave={()=>{this.setState({memberButton:false});}}
                     >
-                        <img src={login ? login.photoURL : user}className={'editorHeader__member--member'} />
+                        <img src={loginStatus ? loginStatus.photoURL?loginStatus.photoURL:bee : user}className={'editorHeader__member--member'} />
                         <img src={arrow} className={'editorHeader__member--arrow'}></img>
                         <div className={this.state.memberButton?'editorHeader__member--option':'displayNone'}>
                             <div onClick={this.logout}>LOGOUT</div>
@@ -162,12 +220,12 @@ class EditorHeader extends Component {
 }
 
 EditorHeader.propTypes = {
-    scale: PropTypes.any,
+    editMainStyle: PropTypes.any,
     onClick: PropTypes.func,
     onDownload: PropTypes.func,
     onHistory: PropTypes.func,
     unable: PropTypes.array,
-    login: PropTypes.any,
+    loginStatus: PropTypes.any,
     saveData: PropTypes.func,
     onBlur: PropTypes.func,
     shareLink:PropTypes.any,

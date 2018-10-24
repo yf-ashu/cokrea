@@ -1,30 +1,27 @@
 @import 'createHeader';
-@import 'createMain';
 
 .public__views{
   @include size(100%,100%);
   display: grid;
   grid-template:
   'createHeader ' 80px
-  'publicOuter   ' 100% / 1fr  ;
-}body{
-  background-color: $editor;
-
+  'publicOuter   ' 100% / 100%   ;
 }
 .public__canvas {
   @include size(100%, 100%);
   position: relative;
-  display: inline-block;
   overflow: hidden;
+  @include distance(0,16px);
 }
 .public__outer{
   @include size(100%, 100%);
- @extend %flexCenter-Center-row ;
+ @extend %flexFlex-start-center-row  ;
  background-color: $editor;
  grid-area: publicOuter;
  position: relative;
 
 }
+
 .public__items {
   position: absolute;
   overflow: hidden;
@@ -41,13 +38,13 @@
 
 }
 .public__close{
-  @include size(100%,100% );
+  @include size(100%,100vh );
   background-color: $editor;
+  @extend %flexCenter-Center-row ;
 
 }
 .public__close--inner{
 color: $text-white;
-@include size(100%,calc(100% - 80px));
 font-size: 60px;
 @extend %flexCenter-Center-row ;
 

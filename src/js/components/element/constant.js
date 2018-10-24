@@ -94,6 +94,7 @@ export const connectFetch = (target, payload, fn) => {
         })
         .catch(err => {
             console.log('錯誤:', err);
+            return fn(err);
         });
 };
 

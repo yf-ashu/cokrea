@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 const EditorMain = ({
     onDrop,
     onDragEnter,
-    onDragOver,
     children,
     style,
     scale,
@@ -16,7 +15,6 @@ const EditorMain = ({
     if (scale < 1) {
         outerStyle = {
             width: 'auto',
-            // width:style.width * scale + 200,
             minWidth: style.width * scale + 200,
             height: style.height * scale + 200
         };
@@ -27,13 +25,13 @@ const EditorMain = ({
         };
     }
     return (
-        <div className="editorMain">
+        <div className="editorMain"  >
             <div className="editorMain__canvas--outer" style={outerStyle}>
                 <div
                     className="editorMain__canvas"
                     onDrop={onDrop}
                     onDragEnter={onDragEnter}
-                    onDragOver={onDragOver}
+                    onDragOver={onDragEnter}
                     data-role="drag-drop-container"
                     style={style}
                     onMouseDown={onMouseDown}

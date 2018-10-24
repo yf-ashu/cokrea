@@ -19,10 +19,7 @@ class EditorShare extends Component {
         this.updateShare = this.updateShare.bind(this);
         this.deleteAllowList = this.deleteAllowList.bind(this);
     }
-    componentDidMount(){
-        // this.shareLink = true;
-
-    }
+   
     componentDidUpdate(nextProps) {
         if (nextProps.projectData && this.state.selected === null) {
             let projectData = location.href.split('edit/')[1];
@@ -91,14 +88,14 @@ class EditorShare extends Component {
         let getData = Object.assign({},this.props.projectData) ;
         if (this.state.selected === 'public') {
             delete getData.share;
-            this.props.database.ref('/public/' + projectData).update(getData);
+            this.props.database[0].ref('/public/' + projectData).update(getData);
             console.log('有public');
             this.setState({
                 shareLink:'https://cokrea-editor.firebaseapp.com/views/'+projectData
             });
          
         }else if (this.state.selected === 'private') {
-            this.props.database.ref('/public/' + projectData).set(null);
+            this.props.database[0].ref('/public/' + projectData).set(null);
             console.log('枚有public');
             this.setState({
                 shareLink:'share close'
@@ -120,6 +117,7 @@ class EditorShare extends Component {
         };
 
         let getProjectData = data => {
+            alert('成功存檔');
             console.log(data);
         };
         connectFetch(target, payload, getProjectData);
@@ -139,7 +137,6 @@ class EditorShare extends Component {
     }
 
     render() {
-        console.log(this.state.share);
         // console.log(this.props.projectData);
 
         return (

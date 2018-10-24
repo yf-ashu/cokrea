@@ -171,9 +171,11 @@ class EditorPreview extends Component {
                     ctx.closePath();
 
                     ctx.clip();
+                    let newStr=  display[index].textContent.replace(/&nbsp;/g,' ');
+                    newStr=  newStr.replace(/<br>/g,' ');
 
                     ctx.fillText(
-                        display[index].textContent,
+                        newStr,
                         display[index].outside[2].left + 16,
                         display[index].outside[3].top + 16
                     );
@@ -226,27 +228,7 @@ class EditorPreview extends Component {
                         >
                             <img src={close} onClick={this.props.closeButton} />
                         </div>
-                        {/* <div className="editorPreview__scale">
-                        <button
-                            id="editorPreview__scale--subtract"
-                            data-num="0"
-                        >
-                            -
-                        </button>
-
-                        <div
-                            className="editorPreview__scale--main"
-                            id="editorPreview__scale--main"
-                        >
-                            {this.state.scale * 100 + '%'}
-                        </div>
-                        <button
-                            id="editorPreview__scale--add"
-                            data-num="1"
-                        >
-                            +
-                        </button>
-                    </div> */}
+                   
                     </div>
                 </div>
             </div>

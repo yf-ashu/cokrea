@@ -44,8 +44,8 @@ display: flex;
 }
 .editorMain__item {
   // word-break: break-all;
-  // white-space: nowrap;
-  white-space: wrap;
+  white-space: nowrap;
+  // white-space: wrap;
 
   z-index: 1500;
   display: flex;

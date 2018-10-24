@@ -4,8 +4,9 @@ import Editor from './components/container/Editor';
 import Create from './components/container/Create';
 import Public from './components/container/Public';
 import Home from './components/container/Home';
-import Login from './components/create/Login';
-
+import Login from './components/element/Login';
+import firebase from 'firebase/app';
+require('firebase/storage');
 import { connectFetch } from './components/element/constant';
 class Layout extends Component {
     constructor(props) {
@@ -25,7 +26,6 @@ class Layout extends Component {
     }
 
     handleDeleteProject(project, id) {
-        console.log(this.state.database);
         let data = {
             userEmail: this.state.loginStatus.email,
             userId: this.state.loginStatus.uid,
@@ -45,8 +45,11 @@ class Layout extends Component {
                 userData: data
             });
         };
+        console.log( this.state.database);
         connectFetch(target, payload, getMemberData);
-        this.state.database.ref('/projectData/' + id).set(null);
+        firebase.database().ref('/projectData/' + id).set(null);
+        firebase.storage().ref().child(id + '/canvas.png').delete();
+      
     }
     changeProjectName(name, id) {
         console.log(this.state.loginStatus);
@@ -76,6 +79,8 @@ class Layout extends Component {
     }
     getUserData(loginStatusout, userDataout, databaseout, projectImgout) {
         console.log('有傳送');
+        console.log(databaseout);
+
         let loginStatus = this.state.loginStatus,
             userData = this.state.userData,
             database = this.state.database,
@@ -114,8 +119,7 @@ class Layout extends Component {
         console.log(this.state.loginStatus);
         console.log(this.state.database);
         console.log(this.state.projectImg);
-        let projectData = location.pathname.split('/')[1];
-        console.log(projectData);
+   
         // if(this.state.loginStatus || this.state.userData){
         //   window.location.pathname = '/dashboard';
         // }

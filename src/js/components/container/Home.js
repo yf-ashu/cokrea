@@ -19,21 +19,7 @@ class Home extends Component {
     }
     componentDidMount() {
         let storage, database;
-        if (!firebase.apps.length) {
-            let connect = initFirebase();
-            database = connect.database();
-            storage = connect.storage();
-            this.setState({
-                database: database,
-                storage: storage
-            });
-        }
-        database = firebase.database();
-        storage = firebase.storage();
-        this.setState({
-            database: database,
-            storage: storage
-        });
+      
         let authCheck = data => {
             console.log(data);
             if (data) {

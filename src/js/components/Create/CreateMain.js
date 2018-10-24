@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CreateMainItem from './CreateMainItem';
-import CreateMainSideItem from './createMainSideItem';
+import CreateMainSideItem from './CreateMainSideItem';
 import sample from '../element/sample.json';
 import triangle from '../../../img/triangle.png';
 
@@ -62,6 +62,8 @@ class CreateMain extends Component {
     }
     addNewProject(e) {
         console.log(e.currentTarget.dataset.data);
+        console.log('新增檔案=====================================');
+
         let projectId = random();
         let url, imgUrl;
 

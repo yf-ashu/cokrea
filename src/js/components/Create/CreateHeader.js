@@ -6,6 +6,7 @@ import user from '../../../img/user.svg';
 import arrow from '../../../img/arrow.svg';
 import logo from '../../../img/logo.png';
 import { NavLink } from 'react-router-dom';
+import bee from '../../../img/bee.png';
 
 const CreateHeader = ({ logout, login,memberButton,handlememberButton }) => {
     console.log(login);
@@ -32,7 +33,7 @@ const CreateHeader = ({ logout, login,memberButton,handlememberButton }) => {
                     onMouseEnter={()=>{handlememberButton('true');}}
                     onMouseLeave={()=>{handlememberButton('false');}}
                 >
-                    <img src={login ? login.photoURL : user}className={'createHeader__member--member'} />
+                    <img src={login ? login.photoURL?login.photoURL:bee : user}className={'createHeader__member--member'} />
                     <img src={arrow} className={login?'createHeader__member--arrow':'displayNone'}></img>
                     <div className={memberButton==='true'&&login?'createHeader__member--option':'displayNone'}>
                         <div onClick={logout}>LOGOUT</div>

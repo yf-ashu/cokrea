@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import sample1 from '../../../img/sample1.png';
 
-const createMainSideItem = ({ sampleName, onClick,data}) => {
+const CreateMainSideItem = ({ sampleName, onClick,data}) => {
     return (
         <div className="createMainSideItem" 
             onClick={onClick}
@@ -18,10 +18,10 @@ const createMainSideItem = ({ sampleName, onClick,data}) => {
         </div>
     );
 };
-createMainSideItem.propTypes = {
+CreateMainSideItem.propTypes = {
     sampleName: PropTypes.string.isRequired,
     onClick:PropTypes.func,
     data:PropTypes.string,
 
 };
-export default createMainSideItem;
+export default CreateMainSideItem;
