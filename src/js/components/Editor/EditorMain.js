@@ -9,7 +9,8 @@ const EditorMain = ({
     scale,
     onMouseDown,
     otherSelect,
-    select
+    select,
+    editorMain
 }) => {
     let outerStyle;
     if (scale < 1) {
@@ -25,7 +26,7 @@ const EditorMain = ({
         };
     }
     return (
-        <div className="editorMain"  >
+        <div className="editorMain"   ref={editorMain}>
             <div className="editorMain__canvas--outer" style={outerStyle}>
                 <div
                     className="editorMain__canvas"
@@ -34,9 +35,11 @@ const EditorMain = ({
                     onDragOver={onDragEnter}
                     data-role="drag-drop-container"
                     style={style}
-                    onMouseDown={onMouseDown}
                 >
-                    <div className="editorMain__canvas--inner">{children}</div>
+                    <div className="editorMain__canvas--inner"
+                        onMouseDown={onMouseDown}
+
+                    >{children}</div>
                     {select}
                     {otherSelect}
                 </div>
@@ -54,6 +57,7 @@ EditorMain.propTypes = {
     onMouseDown: PropTypes.func,
     scale: PropTypes.number,
     select: PropTypes.any,
-    otherSelect: PropTypes.any
+    otherSelect: PropTypes.any,
+    editorMain: PropTypes.any
 };
 export default EditorMain;

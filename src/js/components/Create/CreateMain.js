@@ -14,6 +14,7 @@ require('firebase/storage');
 class CreateMain extends Component {
     constructor(props) {
         super(props);
+        this.createMain= React.createRef();
         this.state = {
             project: [], //畫面要顯示的東西
             projectName: 'New Project',
@@ -47,8 +48,8 @@ class CreateMain extends Component {
         });
     }
     contorllSideBar() {
-        let select = document.querySelector('.createMain');
-
+        let select = this.createMain.current;
+        console.log(this.createMain);
         if (this.state.contorllSideBar) {
             select.style.gridTemplateColumns = '60px 5fr';
         } else {
@@ -196,7 +197,7 @@ class CreateMain extends Component {
             : null;
         console.log(sample);
         return (
-            <div className="createMain">
+            <div className="createMain" ref={this.createMain}>
                 <div className="createMainSide">
                     <div className="createMainSide--main">
                         <div className={this.state.contorllSideBar?'createMainSide--header':'displayNone'}>

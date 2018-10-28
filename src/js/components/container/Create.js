@@ -3,8 +3,8 @@ import CreateHeader from '../Create/CreateHeader';
 import CreateMain from '../Create/CreateMain';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { initFirebase, authInfomation } from '../element/auth';
-import Loading from '../element/loading';
+import {  authInfomation } from '../element/auth';
+import Loading from '../element/Loading';
 
 import firebase from 'firebase/app';
 require('firebase/auth');
@@ -67,14 +67,12 @@ class Create extends Component {
             console.log('要檔案');
             if (data) {
                 this.props.getUserData(data[0], data[1], data[2], data[3]);
-                console.log(data);
                 setTimeout(() => {
                     this.setState({
                         loading: false
                     });
                 }, 700);
             } else {
-                // location.pathname='/'
                 this.setState({
                     logout: true
                 });

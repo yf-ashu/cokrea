@@ -100,7 +100,6 @@ class EditorHeader extends Component {
     render() {
         const {
             editMainStyle,
-            onClick,
             onDownload,
             onHistory,
             unable,
@@ -221,7 +220,6 @@ class EditorHeader extends Component {
 
 EditorHeader.propTypes = {
     editMainStyle: PropTypes.any,
-    onClick: PropTypes.func,
     onDownload: PropTypes.func,
     onHistory: PropTypes.func,
     unable: PropTypes.array,
@@ -232,7 +230,8 @@ EditorHeader.propTypes = {
     offline:PropTypes.any,
     projectName:PropTypes.string,
     onChange:PropTypes.func,
-    saved:PropTypes.string
+    saved:PropTypes.string,
+    headerSizeClick: PropTypes.func
 
     // textContent: PropTypes.any
 };

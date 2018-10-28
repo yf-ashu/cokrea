@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import icon from '../../../img/icon.png';
 import { NavLink, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import screen from '../../../img/screen.png';
+import screenText02 from '../../../img/screenText02.png';
+import screenText from '../../../img/screenText.png';
+import screenImage from '../../../img/screenImage.png';
+import screenImage02 from '../../../img/bee.png';
+import finger from '../../../img/finger.png';
 
-import firebase from 'firebase/app';
-import { initFirebase, authInfomation } from '../element/auth';
+import { authInfomation } from '../element/auth';
 require('firebase/auth');
 
 require('firebase/database');
-import Loading from '../element/loading';
+import Loading from '../element/Loading';
 
 class Home extends Component {
     constructor(props) {
@@ -18,8 +23,6 @@ class Home extends Component {
         };
     }
     componentDidMount() {
-        let storage, database;
-      
         let authCheck = data => {
             console.log(data);
             if (data) {
@@ -78,15 +81,28 @@ class Home extends Component {
                     </div>
 
                     <div className="home__image">
-                        <div className="webpage">
-                            <div className="screen" />
-                            <div className="screen--image02" />
-                            <div className="screen--image" />
-                            <div className="screen--text02" />
-                            <div className="screen--text" />
-                            <div className="finger" />
+                        <div className="screen">
+                            <img src={screen} />
+                            <div>
+                                <div className="screen--image02">
+                                    <img src={screenImage02} />
+                                </div>
+                                <div className="screen--image">
+                                    <img src={screenImage} />
+                                </div>
+                                <div className="screen--text02">
+                                    <img src={screenText02} />
+                                </div>
+                                <div className="screen--text">
+                                    <img src={screenText} />
+                                </div>
+                                <div className="finger" >
+                                    <img src={finger} />
 
-
+                                </div>
+                                <div className="flower" >
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,7 +112,7 @@ class Home extends Component {
 }
 Home.propTypes = {
     getUserData: PropTypes.func.isRequired,
-    loginStatus:PropTypes.any,
-    userData:PropTypes.any
+    loginStatus: PropTypes.any,
+    userData: PropTypes.any
 };
 export default Home;

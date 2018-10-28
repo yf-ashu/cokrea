@@ -1,6 +1,5 @@
 .createMain {
   @include size(100%, calc(100% - 80px));
-
   grid-area: createMain;
   display: grid;
   grid-template: 'createMainSide createMainCenter';
@@ -10,7 +9,6 @@
 .createMainCenter {
   grid-area: createMainCenter;
   @include size(100%, 100%);
-
   background-color: $editor;
   @extend %flexCenter-Center-row;
   @include distance(16px, 0);
@@ -146,7 +144,7 @@
 }
 .createMainSide--main {
   @include size(calc(100% - 60px), 100%);
-  @extend %flexFlex-start-center-row ;
+  @extend %flexCenter-flexStart-column;
 }
 .createMainSide--controller {
   @include size(60px, 100%);
@@ -202,4 +200,23 @@ img{
   position: relative;
   color: $text-white;
   @extend %flexCenter-Center-row;
+}
+
+@media screen and (max-width: 768px) {
+  html,body{
+    background-color: $editor;
+
+  }
+  .createMain {
+    @include size(100%, auto);
+    grid-template: 'createMainCenter' 100%/100%;
+  }
+  .createMainSide{
+
+    display: none;
+  }
+  .createMainCenter {
+    @include size(100%, auto);
+  
+  }
 }

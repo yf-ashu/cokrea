@@ -7,7 +7,7 @@ require('firebase/auth');
 import { connectFetch } from './constant';
 import {  authInfomation } from './auth';
 import CreateHeader from '../Create/CreateHeader';
-import Loading from './loading';
+import Loading from './Loading';
 import { Redirect, NavLink } from 'react-router-dom';
 import iconColor from '../../../img/icon-color.png';
 

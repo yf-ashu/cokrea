@@ -1,35 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 const EditorSelect = ({
     controllCurrent,
     changeSize,
     onMouseDown,
     display,
-    onCopy
+    onCopy,
+    editorSelect,
+    editorSelectClick
 }) => {
     let id = controllCurrent[1] !== null ? controllCurrent[1].key : '';
-    
+
     let style =
         controllCurrent[1] !== null
             ? Object.assign({}, ...display[controllCurrent[2]].outside)
             : {};
-    if(id){
-        let target = document.querySelector(`#${id}`);
-        style.width= +target.offsetWidth;
-        style.height= +target.offsetHeight;
-
+    if (id) {
+        let target = editorSelectClick;
+        style.width = +target.offsetWidth;
+        style.height = +target.offsetHeight;
     }
-    // console.log(controllCurrent)
-   
+
     return (
         <div
-            className={controllCurrent[1]?'editorMain__item--select':'displayNone'}
-            style={
-                style
+            className={
+                controllCurrent[1] ? 'editorMain__item--select' : 'displayNone'
             }
+            ref={editorSelect}
+            style={style}
             data-id={controllCurrent[1] !== null ? controllCurrent[1].key : {}}
         >
-            <svg
+            {/* <svg
                 width={
                     controllCurrent[1] !== null
                         ? style.width
@@ -42,7 +44,8 @@ const EditorSelect = ({
                 }
             
                 className="editorMain__item--select-svg"
-            />
+            /> */}
+            <div className="editorMain__item--select-svg" />
 
             <div className="editorMain__item--select-outside">
                 <div
@@ -108,7 +111,9 @@ EditorSelect.propTypes = {
     controllCurrent: PropTypes.any,
     changeSize: PropTypes.func,
     onMouseDown: PropTypes.func,
-    onCopy:PropTypes.func,
-    display: PropTypes.any
+    onCopy: PropTypes.func,
+    display: PropTypes.any,
+    editorSelectClick: PropTypes.string,
+    editorSelect: PropTypes.string
 };
 export default EditorSelect;

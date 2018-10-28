@@ -112,7 +112,7 @@
   background-color: $click;
   position: absolute;
   border: $white 1px solid;
-  top:40px;
+  top:35px;
   right:1%;
   color: $text-white;
   font-size: 16px;
@@ -169,7 +169,7 @@ input[type='text'].input-edit:focus {
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   .editorHeader {
-    grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 50px 2fr 2fr;
+    grid-template: 'editorHeader__left editorHeader__center editorHeader__right' 100% / 60px 2fr 2fr;
   }
   .editorHeader__left {
     @include size(100%, 100%);

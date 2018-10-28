@@ -6,61 +6,35 @@ import ToolButtonContanier from '../Tool/ToolButtonContanier';
 import EditorMain from '../Editor/Editormain';
 import EditorItem from '../Editor/EditorItem';
 import ToolController from '../Tool/ToolController';
-import { random, constant, styleSetting } from '../element/constant';
+import { random, constant } from '../element/constant';
 import { documentEvent, changeLayer } from './editorFunction/changeEditor';
+import { addNewElement } from './editorFunction/addNewElement';
 import { recoveryItem, redoItem } from './editorFunction/recordEditor';
-import { authInfomation, firebaseSet,firebaseOnsite,firebaseGetProjectData } from '../element/auth';
+import { controllElementSetting } from './editorFunction/controllElementSetting';
+import {
+    authInfomation,
+    firebaseSet,
+    firebaseOnsite,
+    firebaseGetProjectData
+} from '../element/auth';
 import EditorPreview from '../Editor/EditorPreview';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
+import { NavLink } from 'react-router-dom';
+import logo from '../../../img/logo.png';
+
 require('firebase/auth');
 require('firebase/database');
 require('firebase/storage');
-
-// 圖片
-
-import Loading from '../element/loading';
+import Loading from '../element/Loading';
 const projectData = {};
 class Editor extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            display: [], //控制中間元素出現
-            type: { type: null, name: null }, //控制左邊按鈕是否顯示
-            buttonItem: [], //控制左邊預設按鈕出現
-            editMainStyle: [
-                {
-                    scale: 1,
-                    style: [
-                        { width: 800 },
-                        { height: 2000 },
-                        { transform: 'scale(1)' },
-                        { transformOrigin: '0 0' },
-                        { backgroundColor: '#ffffff' }
-                    ]
-                }
-            ], //主畫布的style
-            controllCurrent: ['page', null, null, null], //第一個是種類，第二個是主要的，第三個是移圖層用的
-            fileUpload: { imgUrl: null, file: null },
-            mouseEvent: 'true',
-            saveButton: false,
-            shareButton: [false, false],
-            history: [],
-            redoItem: [],
-            loginStatus: null,
-            projectData: null,
-            database: null,
-            othercontrollCurrent: [],
-            loading: true,
-            downloadUrl: null,
-            intervalId: null,
-            saved: [false, '已存檔'],
-            trashCan: {},
-            locationHref: null
-
-            //前面是public是否有,後面是特定某些人有
-        };
-        //按 button 顯示在 display
+        this.editorSelect = null;
+        this.editorMain = null;
+        this.editorSelectClick = null;
+        this.state = constant.editor;
         this.handleClickButton = this.handleClickButton.bind(this);
         this.handleCloseButton = this.handleCloseButton.bind(this);
         this.dragStartToolButtonItem = this.dragStartToolButtonItem.bind(this);
@@ -72,10 +46,12 @@ class Editor extends Component {
         this.editorItemClick = this.editorItemClick.bind(this);
         this.addNewItem = this.addNewItem.bind(this);
         this.changePosition = this.changePosition.bind(this);
-        this.init = this.init.bind(this);
+        this.initEditorMainCanvasStart = this.initEditorMainCanvasStart.bind(
+            this
+        );
         this.changeSize = this.changeSize.bind(this);
         this.handleImageUpload = this.handleImageUpload.bind(this);
-        this.onBlur = this.onBlur.bind(this);
+        this.unfocusElement = this.unfocusElement.bind(this);
         this.recordStep = this.recordStep.bind(this);
         this.redoStep = this.redoStep.bind(this);
         this.saveData = this.saveData.bind(this);
@@ -85,12 +61,12 @@ class Editor extends Component {
         this.changeProjectNameonBlur = this.changeProjectNameonBlur.bind(this);
         this.getProjectData = this.getProjectData.bind(this);
         this.copyLayer = this.copyLayer.bind(this);
+        this.initEditorMainCanvas = this.initEditorMainCanvas.bind(this);
     }
 
     componentDidMount() {
         projectData.href = location.href.split('edit/')[1];
         this.checkLogin();
-        console.log(projectData);
     }
     componentWillUnmount() {
         firebase
@@ -107,7 +83,6 @@ class Editor extends Component {
             )
             .set(null);
     }
-
     saveData(e, display) {
         this.setState({
             saved: [true, '儲存中']
@@ -129,10 +104,7 @@ class Editor extends Component {
         database
             .ref('/projectData/' + projectData.href)
             .update(getData, error => {
-                if (error) {
-                    console.log('error');
-                } else {
-                    console.log('完成');
+                if (!error) {
                     this.setState({
                         saved: [true, '已存檔']
                     });
@@ -149,13 +121,28 @@ class Editor extends Component {
             copyNowclick,
             this.state.loginStatus.displayName
         ]);
-
         let copy = Object.assign({}, this.props.projectImg);
         copy[projectData.href] = this.state.downloadUrl;
         this.props.getUserData(null, null, null, copy);
-        console.log('已存檔');
     }
+    controllSetting(stateItem, object, inner, value, string) {
+        let resultArray;
 
+        this.setState(state => {
+            resultArray = controllElementSetting(
+                stateItem,
+                object,
+                inner,
+                value,
+                string,
+                state
+            );
+            this.recordStep(resultArray[1]);
+            return {
+                [stateItem]: resultArray[1]
+            };
+        });
+    }
     checkLogin() {
         let storage, database;
         if (!this.props.loginStatus) {
@@ -193,7 +180,7 @@ class Editor extends Component {
     }
 
     getProjectData() {
-        let that=this;
+        let that = this;
         firebaseGetProjectData(that);
     }
     connectDb(database, user) {
@@ -214,8 +201,7 @@ class Editor extends Component {
                     });
                 }
             });
-        firebaseOnsite(that,user);
-     
+        firebaseOnsite(that, user);
     }
     recordStep(value) {
         let record = this.state.history;
@@ -291,58 +277,6 @@ class Editor extends Component {
         this.props.changeProjectName(e.currentTarget.value, projectData.href);
         this.saveData();
     }
-
-    controllSetting(state, object, inner, value, string) {
-        let copy, copyFirst;
-        if (state === 'display') {
-            let copyDisplay = +this.state.controllCurrent[2];
-            copyFirst = this.state[state].slice(0);
-            copy = copyFirst[copyDisplay];
-        } else {
-            copyFirst = this.state[state].slice(0);
-            copy = copyFirst[0];
-        }
-        let find = copy[object].findIndex(data => data[inner]);
-        let opt = [];
-        let old = Object.assign({}, [...copy[object]]);
-        old = Object.keys(old).map(function(key) {
-            opt.push(old[key]);
-            return old[key];
-        });
-        if (value !== null) {
-            if (find < 0) {
-                copy[object].push({ [inner]: value });
-            } else {
-                copy[object][find] = { [inner]: parseInt(value) };
-            }
-        }
-        if (string !== null) {
-            if (find < 0) {
-                copy[object].push({ [inner]: value });
-            } else {
-                copy[object][find] = { [inner]: string };
-            }
-        }
-
-        this.setState({
-            [state]: copyFirst
-        });
-
-        this.recordStep({
-            old: {
-                func: 'controllSetting-' + state,
-                id: state === 'display' ? [copy.key, find] : [0, find],
-                value: [old, object]
-            },
-
-            now: {
-                func: 'controllSetting-' + state,
-                id: state === 'display' ? [copy.key, find] : [0, find],
-                value: [copy[object], object]
-            }
-        });
-    }
-
     dragStartToolButtonItem(e) {
         let data = {
             type: e.currentTarget.attributes.type.value,
@@ -361,124 +295,23 @@ class Editor extends Component {
         });
     }
 
-
-    addNewItem(type, e, special) {
-        console.log(type, e.currentTarget, special);
-        if (type) {
-            let check;
-            if (type.type === 'img' && special !== 'img') {
-                check = this.state.buttonItem.findIndex(object => {
-                    return object.format[1] === type.format.split(',')[1];
-                });
-            } else {
-                check = this.state.buttonItem.findIndex(
-                    object => object.type === type.type
+    addNewItem(itemtype, e, special) {
+        console.log(itemtype);
+        let elem = e;
+        let resultArray;
+        if (itemtype) {
+            this.setState(state => {
+                resultArray = addNewElement(
+                    state,
+                    itemtype,
+                    elem,
+                    special,
+                    this.editorMain
                 );
-            }
-            let array =
-            this.state.display.length === 0 ? [] : this.state.display;
-            let canvaWidthX =
-                (document.querySelector('.editorMain').offsetWidth -
-                    this.state.editMainStyle[0].style[0].width) /
-                2;
-            let width =
-                special === 'img'
-                    ? this.state.fileUpload.file.width *
-                      this.state.buttonItem[check].size.width
-                    : this.state.buttonItem[check].size.width *
-                      this.state.editMainStyle[0].style[0].width;
-            let height =
-                special === 'img'
-                    ? this.state.fileUpload.file.height *
-                      this.state.buttonItem[check].size.width
-                    : this.state.buttonItem[check].size.height;
-            let textContent =
-                type.type === 'img'
-                    ? 'img'
-                    : this.state.buttonItem[check].textContent;
-            let randomClass = random();
-           
-            let style = [
-                {
-                    width: '100%'
-                },
-                {
-                    height: '100%'
-                }
-            ];
-            let src;
-            if (special === 'img') {
-                src = this.state.fileUpload.imgUrl;
-            } else if (type.type === 'img') {
-                src = this.state.buttonItem[check].src;
-            } else {
-                src = '';
-            }
-            let tmp = styleSetting(type);
-
-            const value = {
-                tag: type.type,
-                key: randomClass,
-                attribute: {
-                    className:
-                        'editorMain__item ' +
-                        randomClass +
-                        ' editorMain__item--' +
-                        type.type,
-                    id: randomClass,
-                    format: type.format,
-                    type: type.type,
-                    src: src
-                },
-                textContent: textContent,
-
-                option: [{ contentEditable: 'false' }],
-
-                style: style.concat(tmp),
-
-                outside: [
-                    {
-                        width: 'auto'
-                    },
-                    {
-                        height: 'auto'
-                    },
-                    {
-                        left: e.pageX
-                            ? e.pageX - canvaWidthX - 60 - width / 2
-                            : 0
-                    },
-                    {
-                        top: e.pageY
-                            ? (e.pageY -
-                                  100 -
-                                  (height / 2) *
-                                      this.state.editMainStyle[0].scale +
-                                  document.querySelector('.editorMain')
-                                      .scrollTop -
-                                  80) /
-                              this.state.editMainStyle[0].scale
-                            : 0
-                    }
-                ]
-            };
-            array.push(value);
-            this.recordStep({
-                old: {
-                    func: 'addNewItem-display',
-                    id: [randomClass, array.length - 1],
-                    value: [{}, '']
-                },
-
-                now: {
-                    func: 'addNewItem-display',
-                    id: [randomClass, array.length - 1],
-                    value: [value, '']
-                }
-            });
-
-            this.setState({
-                display: array
+                this.recordStep(resultArray[1]);
+                return {
+                    display: resultArray[0]
+                };
             });
         }
     }
@@ -496,7 +329,21 @@ class Editor extends Component {
             display: copy
         });
     }
-    onBlur(e) {
+
+    initEditorMainCanvas(that, e) {
+        if (e.target.className === 'editorMain__canvas--inner') {
+            that.setState({
+                controllCurrent: ['page', null, null, null]
+            });
+
+            firebaseSet('temp', 'nowclick/' + that.state.loginStatus.uid, [
+                ['page', null, null, null],
+                that.state.loginStatus.displayName
+            ]);
+            return;
+        }
+    }
+    unfocusElement(e) {
         let copyDisplay = +this.state.controllCurrent[2];
         let copy = this.state.display.slice(0);
         if (copy[copyDisplay].option[0].contentEditable === 'true') {
@@ -512,41 +359,34 @@ class Editor extends Component {
 
             this.recordStep({
                 old: {
-                    func: 'onBlur-display',
+                    func: 'unfocusElement-display',
                     id: [copy[copyDisplay].key],
                     value: [pretextContent, 'textContent']
                 },
                 now: {
-                    func: 'onBlur-display',
+                    func: 'unfocusElement-display',
                     id: [copy[copyDisplay].key],
                     value: [e.currentTarget.innerHTML, 'textContent']
                 }
             });
 
             let that = this;
-            let move = function(e) {
-                if (e.target.className === 'editorMain__canvas--inner') {
-                    that.setState({
-                        controllCurrent: ['page', null, null, null]
-                    });
-            
-                    firebaseSet(
-                        'temp',
-                        'nowclick/' + that.state.loginStatus.uid,
-                        [
-                            ['page', null, null, null],
-                            that.state.loginStatus.displayName
-                        ]
-                    );
-
-                    return;
-                }
+            let move = e => {
+                this.initEditorMainCanvas(that, e);
             };
             document.addEventListener('click', move);
-            this.init(e, move);
+            this.initEditorMainCanvasStart(e, move);
         }
     }
 
+    initEditorMainCanvasStart(e, move) {
+        this.cancelDefault(e);
+        setTimeout(function() {
+            document.removeEventListener('click', move);
+        }, 100);
+        let that = this;
+        this.initEditorMainCanvas(that, e);
+    }
     //偵測目前點到誰
     editorItemClick(e) {
         this.cancelDefault(e);
@@ -564,6 +404,7 @@ class Editor extends Component {
             copy,
             this.state.loginStatus.displayName
         ]);
+        this.editorSelectClick = e.currentTarget;
     }
 
     changePosition(e) {
@@ -593,7 +434,7 @@ class Editor extends Component {
     changeSize(e) {
         this.cancelDefault(e);
         let pre = [e.pageX, e.pageY];
-        let target = document.querySelector('.editorMain__item--select');
+        let target = this.editorSelect;
         let init = {
             width: +target.offsetWidth,
             height: +target.offsetHeight,
@@ -608,31 +449,9 @@ class Editor extends Component {
             { left: init.left },
             { top: init.top }
         ];
-
         documentEvent(elem, pre, init, opt, 'changeSize', this);
     }
 
-    init(e, move) {
-        this.cancelDefault(e);
-
-        setTimeout(function() {
-            document.removeEventListener('click', move);
-        }, 100);
-        let classname = e.currentTarget.className.split(' ')[0];
-        if (classname === 'editorMain__canvas') {
-            this.setState({
-                controllCurrent: ['page', null, null, null]
-            });
-
-            firebaseSet('temp', 'nowclick/' + this.state.loginStatus.uid, [
-                ['page', null, null, null],
-                this.state.loginStatus.displayName
-            ]);
-            e.currentTarget.blur();
-        } else {
-            e.currentTarget.blur();
-        }
-    }
     uploadToolButtonImage(e) {
         let send;
         if (e.currentTarget.dataset.send) {
@@ -646,7 +465,7 @@ class Editor extends Component {
             format: e.currentTarget.dataset.format,
             send: send
         };
-        this.addNewItem(type, document.querySelector('.editorMain'), send);
+        this.addNewItem(type, this.editorMain, send);
     }
     handleImageUpload(e) {
         let reader = new FileReader();
@@ -687,14 +506,9 @@ class Editor extends Component {
         this.setState({
             display: insert
         });
-        console.log(copyTerm);
     }
 
     render() {
-        // console.log(this.props.loginStatus);
-        // console.log(this.props.userData);
-        // console.log(this.state.trashCan);
-
         let item = this.state.display.map(data => {
             return (
                 <EditorItem
@@ -712,14 +526,13 @@ class Editor extends Component {
                     onTouchStart={() => {
                         console.log('觸碰');
                     }}
-                    onBlur={this.onBlur}
+                    onBlur={this.unfocusElement}
                     onDoubleClick={this.canInterEdit.bind(this)}
                     textContent={data.textContent}
+                    ref={this.editorSelectClick}
                 />
             );
         });
-        // console.log(item)
-        let color = ['red', 'yellow', 'orange', 'blue', 'purple', 'green'];
         let other = Object.keys(this.state.othercontrollCurrent).map(
             (data, index) => {
                 let name = this.state.othercontrollCurrent[data][1];
@@ -727,14 +540,13 @@ class Editor extends Component {
                     ? this.state.othercontrollCurrent[data][0][1].outside
                     : '';
                 let trans = Object.assign({}, ...main);
-                if (data === this.state.loginStatus.uid) {
-                } else {
+                if (data !== this.state.loginStatus.uid) {
                     return (
                         <div
                             className={
                                 this.state.othercontrollCurrent[data][0][1]
                                     ? 'editorMain__item--select-outer--' +
-                                      color[index] +
+                                      constant.color[index] +
                                       ' editorMain__item--select-outer'
                                     : 'displayNone'
                             }
@@ -743,7 +555,7 @@ class Editor extends Component {
                             <div
                                 className={
                                     'editorMain__item--select--name--' +
-                                    color[index] +
+                                    constant.color[index] +
                                     ' editorMain__item--select--name'
                                 }
                             >
@@ -754,11 +566,14 @@ class Editor extends Component {
                 }
             }
         );
-
         return (
             <div className="editor">
                 <div className="smallSize">
-                    <span>請換至平板或電腦使用</span>{' '}
+                    <NavLink className="smallSize--inner" to="/dashboard">
+                        {' '}
+                        <img src={logo} />
+                    </NavLink>{' '}
+                    <div className="smallSize--text">欲編輯請換至平板或電腦 </div>
                 </div>
 
                 <Loading loading={this.state.loading} />
@@ -792,7 +607,6 @@ class Editor extends Component {
                 />
                 <EditorHeader
                     editMainStyle={this.state.editMainStyle[0]}
-                    // onClick={this.headerSizeClick}
                     onDownload={() => {
                         this.setState({ saveButton: true });
                     }}
@@ -845,7 +659,7 @@ class Editor extends Component {
                     scale={this.state.editMainStyle[0].scale}
                     onMouseDown={
                         this.state.mouseEvent === 'true'
-                            ? this.init.bind(this)
+                            ? this.initEditorMainCanvasStart
                             : null
                     }
                     controllCurrent={this.state.controllCurrent}
@@ -860,9 +674,12 @@ class Editor extends Component {
                             }}
                             onCopy={this.copyLayer}
                             display={this.state.display}
+                            editorSelect={el => (this.editorSelect = el)}
+                            editorSelectClick={this.editorSelectClick}
                         />
                     }
                     otherSelect={other}
+                    editorMain={el => (this.editorMain = el)}
                 >
                     {item}
                 </EditorMain>

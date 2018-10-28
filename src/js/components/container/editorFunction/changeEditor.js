@@ -55,7 +55,6 @@ export const changeSizeset = (e, elem, pre, init, that) => {
     copyDisplay = that.state.controllCurrent[2];
     let copy = that.state.display.slice(0);
     let left, top, height, width;
-    console.log(distanceX);
     switch (elem.dataset.data) {
     case 'tl': {
         left = distanceX / that.state.editMainStyle[0].scale + +init.left;
@@ -160,7 +159,7 @@ export const changePositionset = (e, elem, pre, init, that) => {
         value: copy[copyDisplay].outside
     };
 };
-export const changeLayer = (e, that, projectData) => {
+export const changeLayer = (e, that ) => {
     let copy = that.state.display.slice(0);
     let copyDisplay = that.state.controllCurrent.slice(0);
     console.log(copyDisplay);

@@ -66,7 +66,6 @@ export const authInfomation = func => {
             console.log('在這裡');
             connectFetch(target, payload, getMemberData);
         } else {
-            // this.props.loading();
             authInfomation = null;
             console.log('沒有登入');
             return func(authInfomation);
@@ -130,7 +129,6 @@ export const firebaseOnsite=(that,user)=>{
                 .ref('temp/' + address + '/trash')
                 .on('value', snapshot => {
                     if (snapshot.val()) {
-                        console.log(snapshot.val());
                         let combine;
                         if (that.state.trashCan !== null) {
                             combine = Object.assign(
@@ -153,8 +151,6 @@ export const firebaseOnsite=(that,user)=>{
             firebaseSet('temp', 'trash', that.state.trashCan);
         }
     });
-
-
 };
 export const firebaseGetProjectData=(that)=>{
     let database=firebase.database();
@@ -196,7 +192,7 @@ export const firebaseGetProjectData=(that)=>{
                 } else {
                     if (data.share[0].public === 'public') {
                         window.location.pathname =
-                            '/views/' + projectData.href;
+                            '/views/' + address;
                     } else {
                         alert('沒有存取權');
                         window.location.pathname = '/';

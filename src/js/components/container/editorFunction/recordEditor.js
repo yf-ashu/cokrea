@@ -75,7 +75,6 @@ export const redoItem=(parameter)=> {
         }
     } else {
         copy[0][value[1]] = value[0];
-
     }
     return [[action[1]], copy];
 

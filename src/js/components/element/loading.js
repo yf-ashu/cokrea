@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const loading = ({loading}) => {
+const Loading = ({loading}) => {
     return( <div className={loading?'loading':'loading displayOpacity'}>
     
         <div className="loading__outer">
@@ -15,7 +15,7 @@ const loading = ({loading}) => {
     </div>);
 };
 
-loading.propTypes = {
+Loading.propTypes = {
     loading:PropTypes.bool
 };
-export default loading;
+export default Loading;

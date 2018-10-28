@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CreateHeader from '../Create/CreateHeader';
 import { initFirebase } from '../element/auth';
 import firebase from 'firebase/app';
-import Loading from '../element/loading';
+import Loading from '../element/Loading';
 require('firebase/database');
 class Public extends Component {
     constructor(props) {

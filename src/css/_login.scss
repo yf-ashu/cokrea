@@ -12,6 +12,7 @@
   @include size(100%, 100%);
   grid-area: loginMain;
   @extend %flexCenter-Center-row;
+
 }
 .login__main {
   @include size(40%, auto);
@@ -95,3 +96,23 @@ input[type='password'].input-login:focus {
   @include distance(10px 0,0);
 
 }
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+ 
+
+  .login__main {
+   
+    @include distance(10px 0 20px 0,0);
+  
+    .input__icon {
+      @include size(20px, 20px);
+top: 32px;
+left: 32px;
+      display: block;
+    }
+    img{
+      @include size(80%, auto);
+  
+    }
+  }
+
+  }

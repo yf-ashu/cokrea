@@ -54,7 +54,45 @@ export const constant = {
             }
         ],
         square: []
+    },
+    color : ['red', 'yellow', 'orange', 'blue', 'purple', 'green'],
+    editor:{
+        display: [], //控制中間元素出現
+        type: { type: null, name: null }, //控制左邊按鈕是否顯示
+        buttonItem: [], //控制左邊預設按鈕出現
+        editMainStyle: [
+            {
+                scale: 1,
+                style: [
+                    { width: 800 },
+                    { height: 2000 },
+                    { transform: 'scale(1)' },
+                    { transformOrigin: '0 0' },
+                    { backgroundColor: '#ffffff' }
+                ]
+            }
+        ], //主畫布的style
+        controllCurrent: ['page', null, null, null], //第一個是種類，第二個是主要的，第三個是移圖層用的
+        fileUpload: { imgUrl: null, file: null },
+        mouseEvent: 'true',
+        saveButton: false,
+        shareButton: [false, false],
+        history: [],
+        redoItem: [],
+        loginStatus: null,
+        projectData: null,
+        database: null,
+        othercontrollCurrent: [],
+        loading: true,
+        downloadUrl: null,
+        intervalId: null,
+        saved: [false, '已存檔'],
+        trashCan: {},
+        locationHref: null
+
+        //前面是public是否有,後面是特定某些人有
     }
+
 };
 
 export const random = () => {
