@@ -113,8 +113,6 @@ class Public extends Component {
     }
 }
 Public.propTypes = {
-    // getUserData: PropTypes.func.isRequired,
-    // loginStatus:PropTypes.any,
-    // userData:PropTypes.any
+  
 };
 export default Public;

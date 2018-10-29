@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import Input from '../element/Input';
-// import search from '../../../img/search.svg';
 import user from '../../../img/user.svg';
 import arrow from '../../../img/arrow.svg';
 import logo from '../../../img/logo.png';

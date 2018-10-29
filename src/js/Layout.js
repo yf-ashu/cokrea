@@ -21,9 +21,6 @@ class Layout extends Component {
         this.changeProjectName = this.changeProjectName.bind(this);
         this.handleDeleteProject = this.handleDeleteProject.bind(this);
     }
-    componentDidUpdate(){
-        console.log('改變了');
-    }
 
     handleDeleteProject(project, id) {
         let data = {
@@ -68,19 +65,13 @@ class Layout extends Component {
             })
         };
         let getMemberData = data => {
-            console.log('有', data);
             this.setState({
                 userData: data
             });
         };
-        console.log('收到更改');
         connectFetch(target, payload, getMemberData);
-        console.log(this.state.userData);
     }
     getUserData(loginStatusout, userDataout, databaseout, projectImgout) {
-        console.log('有傳送');
-        console.log(databaseout);
-
         let loginStatus = this.state.loginStatus,
             userData = this.state.userData,
             database = this.state.database,
@@ -119,11 +110,6 @@ class Layout extends Component {
         console.log(this.state.loginStatus);
         console.log(this.state.database);
         console.log(this.state.projectImg);
-   
-        // if(this.state.loginStatus || this.state.userData){
-        //   window.location.pathname = '/dashboard';
-        // }
-
         return (
             <BrowserRouter>
                 <div className="main">

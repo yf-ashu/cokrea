@@ -221,14 +221,11 @@ class EditorShare extends Component {
                                 }
                             }}
                             placeholder='enter "Enter" to input'
-                            // disabled={
-                            //     this.state.selected === 'public' ? true : false
-                            // }
+                           
                         />
                     </div>
                     <div className="editorShare__shareLinkList">
                         <div>Who can edit</div>
-                        {/* {this.state.share} */}
                         {(this.state.share
                             ? this.state.share.share[1]
                                 ? this.state.share.share[1]

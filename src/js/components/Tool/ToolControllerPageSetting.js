@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ToolControllerPageSetting = ({ style, action }) => {
-    // console.log(display)
-    // console.log(style)
 
     return (
         <div className="toolControllerPageSetting">

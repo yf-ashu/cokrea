@@ -17,17 +17,31 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
         (editorMain.offsetWidth -
             state.editMainStyle[0].style[0].width) /
         2;
-    let width =
-        special === 'img'
-            ? state.fileUpload.file.width *
-              state.buttonItem[check].size.width
-            : state.buttonItem[check].size.width *
-              state.editMainStyle[0].style[0].width;
-    let height =
-        special === 'img'
-            ? state.fileUpload.file.height *
-              state.buttonItem[check].size.width
-            : state.buttonItem[check].size.height;
+
+        let width ,height;
+        if (special === 'img') {
+            width=state.fileUpload.file.width *
+            state.buttonItem[check].size.width
+        } else if(type.type==='img'){
+            width=state.fileUpload.file.width *
+            state.buttonItem[check].size.width
+        }else{
+            width=state.buttonItem[check].size.width *
+            state.editMainStyle[0].style[0].width;
+        }
+
+        if (special === 'img') {
+            height=state.fileUpload.file.height *
+            state.buttonItem[check].size.width
+        } else if(type.type==='img'){
+            height=state.fileUpload.file.width *
+            state.buttonItem[check].size.width
+        }else{
+            height=state.buttonItem[check].size.height;
+        }
+    
+
+            console.log('width:'+width,'height:'+height)
     let textContent =
         type.type === 'img'
             ? 'img'
@@ -98,6 +112,7 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
         ]
     };
     array.push(value);
+    console.log(elem)
     let record={
         old: {
             func: 'addNewItem-display',

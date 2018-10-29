@@ -6,7 +6,6 @@ import italic from '../../../img/italic.svg';
 const ToolControllerText = ({ display, action, style, controllCurrent }) => {
     console.log(display);
     console.log(style);
-    // let find = display.findIndex(data => data.style);
     let find,
         findwhere,
         option = [];

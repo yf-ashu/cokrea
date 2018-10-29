@@ -1,6 +1,4 @@
 .createHeader {
-  // @include size(60px, 100%);
-
   background-color: $header;
   grid-area: createHeader;
   display: grid;
@@ -44,8 +42,6 @@
   &--arrow {
     @include size(10px, 10px);
   }
-
-  // @include background-center('../img/self-01.jpg');
 }
 .createHeader__member--option {
   @include size(auto, auto);

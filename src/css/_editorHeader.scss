@@ -11,12 +11,12 @@
   @extend %flexCenter-Center-row;
 
   cursor: pointer;
-  &:hover{
+  &:hover {
     background-color: $hover;
   }
-    img{
-      @include size(55%, auto);
-    }
+  img {
+    @include size(55%, auto);
+  }
 }
 .editorHeader__center {
   grid-area: editorHeader__center;
@@ -45,11 +45,8 @@
   top: -10px;
   left: -60%;
   @extend %flexCenter-Center-row;
-  // text-shadow: -1px 0 rgb(179, 177, 177), 0 1px  rgb(179, 177, 177), 1px 0 rgb(179, 177, 177), 0 -1px  rgb(179, 177, 177);
   letter-spacing: 1px;
   color: $click;
-  // opacity: 1;
-  // visibility: visible;
   transition: all 0.5s;
 }
 .editorHeader__button--saveHint_tringle {
@@ -60,18 +57,13 @@
   position: absolute;
   top: 0px;
   left: -2px;
-  // opacity: 1;
-  // visibility: visible;
   transition: all 0.5s;
 }
 
 .editorHeader__button--share,
 .editorHeader__button--download {
-  // background-color: $button;
   @include size(30px, 30px);
-
   font-size: 12px;
-  // @include distance(0, 0 16px);
   &:hover {
     background-color: darken($button, 20%);
   }
@@ -112,13 +104,12 @@
   background-color: $click;
   position: absolute;
   border: $white 1px solid;
-  top:35px;
-  right:1%;
+  top: 35px;
+  right: 1%;
   color: $text-white;
   font-size: 16px;
-  div{
-    @include distance(16px,0)
-
+  div {
+    @include distance(16px, 0);
   }
 }
 .editorHeader__scale {
@@ -177,7 +168,7 @@ input[type='text'].input-edit:focus {
   }
   input[type='text'].input-edit {
     @include size(90px, 28px);
-  
+
     font-size: 12px;
   }
   .editorHeader__scale {
@@ -187,13 +178,11 @@ input[type='text'].input-edit:focus {
     &--main {
       @include size(50px, 28px);
     }
-
   }
   .input__icon {
-   display:none;
+    display: none;
   }
   .input-control {
     @include distance(4px, 0);
   }
-
 }

@@ -241,7 +241,7 @@ class Editor extends Component {
                 redoItem: redoItems,
                 [result[0]]: result[1]
             };
-        });
+        },this.saveData());
     }
 
     handleClickButton(e) {
@@ -286,6 +286,7 @@ class Editor extends Component {
     }
     dropToolButtonItem(e) {
         let type = JSON.parse(e.dataTransfer.getData('text/plain'));
+        console.log(e.currentTarget)
         this.addNewItem(type, e);
     }
     headerSizeClick(copyDisplay) {
@@ -298,6 +299,7 @@ class Editor extends Component {
     addNewItem(itemtype, e, special) {
         console.log(itemtype);
         let elem = e;
+        console.log(e.pageX)
         let resultArray;
         if (itemtype) {
             this.setState(state => {
@@ -312,7 +314,7 @@ class Editor extends Component {
                 return {
                     display: resultArray[0]
                 };
-            });
+            },this.saveData());
         }
     }
     cancelDefault(e) {
@@ -523,9 +525,7 @@ class Editor extends Component {
                             ? this.changePosition.bind(this)
                             : null
                     }
-                    onTouchStart={() => {
-                        console.log('觸碰');
-                    }}
+                 
                     onBlur={this.unfocusElement}
                     onDoubleClick={this.canInterEdit.bind(this)}
                     textContent={data.textContent}

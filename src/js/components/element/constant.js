@@ -89,8 +89,6 @@ export const constant = {
         saved: [false, '已存檔'],
         trashCan: {},
         locationHref: null
-
-        //前面是public是否有,後面是特定某些人有
     }
 
 };

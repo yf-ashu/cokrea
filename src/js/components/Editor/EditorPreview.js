@@ -23,6 +23,7 @@ class EditorPreview extends Component {
             nextProps.display !== prevState.display ||
             nextProps.editMainStyle !== prevState.editMainStyle
         ) {
+            console.log('有更改')
             return {
                 display: nextProps.display,
                 editMainStyle: nextProps.editMainStyle
@@ -35,22 +36,21 @@ class EditorPreview extends Component {
             prevProps.display !== this.props.display ||
             prevProps.editMainStyle !== this.props.editMainStyle
         ) {
-            //Perform some operation here
+            console.log('有更改2')
             this.setState({
                 display: this.props.display ? this.props.display : [],
                 editMainStyle: this.props.editMainStyle
-            });
-            // console.log('canvas更改');
-            this.updateCanvas();
+            },this.updateCanvas());
         }
     }
 
     updateCanvas() {
+        console.log('有更改3')
         let scare = 1;
         let display = this.props.display;
         let editMainStyle = this.props.editMainStyle[0];
         const canvas = this.canvas;
-
+console.log(display)
         const ctx = canvas.getContext('2d');
         canvas.width = editMainStyle.style[0].width * scare;
         canvas.height = editMainStyle.style[1].height * scare;
@@ -90,24 +90,9 @@ class EditorPreview extends Component {
 
             let loop = (display, index) => {
                 if (index === display.length) {
-                    // console.log()
                     let dataURL = canvas.toDataURL();
 
                     let that = this;
-                    // let dataURL = canvas.toBlob(
-                    //     function(blob) {
-                    //         let url = URL.createObjectURL(blob);
-                    //         console.log(url);
-                    //         // console.log(dataURL);
-                    //         that.props.downloadUrl(url);
-                    //         that.setState({
-                    //             downloadUrl: url
-                    //         });
-                    //     },
-                    //     'image/jpeg',
-                    //     0.8
-                    // );
-                    // console.log(test2);
                     that.props.downloadUrl(dataURL);
                     that.setState({
                         downloadUrl: dataURL
@@ -142,8 +127,7 @@ class EditorPreview extends Component {
                     let findBGColor = display[index].style.findIndex(
                         data => data.backgroundColor
                     );
-                    // console.log(findBGColor);
-                    // console.log(display[index].outside);
+                  
 
                     ctx.fillStyle =
                         display[index].style[findBGColor].backgroundColor;

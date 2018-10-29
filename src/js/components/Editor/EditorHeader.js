@@ -32,11 +32,7 @@ class EditorHeader extends Component {
     headerSizeClick(e) {
         let elem=e.currentTarget;
         this.setState((state,props)=> {
-            //   let copyDisplay = props.editMainStyle.slice(0);
-            console.log(props);
             let  copy = JSON.parse(JSON.stringify(props.editMainStyle));
-            // let copy = copyDisplay[0];
-            console.log(copy);
             if (elem.dataset.num === '0') {
                 if (copy.scale <= 0.25) {
                     let find = copy.style.findIndex(data => data.transform);
@@ -232,7 +228,5 @@ EditorHeader.propTypes = {
     onChange:PropTypes.func,
     saved:PropTypes.string,
     headerSizeClick: PropTypes.func
-
-    // textContent: PropTypes.any
 };
 export default EditorHeader;
