@@ -598,6 +598,7 @@ class Editor extends Component {
     }
 
     addNewItem(type, e, special) {
+        console.log(e.pageX)
         console.log(type, e.currentTarget, special);
         if (type) {
             console.log(type.format);
