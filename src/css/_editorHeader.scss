@@ -29,7 +29,7 @@
   @extend %flexCenter-flex-end-row;
   @include distance(0 16px, 0);
 }
-.editorHeader__button--save {
+.editorHeader__button--unsave {
   position: relative;
   background-color: $special;
   font-size: 12px;
@@ -37,13 +37,19 @@
     background-color: darken($special, 20%);
   }
 }
+.editorHeader__button--save {
+   position: relative;
+  font-size: 12px;
+    background-color: darken($special, 20%);
+
+}
 .editorHeader__button--saveHint {
   position: absolute;
   @include size(70px, 30px);
   background-color: rgb(255, 214, 30);
   border-radius: 5px;
-  top: -10px;
-  left: -60%;
+  top: 0px;
+  left: -75%;
   @extend %flexCenter-Center-row;
   letter-spacing: 1px;
   color: $click;
@@ -55,8 +61,8 @@
   border-left: 6px solid rgb(255, 214, 30);
   display: inline-block;
   position: absolute;
-  top: 0px;
-  left: -2px;
+  top: 28%;
+  left: -17%;
   transition: all 0.5s;
 }
 
@@ -148,7 +154,7 @@ input[type='text'].input-edit {
 
 input[type='text'].input-edit:focus {
   background-color: $white;
-  @include size(240px, 28px);
+  @include size(150px, 28px);
 }
 .input__icon {
   position: absolute;
@@ -185,4 +191,13 @@ input[type='text'].input-edit:focus {
   .input-control {
     @include distance(4px, 0);
   }
+  .editorHeader__button--saveHint {
+  top: 0px;
+  left: -130%;
+ 
+}
+.editorHeader__button--saveHint_tringle {
+  top: 28%;
+  left: -17%;
+}
 }

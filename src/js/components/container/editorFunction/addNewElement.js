@@ -1,6 +1,7 @@
 import { random , styleSetting } from '../../element/constant';
 
 export const  addNewElement=(state,type,elem,special,editorMain) =>{
+    console.log(elem);
     let check;
     if (type.type === 'img' && special !== 'img') {
         check = state.buttonItem.findIndex(object => {
@@ -18,30 +19,30 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
             state.editMainStyle[0].style[0].width) /
         2;
 
-        let width ,height;
-        if (special === 'img') {
-            width=state.fileUpload.file.width *
-            state.buttonItem[check].size.width
-        } else if(type.type==='img'){
-            width=state.fileUpload.file.width *
-            state.buttonItem[check].size.width
-        }else{
-            width=state.buttonItem[check].size.width *
+    let width ,height;
+    if (special === 'img') {
+        width=state.fileUpload.file.width *
+            state.buttonItem[check].size.width;
+    } else if(type.type==='img'){
+        width=state.buttonItem[check].size.width *
             state.editMainStyle[0].style[0].width;
-        }
+    }else{
+        width=state.buttonItem[check].size.width *
+            state.editMainStyle[0].style[0].width;
+    }
 
-        if (special === 'img') {
-            height=state.fileUpload.file.height *
-            state.buttonItem[check].size.width
-        } else if(type.type==='img'){
-            height=state.fileUpload.file.width *
-            state.buttonItem[check].size.width
-        }else{
-            height=state.buttonItem[check].size.height;
-        }
+    if (special === 'img') {
+        height=state.fileUpload.file.height *
+            state.buttonItem[check].size.width;
+    } else if(type.type==='img'){
+        height=state.buttonItem[check].size.width *
+            state.editMainStyle[0].style[0].width;
+    }else{
+        height=state.buttonItem[check].size.height;
+    }
     
 
-            console.log('width:'+width,'height:'+height)
+    console.log('width:'+width,'height:'+height);
     let textContent =
         type.type === 'img'
             ? 'img'
@@ -87,14 +88,14 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
 
         outside: [
             {
-                width: 'auto'
+                width: type.type==='img'?width:'auto'
             },
             {
-                height: 'auto'
+                height: type.type==='img'?height:'auto'
             },
             {
                 left: elem.pageX
-                    ? elem.pageX - canvaWidthX - 60 - width / 2
+                    ? (elem.pageX - canvaWidthX - 60 - width/2)
                     : 0
             },
             {
@@ -112,7 +113,7 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
         ]
     };
     array.push(value);
-    console.log(elem)
+    console.log(value);
     let record={
         old: {
             func: 'addNewItem-display',

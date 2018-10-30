@@ -183,7 +183,7 @@ class CreateMain extends Component {
         let createMainSideItem = sample
             ? Object.keys(sample.sample).map((data, index) => {
                 let sampleData = sample.sample;
-                console.log(sample.sample[data]);
+                // console.log(sample.sample[data]);
 
                 return (
                     <CreateMainSideItem
@@ -195,7 +195,7 @@ class CreateMain extends Component {
                 );
             })
             : null;
-        console.log(sample);
+        // console.log(sample);
         return (
             <div className="createMain" ref={this.createMain}>
                 <div className="createMainSide">

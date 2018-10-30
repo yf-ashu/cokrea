@@ -36,20 +36,20 @@ export const constant = {
                 size: { width: 0.8, height: 65 },
                 format: ['text', 'text'],
                 textContent:
-                    'Double click to edit'
+                    'Double click to edit. This is a span text area.'
             }
         ],
         img: [
             {
                 type: 'img',
                 src: phone,
-                size: { width: 0.5, height: 55 },
+                size: { width: 0.3, height: 55 },
                 format: ['image', 'phone']
             },
             {
                 type: 'img',
                 src: mail,
-                size: { width: 0.5, height: 55 },
+                size: { width: 0.3, height: 55 },
                 format: ['image', 'mail']
             }
         ],

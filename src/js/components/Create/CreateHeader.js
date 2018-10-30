@@ -16,15 +16,7 @@ const CreateHeader = ({ logout, login,memberButton,handlememberButton }) => {
             >            <img src={logo}></img>
             </NavLink>
             <div className="createHeader__center">
-                {' '}
-                {/* <div className={login?'createHeader__search':'createHeader__search displayNone'}>
-                    <Input
-                        src={search}
-                        type="text"
-                        id="searchInput"
-                        className="input-control input-edit"
-                    />
-                </div> */}
+              
             </div>
             <div className="createHeader__right">
                 <div className="createHeader__member"
@@ -47,9 +39,6 @@ CreateHeader.propTypes = {
     login: PropTypes.any,
     memberButton: PropTypes.string,
     handlememberButton: PropTypes.func,
-    // onHistory: PropTypes.func,
-    // unable: PropTypes.array
-
-    // textContent: PropTypes.any
+   
 };
 export default CreateHeader;

@@ -33,7 +33,7 @@ class Editor extends Component {
         super(props);
         this.editorSelect = null;
         this.editorMain = null;
-        this.editorSelectClick = null;
+        this.editorSelectClick = React.createRef();
         this.state = constant.editor;
         this.handleClickButton = this.handleClickButton.bind(this);
         this.handleCloseButton = this.handleCloseButton.bind(this);
@@ -241,7 +241,7 @@ class Editor extends Component {
                 redoItem: redoItems,
                 [result[0]]: result[1]
             };
-        },this.saveData());
+        }, this.saveData());
     }
 
     handleClickButton(e) {
@@ -286,7 +286,7 @@ class Editor extends Component {
     }
     dropToolButtonItem(e) {
         let type = JSON.parse(e.dataTransfer.getData('text/plain'));
-        console.log(e.currentTarget)
+        console.log(e.currentTarget);
         this.addNewItem(type, e);
     }
     headerSizeClick(copyDisplay) {
@@ -297,12 +297,18 @@ class Editor extends Component {
     }
 
     addNewItem(itemtype, e, special) {
-        console.log(itemtype);
-        let elem = e;
-        console.log(e.pageX)
+        console.log(e.currentTarget);
+        let elem = {
+            pageX: e.pageX,
+            pageY: e.pageY
+        };
+        const eventType = e.pageX;
+        console.log(elem.type);
         let resultArray;
         if (itemtype) {
             this.setState(state => {
+                console.log(eventType);
+
                 resultArray = addNewElement(
                     state,
                     itemtype,
@@ -311,12 +317,15 @@ class Editor extends Component {
                     this.editorMain
                 );
                 this.recordStep(resultArray[1]);
+
                 return {
                     display: resultArray[0]
                 };
-            },this.saveData());
+            },     ()=>{this.saveData(null, resultArray[0]);}
+            );
         }
     }
+
     cancelDefault(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -525,11 +534,9 @@ class Editor extends Component {
                             ? this.changePosition.bind(this)
                             : null
                     }
-                 
                     onBlur={this.unfocusElement}
                     onDoubleClick={this.canInterEdit.bind(this)}
                     textContent={data.textContent}
-                    ref={this.editorSelectClick}
                 />
             );
         });
@@ -573,7 +580,9 @@ class Editor extends Component {
                         {' '}
                         <img src={logo} />
                     </NavLink>{' '}
-                    <div className="smallSize--text">欲編輯請換至平板或電腦 </div>
+                    <div className="smallSize--text">
+                        欲編輯請換至平板或電腦{' '}
+                    </div>
                 </div>
 
                 <Loading loading={this.state.loading} />

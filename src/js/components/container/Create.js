@@ -3,7 +3,7 @@ import CreateHeader from '../Create/CreateHeader';
 import CreateMain from '../Create/CreateMain';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import {  authInfomation } from '../element/auth';
+import { authInfomation } from '../element/auth';
 import Loading from '../element/Loading';
 
 import firebase from 'firebase/app';
@@ -119,7 +119,7 @@ class Create extends Component {
         });
         let check = confirm('確認刪除');
         console.log(check);
-        if (check ===true) {
+        if (check === true) {
             console.log(find);
             copy.project.splice(find, 1);
             this.props.handleDeleteProject(copy, e.currentTarget.dataset.data);

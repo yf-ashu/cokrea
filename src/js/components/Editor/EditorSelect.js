@@ -31,20 +31,7 @@ const EditorSelect = ({
             style={style}
             data-id={controllCurrent[1] !== null ? controllCurrent[1].key : {}}
         >
-            {/* <svg
-                width={
-                    controllCurrent[1] !== null
-                        ? style.width
-                        : 0
-                }
-                height={
-                    controllCurrent[1] !== null
-                        ? style.height
-                        : 0
-                }
-            
-                className="editorMain__item--select-svg"
-            /> */}
+    
             <div className="editorMain__item--select-svg" />
 
             <div className="editorMain__item--select-outside">

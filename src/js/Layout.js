@@ -20,6 +20,7 @@ class Layout extends Component {
         this.getUserData = this.getUserData.bind(this);
         this.changeProjectName = this.changeProjectName.bind(this);
         this.handleDeleteProject = this.handleDeleteProject.bind(this);
+        this.logout=this.logout.bind(this)
     }
 
     handleDeleteProject(project, id) {
@@ -167,7 +168,7 @@ class Layout extends Component {
                                     handleDeleteProject={
                                         this.handleDeleteProject
                                     }
-                                    logout={this.logout.bind(this)}
+                                    logout={this.logout}
                                 />
                             )}
                         />

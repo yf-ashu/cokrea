@@ -172,8 +172,9 @@ class EditorHeader extends Component {
                 </div>
                 <div className="editorHeader__right">
                     <button
-                        className="editorHeader__button--save"
+                        className={saved[0]?'editorHeader__button--save':'editorHeader__button--unsave'}
                         onClick={saveData}
+                        disabled={saved[0]?true:false}
                     >
                         SAVE
                         <div className={saved[0]?'editorHeader__button--saveHint':'editorHeader__button--saveHint displayOpacity'}>{saved[1]}</div>

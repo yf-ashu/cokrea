@@ -53,6 +53,7 @@ EditorItem.propTypes = {
     onBlur: PropTypes.func,
     onMouseDown: PropTypes.func,
     onDoubleClick: PropTypes.func,
-    textContent:PropTypes.string
+    textContent:PropTypes.string,
+
 };
 export default EditorItem;

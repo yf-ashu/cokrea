@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import icon from '../../../img/icon.png';
 import { NavLink, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import icon from '../../../img/icon.png';
 import screen from '../../../img/screen.png';
 import screenText02 from '../../../img/screenText02.png';
 import screenText from '../../../img/screenText.png';
@@ -39,9 +39,9 @@ class Home extends Component {
     }
 
     render() {
-        if (this.props.loginStatus || this.props.userData) {
-            return <Redirect to="/dashboard" />;
-        }
+        // if (this.props.loginStatus || this.props.userData) {
+        //     return <Redirect to="/dashboard" />;
+        // }
         return (
             <div className="home">
                 <Loading loading={this.state.loading} />
@@ -113,6 +113,6 @@ class Home extends Component {
 Home.propTypes = {
     getUserData: PropTypes.func.isRequired,
     loginStatus: PropTypes.any,
-    userData: PropTypes.any
+    userata: PropTypes.any
 };
 export default Home;
