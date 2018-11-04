@@ -28,6 +28,10 @@ cokrea 是一款能夠多人同時線上進行同步編輯的圖片編輯器，�
 
 ## Screenshot
 
+https://github.com/yf-ashu/cokrea/blob/master/screenshot/cokrea1.png
+
+https://github.com/yf-ashu/cokrea/blob/master/screenshot/cokrea2.png
+
 ## Contact
 YF Cai
 yfcai1227@gmail.com
