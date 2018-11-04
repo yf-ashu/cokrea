@@ -37,6 +37,7 @@
   "dependencies": {
     "babel-jest": "^23.6.0",
     "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.6.0",
     "eslint-loader": "^2.1.0",
     "express": "^4.16.3",
     "file-loader": "^2.0.0",
@@ -52,5 +53,6 @@
     "moduleNameMapper": {
       ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
     }
+
   }
 }

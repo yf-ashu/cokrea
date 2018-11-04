@@ -39,9 +39,9 @@ class Home extends Component {
     }
 
     render() {
-        // if (this.props.loginStatus || this.props.userData) {
-        //     return <Redirect to="/dashboard" />;
-        // }
+        if (this.props.loginStatus || this.props.userData) {
+            return <Redirect to="/dashboard" />;
+        }
         return (
             <div className="home">
                 <Loading loading={this.state.loading} />
@@ -113,6 +113,6 @@ class Home extends Component {
 Home.propTypes = {
     getUserData: PropTypes.func.isRequired,
     loginStatus: PropTypes.any,
-    userata: PropTypes.any
+    userData: PropTypes.any
 };
 export default Home;

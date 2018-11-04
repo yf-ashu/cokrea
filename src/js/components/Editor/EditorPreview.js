@@ -111,7 +111,7 @@ class EditorPreview extends Component {
                             display[index].outside[0].width - 32,
                             display[index].outside[1].height - 32
                         );
-console.log( display[index].outside)
+                        console.log( display[index].outside);
                         loop(display, ++index);
                     };
                     img.src = display[index].attribute.src;
