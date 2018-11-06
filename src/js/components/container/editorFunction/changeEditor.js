@@ -1,7 +1,7 @@
 import { firebaseSet } from '../../element/auth';
 
 export const documentEvent = (elem, pre, init, opt, func, that) => {
-    console.log(elem);
+    // //console.log(elem);
     let result;
     let move = e => {
         e.preventDefault();
@@ -162,7 +162,7 @@ export const changePositionset = (e, elem, pre, init, that) => {
 export const changeLayer = (e, that ) => {
     let copy = that.state.display.slice(0);
     let copyDisplay = that.state.controllCurrent.slice(0);
-    console.log(copyDisplay);
+    // //console.log(copyDisplay);
     if (e.currentTarget.dataset.data === 'layerdown') {
         let previous = copy[copyDisplay[2] - 1];
         let now = copy[copyDisplay[2]];
@@ -219,7 +219,7 @@ export const changeLayer = (e, that ) => {
             }
         });
         let trash = that.state.trashCan;
-        console.log(trash);
+        //console.log(trash);
         trash[name] = {
             func: 'changeLayerDelete-display',
             id: [name, copyDisplay[2]],

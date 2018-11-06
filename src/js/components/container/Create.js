@@ -27,22 +27,22 @@ class Create extends Component {
 
     componentDidMount() {
         if (this.props.userData === null || this.props.loginStatus === null) {
-            console.log('都沒有3');
+            // //console.log('都沒有3');
             this.initCheck();
         } else {
-            console.log('有東西');
+            // //console.log('有東西');
             let that = this;
             let storage = firebase.storage().ref();
             if (that.props.projectImg) {
                 Object.keys(that.props.projectImg).map(projectData => {
-                    console.log(
-                        that.props.projectImg[projectData].split(':')[0]
-                    );
+                    // //console.log(
+                    //     that.props.projectImg[projectData].split(':')[0]
+                    // );
                     if (
                         that.props.projectImg[projectData].split(':')[0] ===
                         'data'
                     ) {
-                        console.log('上傳');
+                        // //console.log('上傳');
 
                         storage
                             .child(projectData + '/canvas.png')
@@ -51,7 +51,7 @@ class Create extends Component {
                                 'data_url'
                             )
                             .then(function() {
-                                console.log('Uploaded a base64url string!');
+                                // //console.log('Uploaded a base64url string!');
                             });
                     }
                 });
@@ -64,7 +64,7 @@ class Create extends Component {
     }
     initCheck() {
         let authCheck = data => {
-            console.log('要檔案');
+            // //console.log('要檔案');
             if (data) {
                 this.props.getUserData(data[0], data[1], data[2], data[3]);
                 setTimeout(() => {
@@ -85,7 +85,7 @@ class Create extends Component {
             nextProps.userData !== prevState.userData &&
             nextProps.userData !== null
         ) {
-            console.log('有改變');
+            // //console.log('有改變');
             return {
                 loading: false
             };
@@ -93,7 +93,7 @@ class Create extends Component {
     }
 
     checkLogin(loginData, userData, database, projectImg) {
-        console.log('要檔案２');
+        // //console.log('要檔案２');
         this.props.getUserData(loginData, userData, database, projectImg);
     }
     logout() {
@@ -101,16 +101,16 @@ class Create extends Component {
             .auth()
             .signOut()
             .then(() => {
-                console.log('email sign out');
+                // //console.log('email sign out');
                 this.setState({
                     logout: true
                 });
                 this.props.logout();
-            })
-
-            .catch(function(error) {
-                console.log(error);
             });
+
+        // .catch(function(error) {
+        //     // //console.log(error);
+        // });
     }
     deleteProject(e) {
         let copy = Object.assign({}, this.props.userData);
@@ -118,17 +118,17 @@ class Create extends Component {
             return data.projectId === e.currentTarget.dataset.data;
         });
         let check = confirm('確認刪除');
-        console.log(check);
+        // //console.log(check);
         if (check === true) {
-            console.log(find);
+            // //console.log(find);
             copy.project.splice(find, 1);
             this.props.handleDeleteProject(copy, e.currentTarget.dataset.data);
         }
     }
 
     render() {
-        console.log(this.props.loginStatus);
-        console.log(this.props.userData);
+        // //console.log(this.props.loginStatus);
+        // //console.log(this.props.userData);
 
         let displayItem = '';
 
@@ -142,9 +142,9 @@ class Create extends Component {
             this.props.loginStatus === null ||
             this.props.userData === null
         ) {
-            console.log('測看看3');
+            // //console.log('測看看3');
         } else {
-            console.log('測看看２');
+            // //console.log('測看看２');
 
             displayItem = (
                 <CreateMain

@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import bee from '../../../img/bee.png';
 
 const CreateHeader = ({ logout, login,memberButton,handlememberButton }) => {
-    console.log(login);
+    // //console.log(login);
     return (
         <div className="createHeader">
             <NavLink

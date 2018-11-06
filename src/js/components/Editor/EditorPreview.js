@@ -23,7 +23,7 @@ class EditorPreview extends Component {
             nextProps.display !== prevState.display ||
             nextProps.editMainStyle !== prevState.editMainStyle
         ) {
-            console.log('有更改');
+            // //console.log('有更改');
             return {
                 display: nextProps.display,
                 editMainStyle: nextProps.editMainStyle
@@ -36,7 +36,7 @@ class EditorPreview extends Component {
             prevProps.display !== this.props.display ||
             prevProps.editMainStyle !== this.props.editMainStyle
         ) {
-            console.log('有更改2');
+            // //console.log('有更改2');
             this.setState({
                 display: this.props.display ? this.props.display : [],
                 editMainStyle: this.props.editMainStyle
@@ -45,12 +45,12 @@ class EditorPreview extends Component {
     }
 
     updateCanvas() {
-        console.log('有更改3');
+        // //console.log('有更改3');
         let scare = 1;
         let display = this.props.display;
         let editMainStyle = this.props.editMainStyle[0];
         const canvas = this.canvas;
-        console.log(display);
+        // //console.log(display);
         const ctx = canvas.getContext('2d');
         canvas.width = editMainStyle.style[0].width * scare;
         canvas.height = editMainStyle.style[1].height * scare;
@@ -101,7 +101,7 @@ class EditorPreview extends Component {
                 }
                 if (display[index].tag === 'img') {
                     let img = new Image();
-                    console.log('製造圖');
+                    // //console.log('製造圖');
 
                     img.onload = function() {
                         ctx.drawImage(
@@ -111,7 +111,7 @@ class EditorPreview extends Component {
                             display[index].outside[0].width - 32,
                             display[index].outside[1].height - 32
                         );
-                        console.log( display[index].outside);
+                        // //console.log( display[index].outside);
                         loop(display, ++index);
                     };
                     img.src = display[index].attribute.src;
@@ -138,7 +138,7 @@ class EditorPreview extends Component {
                         display[index].outside[0].width,
                         display[index].outside[1].height
                     );
-                    console.log('製造字');
+                    // //console.log('製造字');
                     ctx.font = `${
                         display[index].style[findWeight].fontWeight
                     } ${display[index].style[findSize].fontSize}px Helvetica`;
@@ -176,7 +176,7 @@ class EditorPreview extends Component {
         let element = document.createElement('a');
         let file = this.state.downloadUrl;
         element.href = file;
-        console.log(this.props.projectData);
+        // //console.log(this.props.projectData);
         element.download = this.props.projectData.projectName+'.png';
         element.click();
     }

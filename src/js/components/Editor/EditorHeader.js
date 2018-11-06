@@ -86,12 +86,12 @@ class EditorHeader extends Component {
             .auth()
             .signOut()
             .then(function() {
-                console.log('email sign out');
+                // //console.log('email sign out');
                 window.location.pathname = '/dashboard';
-            })
-            .catch(function(error) {
-                console.log(error);
             });
+        // .catch(function() {
+        //     // //console.log(error); 
+        // });
     }
     render() {
         const {

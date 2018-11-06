@@ -16,11 +16,11 @@ export const authInfomation = func => {
     firebase.auth().onAuthStateChanged(user => {
         let authInfomation = [];
         if (user) {
-            console.log('有登入');
+            //console.log('有登入');
             let data = {
                 id: user.uid
             };
-            console.log(user);
+            //console.log(user);
             let target = '/app/getAccount';
             let payload = {
                 method: 'POST',
@@ -33,7 +33,7 @@ export const authInfomation = func => {
                 let imgUrl = {};
                 if (data.project) {
                     data.project.map(projectdata => {
-                        console.log(projectdata.projectId);
+                        //console.log(projectdata.projectId);
                         storage
                             .ref(projectdata.projectId + '/canvas.png')
                             .getDownloadURL()
@@ -49,25 +49,25 @@ export const authInfomation = func => {
                                         [database, storage],
                                         imgUrl
                                     ];
-                                    console.log(authInfomation);
+                                    //console.log(authInfomation);
                                     return func(authInfomation);
                                 }
-                            })
-                            .catch(error => {
-                                console.log(error);
                             });
+                        // .catch(error => {
+                        //     //console.log(error);
+                        // });
                     });
                 } else {
-                    console.log('沒有圖片');
+                    //console.log('沒有圖片');
                     authInfomation = [user, data, [database, storage], null];
                     return func(authInfomation);
                 }
             };
-            console.log('在這裡');
+            //console.log('在這裡');
             connectFetch(target, payload, getMemberData);
         } else {
             authInfomation = null;
-            console.log('沒有登入');
+            //console.log('沒有登入');
             return func(authInfomation);
         }
     });
@@ -82,8 +82,8 @@ export const initFirebase = () => {
         messagingSenderId: '751312443170'
     };
     let firebaseConnect = firebase.initializeApp(config);
-    var database = firebase.database();
-    console.log(database);
+    // var database = firebase.database();
+    //console.log(database);
     return firebaseConnect;
 };
 export const getAddress = () => {
@@ -146,7 +146,7 @@ export const firebaseOnsite=(that,user)=>{
                 loading: false
             });
         } else {
-            console.log('離線');
+            //console.log('離線');
             firebaseSet('temp', 'nowclick/' + user.uid, 'null');
             firebaseSet('temp', 'trash', that.state.trashCan);
         }

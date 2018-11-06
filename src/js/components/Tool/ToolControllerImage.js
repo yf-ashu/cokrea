@@ -8,7 +8,7 @@ const ToolControllerImage = ({ display, action, controllCurrent }) => {
     if (controllCurrent[2] != null) {
         find = display[controllCurrent[2]].style;
         findwhere = Object.assign({}, ...find);
-        console.log(findwhere);
+        //console.log(findwhere);
     }
     return (
         <div className="toolControllerImage">

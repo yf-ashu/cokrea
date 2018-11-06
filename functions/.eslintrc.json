@@ -8,8 +8,8 @@
   ],
   "extends": "eslint:recommended",
   "rules": {
-    // Removed rule "disallow the use of console" from recommended eslint rules
-    "no-console": "off",
+    // Removed rule "disallow the use of //console" from recommended eslint rules
+    "no-//console": "off",
 
     // Removed rule "disallow multiple spaces in regular expressions" from recommended eslint rules
     "no-regex-spaces": "off",
@@ -111,7 +111,7 @@
     "prefer-arrow-callback": 1,
 
     // Return inside each then() to create readable and reusable Promise chains.
-    // Forces developers to return console logs and http calls in promises. 
+    // Forces developers to return //console logs and http calls in promises. 
     "promise/always-return": 2,
 
     //Enforces the use of catch() on un-returned promises

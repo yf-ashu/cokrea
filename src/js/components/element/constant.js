@@ -117,19 +117,19 @@ export const random = () => {
 };
 
 export const connectFetch = (target, payload, fn) => {
-    // console.log(payload)
+    // //console.log(payload)
     let url = `https://cokrea-editor.firebaseapp.com${target}`;
-    // console.log(url)
+    // //console.log(url)
     fetch(url, payload)
         .then(function(response) {
             return response.json();
         })
         .then(jsonData => {
-            console.log(jsonData);
+            //console.log(jsonData);
             return fn(jsonData);
         })
         .catch(err => {
-            console.log('錯誤:', err);
+            //console.log('錯誤:', err);
             return fn(err);
         });
 };

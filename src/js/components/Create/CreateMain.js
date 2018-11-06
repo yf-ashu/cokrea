@@ -49,7 +49,7 @@ class CreateMain extends Component {
     }
     contorllSideBar() {
         let select = this.createMain.current;
-        console.log(this.createMain);
+        //console.log(this.createMain);
         if (this.state.contorllSideBar) {
             select.style.gridTemplateColumns = '60px 5fr';
         } else {
@@ -59,11 +59,11 @@ class CreateMain extends Component {
             contorllSideBar: !this.state.contorllSideBar
         });
 
-        console.log(select);
+        //console.log(select);
     }
     addNewProject(e) {
-        console.log(e.currentTarget.dataset.data);
-        console.log('新增檔案=====================================');
+        //console.log(e.currentTarget.dataset.data);
+        //console.log('新增檔案=====================================');
 
         let projectId = random();
         let url, imgUrl;
@@ -81,7 +81,7 @@ class CreateMain extends Component {
         this.setState({
             project: projectArray
         });
-        console.log(projectArray);
+        //console.log(projectArray);
         //送使用者名字跟
         let sendData = {
             project: projectArray,
@@ -125,17 +125,17 @@ class CreateMain extends Component {
             }
 
             if (event !== 'default') {
-                console.log(event);
+                //console.log(event);
                 firebase
                     .storage()
                     .ref('sample/' + event + '.png')
                     .getDownloadURL()
                     .then(url => {
-                        console.log(url);
-                        console.log(url);
+                        //console.log(url);
+                        //console.log(url);
                         imgUrl = that.props.projectImg?that.props.projectImg:{};
                         imgUrl[projectId] = url;
-                        console.log(imgUrl);
+                        //console.log(imgUrl);
 
                     });
             }else{
@@ -143,24 +143,24 @@ class CreateMain extends Component {
                 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
             }
-            console.log(url);
+            //console.log(url);
             firebase
                 .storage()
                 .ref()
                 .child(projectId + '/canvas.png')
                 .putString(url, 'data_url')
                 .then(function() {
-                    console.log('Uploaded a base64url string!');
+                    //console.log('Uploaded a base64url string!');
                 });
-            console.log(data);
-            console.log(this.props.projectImg);
+            //console.log(data);
+            //console.log(this.props.projectImg);
             this.props.checkLogin(null, data, null, imgUrl);
         };
         connectFetch(target, payload, getMemberData);
     }
 
     render() {
-        // console.log(this.props.userData.project);
+        // //console.log(this.props.userData.project);
         let createMain = this.state.project
             ? this.state.project.map(data => {
                 let id = data.projectId;
@@ -183,7 +183,7 @@ class CreateMain extends Component {
         let createMainSideItem = sample
             ? Object.keys(sample.sample).map((data, index) => {
                 let sampleData = sample.sample;
-                // console.log(sample.sample[data]);
+                // //console.log(sample.sample[data]);
 
                 return (
                     <CreateMainSideItem
@@ -195,7 +195,7 @@ class CreateMain extends Component {
                 );
             })
             : null;
-        // console.log(sample);
+        // //console.log(sample);
         return (
             <div className="createMain" ref={this.createMain}>
                 <div className="createMainSide">

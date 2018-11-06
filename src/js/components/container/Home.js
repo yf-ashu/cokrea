@@ -24,7 +24,7 @@ class Home extends Component {
     }
     componentDidMount() {
         let authCheck = data => {
-            console.log(data);
+            // //console.log(data);
             if (data) {
                 this.props.getUserData(data[0], data[1], data[2], data[3]);
             } else {

@@ -3,7 +3,7 @@ export const  controllElementSetting=(stateItem, object, inner, value, string,st
     let copy, copyFirst;
     if (stateItem === 'display') {
         let copyDisplay = +state.controllCurrent[2];
-        console.log(   JSON.parse(JSON.stringify(state[stateItem])));
+        // //console.log(   JSON.parse(JSON.stringify(state[stateItem])));
         copyFirst = state[stateItem].slice(0);
         copy = copyFirst[copyDisplay];
     } else {

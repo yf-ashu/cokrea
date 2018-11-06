@@ -1,7 +1,7 @@
 import { random , styleSetting } from '../../element/constant';
 
 export const  addNewElement=(state,type,elem,special,editorMain) =>{
-    console.log(elem);
+    // //console.log(elem);
     let check;
     if (type.type === 'img' && special !== 'img') {
         check = state.buttonItem.findIndex(object => {
@@ -42,7 +42,7 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
     }
     
 
-    console.log('width:'+width,'height:'+height);
+    // //console.log('width:'+width,'height:'+height);
     let textContent =
         type.type === 'img'
             ? 'img'
@@ -113,7 +113,7 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
         ]
     };
     array.push(value);
-    console.log(value);
+    // //console.log(value);
     let record={
         old: {
             func: 'addNewItem-display',

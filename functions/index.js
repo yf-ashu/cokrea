@@ -25,7 +25,7 @@ app.use('/app/', (req, res, next) => {
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝get Account 得到帳號
 app.post('/app/getAccount', (req, res) => {
   let userId = req.body.id;
-  console.log(userId);
+  //console.log(userId);
   if (userId === null) {
     return res.json({
       error: 'No Data'
@@ -34,7 +34,7 @@ app.post('/app/getAccount', (req, res) => {
     db.ref('/userData/' + userId).once('value', snapshot => {
       if (snapshot.exists()) {
         let data = snapshot.val();
-        console.log(data);
+        //console.log(data);
         delete data.createTime;
         delete data.updateTime;
         return res.json(data);
@@ -71,7 +71,7 @@ app.post('/app/manageAccount', (req, res) => {
     if (snapshot.exists()) {
       let getData = snapshot.val();
       Object.keys(data).map(getdata => {
-        console.log(getdata);
+        //console.log(getdata);
       });
       if (data.userTel ) {
         getData.userTel = data.userTel;
@@ -130,7 +130,7 @@ app.post('/app/addNewProject', (req, res) => {
     return;
   }
   let userId = data.userId;
-  console.log(data);
+  //console.log(data);
 
   //新增一個專案
   let projectData = {
@@ -154,7 +154,7 @@ app.post('/app/addNewProject', (req, res) => {
   }
   
   let usernew = data.newItem;
-  console.log(usernew);
+  //console.log(usernew);
   db.ref('/projectData/' + usernew).set(projectData, error => {
   
   });
