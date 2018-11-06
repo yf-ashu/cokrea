@@ -143,8 +143,8 @@ class Login extends Component {
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then(function(result)  {
-                alert('註冊成功並自動登入');
                 that.addTodatabase(result);
+                alert('註冊成功並自動登入');
                 //console.log(result);
             });
         // .catch(error => { 

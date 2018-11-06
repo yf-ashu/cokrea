@@ -63,7 +63,7 @@ class CreateMain extends Component {
     }
     addNewProject(e) {
         //console.log(e.currentTarget.dataset.data);
-        //console.log('新增檔案=====================================');
+        // console.log('新增檔案=====================================');
 
         let projectId = random();
         let url, imgUrl;
@@ -81,8 +81,8 @@ class CreateMain extends Component {
         this.setState({
             project: projectArray
         });
-        //console.log(projectArray);
-        //送使用者名字跟
+        // console.log(projectArray);
+
         let sendData = {
             project: projectArray,
             userId: this.props.userData.userId,
@@ -120,18 +120,21 @@ class CreateMain extends Component {
             })
         };
         let getMemberData = data => {
+            // console.log('有東西');
+            // console.log(data);
+
             if (!firebase.apps.length) {
                 initFirebase();
             }
 
             if (event !== 'default') {
-                //console.log(event);
+                // console.log(event);
                 firebase
                     .storage()
                     .ref('sample/' + event + '.png')
                     .getDownloadURL()
                     .then(url => {
-                        //console.log(url);
+                        // console.log(url);
                         //console.log(url);
                         imgUrl = that.props.projectImg?that.props.projectImg:{};
                         imgUrl[projectId] = url;
