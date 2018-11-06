@@ -95,7 +95,7 @@ class Editor extends Component {
         }
 
         if (this.state.projectData.share[0].public === 'public') {
-            console.log('公開中');
+            // //console.log('公開中');
             delete getData.share;
             database.ref('/public/' + projectData.href).update(getData);
         }
@@ -146,10 +146,10 @@ class Editor extends Component {
     checkLogin() {
         let storage, database;
         if (!this.props.loginStatus) {
-            console.log('沒有登入資訊');
+            // //console.log('沒有登入資訊');
             let authCheck = data => {
                 if (data) {
-                    console.log(data);
+                    // //console.log(data);
                     this.props.getUserData(data[0], data[1], data[2], data[3]);
                     this.setState(
                         {
@@ -162,7 +162,7 @@ class Editor extends Component {
                     );
                 } else {
                     window.location.pathname = '/';
-                    console.log('沒有登入');
+                    // //console.log('沒有登入');
                 }
             };
             authInfomation(authCheck);
@@ -184,7 +184,7 @@ class Editor extends Component {
         firebaseGetProjectData(that);
     }
     connectDb(database, user) {
-        console.log('連接', user);
+        // //console.log('連接', user);
         let that = this;
 
         database
@@ -286,28 +286,28 @@ class Editor extends Component {
     }
     dropToolButtonItem(e) {
         let type = JSON.parse(e.dataTransfer.getData('text/plain'));
-        console.log(e.currentTarget);
+        // //console.log(e.currentTarget);
         this.addNewItem(type, e);
     }
     headerSizeClick(copyDisplay) {
-        console.log(copyDisplay);
+        // //console.log(copyDisplay);
         this.setState({
             editMainStyle: copyDisplay
         });
     }
 
     addNewItem(itemtype, e, special) {
-        console.log(e.currentTarget);
+        // //console.log(e.currentTarget);
         let elem = {
             pageX: e.pageX,
             pageY: e.pageY
         };
-        const eventType = e.pageX;
-        console.log(elem.type);
+        // const eventType = e.pageX;
+        // //console.log(elem.type);
         let resultArray;
         if (itemtype) {
             this.setState(state => {
-                console.log(eventType);
+                // //console.log(eventType);
 
                 resultArray = addNewElement(
                     state,
@@ -486,7 +486,7 @@ class Editor extends Component {
         reader.onloadend = () => {
             let img = new Image();
             img.onload = function() {
-                console.log(img.width);
+                // //console.log(img.width);
                 that.setState({
                     fileUpload: {
                         file: img,
@@ -628,7 +628,7 @@ class Editor extends Component {
                     ]}
                     saveData={this.saveData}
                     shareLink={() => {
-                        console.log(this.state.shareButton);
+                        // //console.log(this.state.shareButton);
                         if (this.state.shareButton[1]) {
                             let shareButton = this.state.shareButton;
                             shareButton[0] = true;

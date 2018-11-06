@@ -27,7 +27,7 @@ class Public extends Component {
         database.ref('/public/' + projectData).off();
         database.ref('/public/' + projectData).on('value', snapshot => {
             if (snapshot.exists()) {
-                console.log(snapshot.val());
+                // //console.log(snapshot.val());
                 this.setState({
                     projectData: snapshot.val(),
                     display: snapshot.val().display,
@@ -73,7 +73,7 @@ class Public extends Component {
                 );
             })
             : null;
-        console.log(item);
+        // //console.log(item);
         return (
             <div className="public__views">
                 <Loading loading={this.state.loading} />

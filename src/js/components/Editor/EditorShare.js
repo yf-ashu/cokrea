@@ -24,7 +24,7 @@ class EditorShare extends Component {
         if (nextProps.projectData && this.state.selected === null) {
             let projectData = location.href.split('edit/')[1];
 
-            console.log(nextProps.projectData.share[0].public);
+            //console.log(nextProps.projectData.share[0].public);
             this.setState({
                 selected: nextProps.projectData.share[0].public
             });
@@ -52,13 +52,13 @@ class EditorShare extends Component {
             selected: e.currentTarget.value,
             share: copy
         });
-        console.log(copy);
-        console.log(this.state.share);
+        //console.log(copy);
+        //console.log(this.state.share);
 
     }
 
     checkLink(e, value) {
-        console.log(value);
+        //console.log(value);
         let insert;
         if (value === 'keypress') {
             let share = this.props.projectData;
@@ -67,10 +67,10 @@ class EditorShare extends Component {
             } else {
                 insert = this.props.projectData.share[1];
             }
-            console.log(insert);
+            //console.log(insert);
             insert.push(this.state.inputCheck);
             share.share[1] = insert;
-            console.log(share);
+            //console.log(share);
 
             this.setState({
                 share: share,
@@ -84,19 +84,19 @@ class EditorShare extends Component {
     }
     updateShare() {
         let projectData = location.href.split('edit/')[1];
-        console.log(this.state.share);
+        //console.log(this.state.share);
         let getData = Object.assign({},this.props.projectData) ;
         if (this.state.selected === 'public') {
             delete getData.share;
             this.props.database[0].ref('/public/' + projectData).update(getData);
-            console.log('有public');
+            //console.log('有public');
             this.setState({
                 shareLink:'https://cokrea-editor.firebaseapp.com/views/'+projectData
             });
          
         }else if (this.state.selected === 'private') {
             this.props.database[0].ref('/public/' + projectData).set(null);
-            console.log('枚有public');
+            //console.log('枚有public');
             this.setState({
                 shareLink:'share close'
             });
@@ -106,7 +106,7 @@ class EditorShare extends Component {
             projectId: projectData,
             share: this.state.share.share
         };
-        console.log(projectSendData);
+        //console.log(projectSendData);
         let target = '/app/manageProject';
         let payload = {
             method: 'POST',
@@ -116,9 +116,9 @@ class EditorShare extends Component {
             })
         };
 
-        let getProjectData = data => {
+        let getProjectData = () => {
             alert('成功存檔');
-            console.log(data);
+            //console.log(data);
         };
         connectFetch(target, payload, getProjectData);
     
@@ -137,7 +137,7 @@ class EditorShare extends Component {
     }
 
     render() {
-        // console.log(this.props.projectData);
+        // //console.log(this.props.projectData);
 
         return (
             <div className="editorShare">

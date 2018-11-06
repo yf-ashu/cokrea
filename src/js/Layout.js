@@ -38,19 +38,19 @@ class Layout extends Component {
             })
         };
         let getMemberData = data => {
-            console.log('有', data);
+            //console.log('有', data);
             this.setState({
                 userData: data
             });
         };
-        console.log( this.state.database);
+        //console.log( this.state.database);
         connectFetch(target, payload, getMemberData);
         firebase.database().ref('/projectData/' + id).set(null);
         firebase.storage().ref().child(id + '/canvas.png').delete();
       
     }
     changeProjectName(name, id) {
-        console.log(this.state.loginStatus);
+        //console.log(this.state.loginStatus);
         let data = {
             userEmail: this.state.loginStatus.email,
             userId: this.state.loginStatus.uid,
@@ -78,11 +78,11 @@ class Layout extends Component {
             database = this.state.database,
             projectImg = this.state.projectImg;
         if (loginStatusout) {
-            console.log('有送入1');
+            //console.log('有送入1');
             loginStatus = loginStatusout;
         }
         if (userDataout) {
-            console.log('有送入');
+            //console.log('有送入');
             userData = userDataout;
         }
         if (databaseout) {
@@ -107,10 +107,10 @@ class Layout extends Component {
         });
     }
     render() {
-        console.log(this.state.userData);
-        console.log(this.state.loginStatus);
-        console.log(this.state.database);
-        console.log(this.state.projectImg);
+        //console.log(this.state.userData);
+        //console.log(this.state.loginStatus);
+        //console.log(this.state.database);
+        //console.log(this.state.projectImg);
         return (
             <BrowserRouter>
                 <div className="main">

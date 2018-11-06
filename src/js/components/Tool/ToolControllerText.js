@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import bold from '../../../img/bold.svg';
 import italic from '../../../img/italic.svg';
 
-const ToolControllerText = ({ display, action, style, controllCurrent }) => {
-    console.log(display);
-    console.log(style);
+const ToolControllerText = ({ display, action, controllCurrent }) => {
+    //console.log(display);
+    //console.log(style);
     let find,
         findwhere,
         option = [];

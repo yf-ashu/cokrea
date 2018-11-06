@@ -70,7 +70,7 @@ class ToolController extends Component {
 
     handlePageOnChangeNum(e) {
         let value;
-        console.log(e.currentTarget.value);
+        //console.log(e.currentTarget.value);
         if(+e.currentTarget.value<1){
             value=10;
         }else{

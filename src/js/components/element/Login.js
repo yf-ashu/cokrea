@@ -30,7 +30,7 @@ class Login extends Component {
     componentDidMount() {
        
         let authCheck = data => {
-            console.log(data);
+            //console.log(data);
             if (data) {
                 this.props.getUserData(data[0], data[1], data[2], data[3]);
             } else {
@@ -62,10 +62,10 @@ class Login extends Component {
                 'Content-Type': 'application/json'
             })
         };
-        let getMemberData = data => {
-            console.log('有', data);
-        };
-        connectFetch(target, payload, getMemberData);
+        // let getMemberData = data => {
+        //     //console.log('有', data);
+        // };
+        connectFetch(target, payload, null);
     }
     loginWithFB() {
         let that=this;
@@ -75,10 +75,10 @@ class Login extends Component {
             .signInWithPopup(provider)
             .then(function(result) {
                 that.addTodatabase(result);
-            })
-            .catch(function(error) {
-                console.log(error);
             });
+        // .catch(function(error) {
+        //     //console.log(error);
+        // });
     }
     loginWithGoogle() {
         let that=this;
@@ -89,10 +89,10 @@ class Login extends Component {
             .signInWithPopup(provider)
             .then(function(result) {
                 that.addTodatabase(result);
-            })
-            .catch(function(error) {
-                console.log(error);
             });
+        // .catch(function(error) {
+        //     //console.log(error);
+        // });
     }
     loginWithEmail() {
         let email = this.state.userName;
@@ -106,10 +106,10 @@ class Login extends Component {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then(function(result) {
-                console.log('創完了');
+            .then(function() {
+                //console.log('創完了');
 
-                console.log(result);
+                // console.log(result);
             })
             .catch(function(error) {
                 if (
@@ -122,7 +122,7 @@ class Login extends Component {
                 } else {
                     alert(error.message, false);
                 }
-                console.log(error);
+                //console.log(error);
             });
     }
     signupWithEmail() {
@@ -145,19 +145,19 @@ class Login extends Component {
             .then(function(result)  {
                 alert('註冊成功並自動登入');
                 that.addTodatabase(result);
-                console.log(result);
-            })
-            .catch(error => { 
-                console.log('再觀察');
-                console.log(error);
+                //console.log(result);
             });
+        // .catch(error => { 
+        //     //console.log('再觀察');
+        //     //console.log(error);
+        // });
     }
     render() {
         if (this.props.loginStatus && this.props.userData) {
             return <Redirect to="/dashboard" />;
         }
         let address = location.pathname.split('/')[1];
-        console.log(address);
+        //console.log(address);
         return (
             <div className="login">
                 <Loading loading={this.state.loading} />
