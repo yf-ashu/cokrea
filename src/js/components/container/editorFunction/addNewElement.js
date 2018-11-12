@@ -1,7 +1,7 @@
 import { random , styleSetting } from '../../element/constant';
 
 export const  addNewElement=(state,type,elem,special,editorMain) =>{
-    // //console.log(elem);
+    // console.log(editorMain.childNodes[0].offsetWidth);
     let check;
     if (type.type === 'img' && special !== 'img') {
         check = state.buttonItem.findIndex(object => {
@@ -15,7 +15,7 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
     let array =
     state.display.length === 0 ? [] : JSON.parse(JSON.stringify(state.display));
     let canvaWidthX =
-        (editorMain.offsetWidth -
+        (editorMain.childNodes[0].offsetWidth -
             state.editMainStyle[0].style[0].width) /
         2;
 
@@ -42,7 +42,7 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
     }
     
 
-    // //console.log('width:'+width,'height:'+height);
+    // console.log('width:'+width,'height:'+height,'canvaWidthX:'+canvaWidthX);
     let textContent =
         type.type === 'img'
             ? 'img'
@@ -95,7 +95,7 @@ export const  addNewElement=(state,type,elem,special,editorMain) =>{
             },
             {
                 left: elem.pageX
-                    ? (elem.pageX - canvaWidthX - 60 - width/2)
+                    ? (elem.pageX - canvaWidthX - 60 - width/2 )
                     : 0
             },
             {

@@ -25,18 +25,18 @@ export const constant = {
             {
                 type: 'p',
                 src: p,
-                size: { width: 0.8, height: 65 },
+                size: { width: 0.9, height: 65 },
                 format: ['text', 'text'],
                 textContent:
-                    'Double click to edit'
+                'Double click to edit. This is a p text area.'
             },
             {
                 type: 'span',
                 src: span,
-                size: { width: 0.8, height: 65 },
+                size: { width: 0.9, height: 65 },
                 format: ['text', 'text'],
                 textContent:
-                    'Double click to edit. This is a span text area.'
+                    'Double click to edit. This is a word text area.The font size is 16.'
             }
         ],
         img: [

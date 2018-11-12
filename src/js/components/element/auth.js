@@ -14,64 +14,71 @@ export const authInfomation = func => {
     storage = firebase.storage();
 
     firebase.auth().onAuthStateChanged(user => {
-        let authInfomation = [];
-        if (user) {
-            //console.log('有登入');
-            let data = {
-                id: user.uid
-            };
-            //console.log(user);
-            let target = '/app/getAccount';
-            let payload = {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                })
-            };
-            let getMemberData = data => {
-                let imgUrl = {};
-                if (data.project) {
-                    data.project.map(projectdata => {
-                        //console.log(projectdata.projectId);
-                        storage
-                            .ref(projectdata.projectId + '/canvas.png')
-                            .getDownloadURL()
-                            .then(url => {
-                                imgUrl[projectdata.projectId] = url;
-                                if (
-                                    Object.keys(imgUrl).length ===
-                                    data.project.length
-                                ) {
-                                    authInfomation = [
-                                        user,
-                                        data,
-                                        [database, storage],
-                                        imgUrl
-                                    ];
-                                    //console.log(authInfomation);
-                                    return func(authInfomation);
-                                }
-                            });
-                        // .catch(error => {
-                        //     //console.log(error);
-                        // });
-                    });
-                } else {
-                    //console.log('沒有圖片');
-                    authInfomation = [user, data, [database, storage], null];
-                    return func(authInfomation);
-                }
-            };
-            //console.log('在這裡');
-            connectFetch(target, payload, getMemberData);
-        } else {
-            authInfomation = null;
-            //console.log('沒有登入');
+        // 
+        let promise1 = new Promise(function(resolve) {
+            userInfomation(user,resolve,database,storage);
+        });
+
+        promise1.then((authInfomation)=>{
             return func(authInfomation);
-        }
+        });
+
     });
 };
+
+export const userInfomation =(user,resolve,database,storage) => {
+    let authInfomation = [];
+    if (user) {
+        //console.log('有登入');
+        let data = {
+            id: user.uid
+        };
+        // console.log(user);
+        let target = '/app/getAccount';
+        let payload = {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        };
+        let getMemberData = data => {
+            let imgUrl = {};
+            if (data.project) {
+                data.project.map(projectdata => {
+                    storage
+                        .ref(projectdata.projectId + '/canvas.png')
+                        .getDownloadURL()
+                        .then(url => {
+                            imgUrl[projectdata.projectId] = url;
+                            if (
+                                Object.keys(imgUrl).length ===
+                                data.project.length
+                            ) {
+                                authInfomation = [
+                                    user,
+                                    data,
+                                    [database, storage],
+                                    imgUrl
+                                ];
+                                //console.log(authInfomation);
+                                resolve(authInfomation);
+                            }
+                        });
+                });
+            } else {
+                authInfomation = [user, data, [database, storage], null];
+                resolve(authInfomation);
+            }
+        };
+        connectFetch(target, payload, getMemberData);
+    } else {
+        authInfomation = null;
+        resolve(authInfomation);
+    }
+};
+
+
 export const initFirebase = () => {
     let config = {
         apiKey: 'AIzaSyAncjAic0clz2IUCF-HOjHVOCe9_YCRzdo',
@@ -88,6 +95,9 @@ export const initFirebase = () => {
 };
 export const getAddress = () => {
     let projectDatahref = location.href.split('edit/')[1];
+    if(!projectDatahref){
+        projectDatahref='test';
+    }
     return projectDatahref;
 };
 
@@ -203,6 +213,4 @@ export const firebaseGetProjectData=(that)=>{
                 window.location.pathname = '/';
             }
         });
-
-
 };

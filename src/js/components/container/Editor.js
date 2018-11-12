@@ -124,6 +124,7 @@ class Editor extends Component {
         let copy = Object.assign({}, this.props.projectImg);
         copy[projectData.href] = this.state.downloadUrl;
         this.props.getUserData(null, null, null, copy);
+        // console.log(copy);
     }
     controllSetting(stateItem, object, inner, value, string) {
         let resultArray;
@@ -183,8 +184,7 @@ class Editor extends Component {
         let that = this;
         firebaseGetProjectData(that);
     }
-    connectDb(database, user) {
-        // //console.log('連接', user);
+    connectDb(database, user) {//get projectData
         let that = this;
 
         database
@@ -486,7 +486,6 @@ class Editor extends Component {
         reader.onloadend = () => {
             let img = new Image();
             img.onload = function() {
-                // //console.log(img.width);
                 that.setState({
                     fileUpload: {
                         file: img,
@@ -518,9 +517,9 @@ class Editor extends Component {
             display: insert
         });
     }
-
     render() {
         let item = this.state.display.map(data => {
+
             return (
                 <EditorItem
                     key={data.key}

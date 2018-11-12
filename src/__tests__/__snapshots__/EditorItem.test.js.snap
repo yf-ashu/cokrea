@@ -1,0 +1,395 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditorItem tests EditorItem is rendered correctly 1`] = `
+ReactWrapper {
+  Symbol(enzyme.__unrendered__): <EditorItem
+    attribute={
+      Object {
+        "className": "editorMain__item X15X0R22O61g50x editorMain__item--h1",
+        "format": "text,text",
+        "id": "X15X0R22O61g50x",
+        "src": "",
+        "type": "h1",
+      }
+    }
+    onBlur={[MockFunction]}
+    onDoubleClick={[MockFunction]}
+    onMouseDown={[MockFunction]}
+    option={
+      Object {
+        "contentEditable": "false",
+        "dangerouslySetInnerHTML": Object {
+          "__html": "",
+        },
+      }
+    }
+    outside={
+      Object {
+        "height": 7,
+        "left": 80.667,
+        "top": 223.334,
+        "width": 528,
+      }
+    }
+    style={
+      Object {
+        "backgroundColor": "#ffd300",
+        "color": "#000000",
+        "fontSize": 47,
+        "fontStyle": "normal",
+        "fontWeight": 700,
+        "height": "100%",
+        "width": "100%",
+      }
+    }
+    tag="h1"
+    textContent=""
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "attribute": Object {
+        "className": "editorMain__item X15X0R22O61g50x editorMain__item--h1",
+        "format": "text,text",
+        "id": "X15X0R22O61g50x",
+        "src": "",
+        "type": "h1",
+      },
+      "onBlur": [MockFunction],
+      "onDoubleClick": [MockFunction],
+      "onMouseDown": [MockFunction],
+      "option": Object {
+        "contentEditable": "false",
+        "dangerouslySetInnerHTML": Object {
+          "__html": "",
+        },
+      },
+      "outside": Object {
+        "height": 7,
+        "left": 80.667,
+        "top": 223.334,
+        "width": 528,
+      },
+      "style": Object {
+        "backgroundColor": "#ffd300",
+        "color": "#000000",
+        "fontSize": 47,
+        "fontStyle": "normal",
+        "fontWeight": 700,
+        "height": "100%",
+        "width": "100%",
+      },
+      "tag": "h1",
+      "textContent": "",
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": <div
+        class="editorMain__items"
+        data-id="X15X0R22O61g50x"
+        draggable="false"
+        style="width: 528px; height: 7px; left: 80.667px; top: 223.334px;"
+      >
+        <h1
+          class="editorMain__item X15X0R22O61g50x editorMain__item--h1"
+          contenteditable="false"
+          data-format="text,text"
+          data-id="X15X0R22O61g50x"
+          draggable="false"
+          id="X15X0R22O61g50x"
+          src=""
+          style="width: 100%; height: 100%; background-color: rgb(255, 211, 0); color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 47px;"
+          tabindex="-1"
+          type="h1"
+        />
+      </div>,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <h1
+          className="editorMain__item X15X0R22O61g50x editorMain__item--h1"
+          contentEditable="false"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "",
+            }
+          }
+          data-format="text,text"
+          data-id="X15X0R22O61g50x"
+          draggable="false"
+          id="X15X0R22O61g50x"
+          onBlur={[MockFunction]}
+          onDoubleClick={[MockFunction]}
+          onMouseDown={[MockFunction]}
+          src=""
+          style={
+            Object {
+              "backgroundColor": "#ffd300",
+              "color": "#000000",
+              "fontSize": 47,
+              "fontStyle": "normal",
+              "fontWeight": 700,
+              "height": "100%",
+              "width": "100%",
+            }
+          }
+          suppressContentEditableWarning={true}
+          tabIndex="-1"
+          type="h1"
+        />,
+        "className": "editorMain__items",
+        "data-id": "X15X0R22O61g50x",
+        "draggable": "false",
+        "style": Object {
+          "height": 7,
+          "left": 80.667,
+          "top": 223.334,
+          "width": 528,
+        },
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": <h1
+            class="editorMain__item X15X0R22O61g50x editorMain__item--h1"
+            contenteditable="false"
+            data-format="text,text"
+            data-id="X15X0R22O61g50x"
+            draggable="false"
+            id="X15X0R22O61g50x"
+            src=""
+            style="width: 100%; height: 100%; background-color: rgb(255, 211, 0); color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 47px;"
+            tabindex="-1"
+            type="h1"
+          />,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "className": "editorMain__item X15X0R22O61g50x editorMain__item--h1",
+            "contentEditable": "false",
+            "dangerouslySetInnerHTML": Object {
+              "__html": "",
+            },
+            "data-format": "text,text",
+            "data-id": "X15X0R22O61g50x",
+            "draggable": "false",
+            "id": "X15X0R22O61g50x",
+            "onBlur": [MockFunction],
+            "onDoubleClick": [MockFunction],
+            "onMouseDown": [MockFunction],
+            "src": "",
+            "style": Object {
+              "backgroundColor": "#ffd300",
+              "color": "#000000",
+              "fontSize": 47,
+              "fontStyle": "normal",
+              "fontWeight": 700,
+              "height": "100%",
+              "width": "100%",
+            },
+            "suppressContentEditableWarning": true,
+            "tabIndex": "-1",
+            "type": "h1",
+          },
+          "ref": null,
+          "rendered": Array [
+            undefined,
+          ],
+          "type": "h1",
+        },
+      ],
+      "type": "div",
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "attribute": Object {
+          "className": "editorMain__item X15X0R22O61g50x editorMain__item--h1",
+          "format": "text,text",
+          "id": "X15X0R22O61g50x",
+          "src": "",
+          "type": "h1",
+        },
+        "onBlur": [MockFunction],
+        "onDoubleClick": [MockFunction],
+        "onMouseDown": [MockFunction],
+        "option": Object {
+          "contentEditable": "false",
+          "dangerouslySetInnerHTML": Object {
+            "__html": "",
+          },
+        },
+        "outside": Object {
+          "height": 7,
+          "left": 80.667,
+          "top": 223.334,
+          "width": 528,
+        },
+        "style": Object {
+          "backgroundColor": "#ffd300",
+          "color": "#000000",
+          "fontSize": 47,
+          "fontStyle": "normal",
+          "fontWeight": 700,
+          "height": "100%",
+          "width": "100%",
+        },
+        "tag": "h1",
+        "textContent": "",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": <div
+          class="editorMain__items"
+          data-id="X15X0R22O61g50x"
+          draggable="false"
+          style="width: 528px; height: 7px; left: 80.667px; top: 223.334px;"
+        >
+          <h1
+            class="editorMain__item X15X0R22O61g50x editorMain__item--h1"
+            contenteditable="false"
+            data-format="text,text"
+            data-id="X15X0R22O61g50x"
+            draggable="false"
+            id="X15X0R22O61g50x"
+            src=""
+            style="width: 100%; height: 100%; background-color: rgb(255, 211, 0); color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 47px;"
+            tabindex="-1"
+            type="h1"
+          />
+        </div>,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <h1
+            className="editorMain__item X15X0R22O61g50x editorMain__item--h1"
+            contentEditable="false"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "",
+              }
+            }
+            data-format="text,text"
+            data-id="X15X0R22O61g50x"
+            draggable="false"
+            id="X15X0R22O61g50x"
+            onBlur={[MockFunction]}
+            onDoubleClick={[MockFunction]}
+            onMouseDown={[MockFunction]}
+            src=""
+            style={
+              Object {
+                "backgroundColor": "#ffd300",
+                "color": "#000000",
+                "fontSize": 47,
+                "fontStyle": "normal",
+                "fontWeight": 700,
+                "height": "100%",
+                "width": "100%",
+              }
+            }
+            suppressContentEditableWarning={true}
+            tabIndex="-1"
+            type="h1"
+          />,
+          "className": "editorMain__items",
+          "data-id": "X15X0R22O61g50x",
+          "draggable": "false",
+          "style": Object {
+            "height": 7,
+            "left": 80.667,
+            "top": 223.334,
+            "width": 528,
+          },
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": <h1
+              class="editorMain__item X15X0R22O61g50x editorMain__item--h1"
+              contenteditable="false"
+              data-format="text,text"
+              data-id="X15X0R22O61g50x"
+              draggable="false"
+              id="X15X0R22O61g50x"
+              src=""
+              style="width: 100%; height: 100%; background-color: rgb(255, 211, 0); color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 47px;"
+              tabindex="-1"
+              type="h1"
+            />,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "className": "editorMain__item X15X0R22O61g50x editorMain__item--h1",
+              "contentEditable": "false",
+              "dangerouslySetInnerHTML": Object {
+                "__html": "",
+              },
+              "data-format": "text,text",
+              "data-id": "X15X0R22O61g50x",
+              "draggable": "false",
+              "id": "X15X0R22O61g50x",
+              "onBlur": [MockFunction],
+              "onDoubleClick": [MockFunction],
+              "onMouseDown": [MockFunction],
+              "src": "",
+              "style": Object {
+                "backgroundColor": "#ffd300",
+                "color": "#000000",
+                "fontSize": 47,
+                "fontStyle": "normal",
+                "fontWeight": 700,
+                "height": "100%",
+                "width": "100%",
+              },
+              "suppressContentEditableWarning": true,
+              "tabIndex": "-1",
+              "type": "h1",
+            },
+            "ref": null,
+            "rendered": Array [
+              undefined,
+            ],
+            "type": "h1",
+          },
+        ],
+        "type": "div",
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+  },
+}
+`;

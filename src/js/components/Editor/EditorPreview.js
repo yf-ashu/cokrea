@@ -176,7 +176,6 @@ class EditorPreview extends Component {
         let element = document.createElement('a');
         let file = this.state.downloadUrl;
         element.href = file;
-        // //console.log(this.props.projectData);
         element.download = this.props.projectData.projectName+'.png';
         element.click();
     }
